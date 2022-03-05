@@ -28,20 +28,6 @@ const TimetableBody = () => {
         return
     }
     dragItem(result)
-    //Convert ID to Index
-    const converToNum = (id: string) =>{
-      let indexs: Array<number> =[]
-      id.split("").forEach((x: string)=>{
-        indexs.push(Number(x))
-      })
-      return indexs
-    }
-    const dragIndex= converToNum(source.droppableId)
-    const dropIndex = converToNum(destination.droppableId)
-    const draggingItem = {...alignment[dragIndex[0]][dragIndex[1]].tasks[source.index]}
-    //
-    console.log(source, destination);
-    console.log(draggingItem)
   };
   return (
     <>
