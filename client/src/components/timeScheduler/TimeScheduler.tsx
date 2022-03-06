@@ -20,12 +20,10 @@ const fakeData = [
 
 const TimeScheduler: React.FC = () => {
   const dispatch = useDispatch();
-  const { getTasks,drawTable } = bindActionCreators(actionCreators, dispatch);
-  const tasks = useSelector((state: State) => state.tasks);
+  const { getTasks } = bindActionCreators(actionCreators, dispatch);
 
   //**Get tasks */
   useEffect(()=>{   
-    drawTable()
     getTasks(fakeData)  
   },[])
   

@@ -1,18 +1,22 @@
-import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@material-ui/core";
+import { TableCell, TableHead, TableRow } from "@material-ui/core";
 import React from "react";
+import { useSelector } from "react-redux";
+import { State } from "../../store/reducers";
 
 const TimetableHeader = () => {
+  const {dates} = useSelector((state: State)=>state)
+  console.log(dates)
   return (
     <>
     <TableHead style={{padding: '0px'}}>
       <TableRow>
-        <TableCell  align="center">Sun</TableCell>
-        <TableCell  align="center">Mon</TableCell>
-        <TableCell  align="center">Tue</TableCell>
-        <TableCell  align="center">Wed</TableCell>
-        <TableCell  align="center">Thu</TableCell>
-        <TableCell  align="center">Fri</TableCell>
-        <TableCell  align="center">Sat</TableCell>
+        {dates?.map((date: any, index: number)=>{
+          return(
+            <TableCell key={index}>
+              <small>{date}</small>
+            </TableCell>
+          )
+        })}
       </TableRow>
     </TableHead>
     </>

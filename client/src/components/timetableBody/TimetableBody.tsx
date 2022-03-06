@@ -1,4 +1,4 @@
-import React,{useState} from "react";
+import React from "react";
 import { TableBody, TableCell, TableRow } from "@material-ui/core";
 import { State } from "../../store/reducers";
 import { useDispatch, useSelector } from "react-redux";
@@ -14,7 +14,6 @@ const TimetableBody = () => {
   const tasks = useSelector((state: State) => state.tasks);
   const dispatch = useDispatch()
   const {dragItem} = bindActionCreators(actionCreators,dispatch)
-  const [alignment,setAlignment] = useState(tasks)
 
   //Handle Drag
   const onDragEnd = (result: DropResult) => {

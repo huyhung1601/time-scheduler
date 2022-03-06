@@ -6,26 +6,31 @@ import {getTime,getDay,converToNum} from '../../utils/index'
 const tasksReducer = (state: any = [], action: Action) => {
   switch (action.type) {
     //Draw timetable
-    case Actiontype.drawTable:
-      for (let t = 0; t < 24 * 2; t++) {
-        state.push([]);
-        for (let d = 0; d < 7; d++) {
-          let slot = {id: `${t}${d}`,tasks:[]}
-          state[t].push(slot);
-        }
-      }
-      return [...state];
-    //Fetch data
+    // case Actiontype.drawTable:
+    //   for (let t = 0; t < 24 * 2; t++) {
+    //     state.push([]);
+    //     for (let d = 0; d < 7; d++) {
+    //       let slot = {id: `${t}${d}`,tasks:[]}
+    //       state[t].push(slot);
+    //     }
+    //   }
+    //   return [...state];
+
+    /**Draw table and mark items */
     case Actiontype.getTasks: 
+      let arr: any = []
       for (let i = 0; i < 24 * 2; i++) {
+        arr.push([]);
         for (let j = 0; j < 7; j++) {
+          let slot = {id: `${i}${j}`,tasks:[]}
+          arr[i].push(slot);
           action.payload.map((task: any) => {
             getTime(task.start) === i && getDay(task.start) === j
-              && state[i][j].tasks.every((x:any)=>x.id !== task.id) && state[i][j].tasks.push(task)                         
+              && arr[i][j].tasks.every((x:any)=>x.id !== task.id) && arr[i][j].tasks.push(task)                         
           });
         }
       }
-      return [...state];
+      return [...arr];
     //Drag Item
     case Actiontype.dragItem:
       const {source,destination} = action.payload

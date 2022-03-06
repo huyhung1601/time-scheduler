@@ -13,3 +13,12 @@ export const converToNum = (id: string) =>{
     })
     return indexs
   }
+
+export const daysPreviousMonth = (month:any, year:any) =>{
+    return new Date(year, month , 0).getDate();
+  }
+
+export const daysCurrentMonth = (month:any, year:any) =>{
+  return new Date(year, month + 1, 0).getDate();
+}
+

@@ -10,10 +10,11 @@ export const getTasks = (datas: any) =>{
     }
 }
 
-export const drawTable = () =>{
+export const setDates = (dates: any) =>{
     return (dispath: Dispatch) =>{
         dispath({
-            type: Actiontype.drawTable
+            type: Actiontype.setDates,
+            payload: dates
         })
     }
 }
