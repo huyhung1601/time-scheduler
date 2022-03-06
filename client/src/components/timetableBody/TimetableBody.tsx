@@ -14,7 +14,7 @@ const TimetableBody = () => {
   const tasks = useSelector((state: State) => state.tasks);
   const dispatch = useDispatch()
   const {dragItem} = bindActionCreators(actionCreators,dispatch)
-
+  const {dates} = useSelector((state: State)=>state)
   //Handle Drag
   const onDragEnd = (result: DropResult) => {
     const { destination, source } = result;
@@ -26,24 +26,26 @@ const TimetableBody = () => {
         console.log(result)
         return
     }
-    dragItem(result)
+    dragItem(result,dates)
   };
+
   return (
     <>
       <DragDropContext onDragEnd={onDragEnd}>
         <TableBody>
           {tasks.map((row: any, index: number) => {
             return (
-              <TableRow>
+              <TableRow key={index}>
                 {row.map((slot: any, index: number) => {
                   return (
-                    <Droppable droppableId={slot.id}>
+                    <Droppable droppableId={slot.id} key={index}>
                       {(provided) => {
                         return (
                           <TableCell
                             className="timeslot"
                             ref={provided.innerRef}
                             {...provided.droppableProps}
+                            onClick={()=>console.log(slot)}
                           >
                           {slot.tasks.map((t:any, index: number)=>{
                             return(
@@ -51,7 +53,7 @@ const TimetableBody = () => {
                                 {(provided)=>{
                                   return(
                                     <div className="draggable" ref={provided.innerRef} {...provided.dragHandleProps} {...provided.draggableProps}>
-                                        {t.task}
+                                        <small>{t.start.toLocaleString('en-GB')}</small>
                                     </div>
                                   )
                                 }}

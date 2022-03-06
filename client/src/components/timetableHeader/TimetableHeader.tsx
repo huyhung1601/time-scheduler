@@ -5,7 +5,6 @@ import { State } from "../../store/reducers";
 
 const TimetableHeader = () => {
   const {dates} = useSelector((state: State)=>state)
-  console.log(dates)
   return (
     <>
     <TableHead style={{padding: '0px'}}>

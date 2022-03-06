@@ -1,6 +1,6 @@
 import { Actiontype } from "../action-types";
 import { Action } from "../actions";
-import {getTime,getDay,converToNum} from '../../utils/index'
+import {getTime,getDay,converToNum, calcMinutes} from '../../utils/index'
 
 
 const tasksReducer = (state: any = [], action: Action) => {
@@ -33,10 +33,14 @@ const tasksReducer = (state: any = [], action: Action) => {
       return [...arr];
     //Drag Item
     case Actiontype.dragItem:
-      const {source,destination} = action.payload
+      const {result, dates} = action.payload
+      const {source,destination} = result
       const dragIndex= converToNum(source.droppableId)
       const dropIndex = converToNum(destination.droppableId)
       const dragItem = state[dragIndex[0]][dragIndex[1]].tasks[source.index]
+      const draggedItem = {...dragItem, start: dragItem.start.setDate(dates[dropIndex[1]].split('/')[0]), end:dragItem.end.setDate(dates[dropIndex[1]].split('/')[0])}
+      
+      dragItem.start.setHours(0,dragItem.start.getMinutes() - (dragItem.start.getMinutes() > 30? 30 : 0) + dropIndex[0] * 30)
       //Remove from previous time slot
       state[dragIndex[0]][dragIndex[1]].tasks.splice(source,1)
       //Add to new time slot

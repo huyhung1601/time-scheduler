@@ -22,3 +22,14 @@ export const daysCurrentMonth = (month:any, year:any) =>{
   return new Date(year, month + 1, 0).getDate();
 }
 
+export const calcMinutes = (half: number, minutes:number) =>{
+  return half * 30 + minutes
+}
+
+export const timeMarks = (x:number)=>{
+  let timeMarks =[]
+  for(let i =0;i <= x; i++){
+    timeMarks.push(i)
+  }
+  return timeMarks
+}

@@ -11,9 +11,8 @@ const datesReducer = (state: any = [], action: Action) => {
       const year = selectedDate.getFullYear();
       let arr = [];
       for (let d = 0; d < 7; d++) {
-        arr[d] = (new Date(year,month,date -(day-d))).toLocaleDateString()
+        arr[d] = (new Date(year,month,date -(day-d))).toLocaleDateString('en-GB')
       }
-      console.log(state)
       return [...arr]
       
     default:

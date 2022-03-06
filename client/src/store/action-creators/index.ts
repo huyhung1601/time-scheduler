@@ -19,11 +19,11 @@ export const setDates = (dates: any) =>{
     }
 }
 
-export const dragItem = (result: any) =>{
+export const dragItem = (result: any,dates: any) =>{
     return (dispatch: Dispatch) =>{
         dispatch({
             type: Actiontype.dragItem,
-            payload: result
+            payload: {result, dates}
         })
     }
 }
