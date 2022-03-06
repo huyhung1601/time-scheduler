@@ -1,5 +1,5 @@
 export enum Actiontype{
     getTasks = "getTasks",
-    setDates = "setDates",
+    setWeek = "setWeek",
     dragItem = "dragItem"
 }

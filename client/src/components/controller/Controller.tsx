@@ -14,30 +14,28 @@ import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { bindActionCreators } from "redux";
 import { actionCreators } from "../../store";
-import { fakeData } from "../timeScheduler/TimeScheduler";
+import { fakeData } from "../../utils"
 import { timeMarks } from "../../utils";
 
 const Controller = () => {
   const dispatch = useDispatch();
-  const { setDates, getTasks } = bindActionCreators(actionCreators, dispatch);
+  const { setWeek, getTasks } = bindActionCreators(actionCreators, dispatch);
   const [selectedDate, setSelectedDate] = React.useState(new Date());
-  const [timeline, setTimeline] = useState({ start: 6, end: 18 });
+  const [timeline, setTimeline] = useState({ start: 6, end: 11 });
   /**Dates pick-up */
   const handleDateChange = (date: any) => {
     setSelectedDate(date);
   };
   /**Handle Change */
-  const handleChange = (e: any) => {
-    const [name,value] = e.target
-    setTimeline({...timeline, start: value} )
-    console.log(name,value)
+  const handleChange = (e: any): void => {    
+    setTimeline({...timeline, [e.target.name]:e.target.value} )
   };
   /**Time marks */
   const tMarks = timeMarks(24)
   useEffect(() => {
-    setDates(selectedDate);
+    setWeek(selectedDate,timeline);
     getTasks(fakeData);
-  }, [selectedDate]);
+  }, [selectedDate,timeline]);
 
   return (
     <div className="controller">
@@ -47,7 +45,7 @@ const Controller = () => {
         <Select
           name='start'
           value={timeline.start}
-          onChange={e=>handleChange(e)}
+          onChange={handleChange}
         >
           {tMarks.map((x:any,index:number)=>{
             return(
@@ -55,21 +53,7 @@ const Controller = () => {
             )
           })}
         </Select>
-      </FormControl>
-      <FormControl>
-        <InputLabel >End</InputLabel>
-        <Select
-          name='end'
-          value={timeline.end}
-          onChange={e=>handleChange(e)}
-        >
-          {tMarks.map((x:any,index:number)=>{
-            return(
-              <MenuItem key={index} value={x}>{x}:00</MenuItem>
-            )
-          })}
-        </Select>
-      </FormControl>
+      </FormControl>      
       <FormControl>
         <InputLabel >End</InputLabel>
         <Select
@@ -78,11 +62,13 @@ const Controller = () => {
           onChange={e=>handleChange(e)}
         >
           {tMarks.map((x:any,index:number)=>{
-             return(
-               <>
-               {x > timeline.start && <MenuItem value={x}>{x}:00</MenuItem> }
-               </>
-            )
+             if (x < timeline.start +5) {
+               return null
+             } else {
+               return(
+                <MenuItem key={index} value={x}>{x}:00</MenuItem>
+               )
+             }
           })}
         </Select>
       </FormControl>

@@ -10,11 +10,11 @@ export const getTasks = (datas: any) =>{
     }
 }
 
-export const setDates = (dates: any) =>{
+export const setWeek = (selectedDate: any,timeline: any) =>{
     return (dispath: Dispatch) =>{
         dispath({
-            type: Actiontype.setDates,
-            payload: dates
+            type: Actiontype.setWeek,
+            payload: {selectedDate,timeline}
         })
     }
 }

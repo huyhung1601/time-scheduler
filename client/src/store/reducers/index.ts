@@ -5,7 +5,7 @@ import tasksReducer from "./tasksReducer";
 
 const reducers = combineReducers({
     tasks: tasksReducer,
-    dates: datesReducer
+    calendar: datesReducer
 })
 
 export default reducers
