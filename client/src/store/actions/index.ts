@@ -1,16 +1,17 @@
 import { Actiontype } from "../action-types";
 
-interface GroupAction {
+interface GetTasks {
     type: Actiontype.getTasks
     payload: any
 }
 
-interface DrawTableAction {
-    type: Actiontype.drawTable
+interface SetWeek {
+    type: Actiontype.setWeek
+    payload: any
 }
 
 interface DragItem {
     type: Actiontype.dragItem
     payload: any
 }
-export type Action = GroupAction | DrawTableAction |DragItem
+export type Action = GetTasks | SetWeek |DragItem

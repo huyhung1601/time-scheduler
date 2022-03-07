@@ -1,32 +1,41 @@
-import React from 'react'
-import { Grid, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@material-ui/core";
+import React from "react";
+import {
+  Table,
+  TableBody,
+  TableContainer,
+  TableHead,
+  TableRow,
+} from "@material-ui/core";
+import { useSelector } from "react-redux";
+import { State } from "../../store/reducers";
+import useStyles from './styles'
 
 const Timeline = () => {
-    const timeline=[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24]
+  /**MUI Style */
+  const classes = useStyles()
+  const timemarks = [
+    0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
+    21, 22, 23, 24,
+  ];
+  const calendar = useSelector((state: State) => state.calendar);
   return (
-    < TableContainer>
-        <Table aria-label="simple table">
-            <TableHead >
-                <TableRow>
-                    Time/Day
-                </TableRow>
-            </TableHead>
-            <TableBody>
-                <TableCell >
-                {timeline.map((x:number, i: number)=>{
-                return(
-                    <TableRow key={i}>
-                        {`${x}:00`}
-                    </TableRow>
-                )
-            })}
-                </TableCell>
-            
-            </TableBody>
-        </Table>
-      
+    <TableContainer className={classes.root} >
+      <Table aria-label="simple table">
+        <TableHead className={classes.tableHead}>
+          <TableRow><h4>Time/Day</h4></TableRow>
+        </TableHead>
+        <TableBody>
+          {timemarks.map((x: number, i: number) => {
+            if (x >= calendar.timeline.start && x <= calendar.timeline.end) {
+              return <TableRow className={classes.tableRow} key={i}>{`${x}:00`}</TableRow>;
+            } else {
+              return null;
+            }
+          })}
+        </TableBody>
+      </Table>
     </TableContainer>
-  )
-}
+  );
+};
 
-export default Timeline
+export default Timeline;
