@@ -4,6 +4,8 @@ import {
   InputLabel,
   Select,
   MenuItem,
+  AppBar,
+  Toolbar,
 } from "@material-ui/core";
 import DateFnsUtils from "@date-io/date-fns";
 import {
@@ -16,10 +18,14 @@ import { bindActionCreators } from "redux";
 import { actionCreators } from "../../store";
 import { fakeData } from "../../utils"
 import { timeMarks } from "../../utils";
-
+import useStyles from './styles'
 const Controller = () => {
+  /**MUI Theme */
+  const classes = useStyles()
+  /**Redux */
   const dispatch = useDispatch();
   const { setWeek, getTasks } = bindActionCreators(actionCreators, dispatch);
+  /**First value */
   const [selectedDate, setSelectedDate] = React.useState(new Date());
   const [timeline, setTimeline] = useState({ start: 6, end: 11 });
   /**Dates pick-up */
@@ -32,13 +38,15 @@ const Controller = () => {
   };
   /**Time marks */
   const tMarks = timeMarks(24)
+  /**Fetch data */
   useEffect(() => {
     setWeek(selectedDate,timeline);
     getTasks(fakeData);
   }, [selectedDate,timeline]);
 
   return (
-    <div className="controller">
+    <AppBar position="static" className={classes.root}>
+      <Toolbar>
       <Button onClick={() => handleDateChange(new Date())}>Today</Button>
       <FormControl>
         <InputLabel >Start</InputLabel>
@@ -72,7 +80,7 @@ const Controller = () => {
           })}
         </Select>
       </FormControl>
-      <MuiPickersUtilsProvider utils={DateFnsUtils}>
+      <MuiPickersUtilsProvider  utils={DateFnsUtils}>
         <KeyboardDatePicker
           margin="normal"
           id="date-picker-dialog"
@@ -85,7 +93,8 @@ const Controller = () => {
           }}
         />
       </MuiPickersUtilsProvider>
-    </div>
+      </Toolbar>
+    </AppBar>
   );
 };
 

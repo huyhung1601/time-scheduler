@@ -11,11 +11,14 @@ import {
 import { bindActionCreators } from "redux";
 import { actionCreators } from "../../store";
 import Task from "../Task/Task";
+import useStyles from './styles'
 const TimetableBody = () => {
-  const tasks = useSelector((state: State) => state.tasks);
+  /**MUI styles */
+  const classes = useStyles()
+  /**Redux */
   const dispatch = useDispatch()
   const {dragItem} = bindActionCreators(actionCreators,dispatch)
-  const {calendar} = useSelector((state: State)=>state)
+  const {calendar,tasks} = useSelector((state: State)=>state)
   //Handle Drag
   const onDragEnd = (result: DropResult) => {
     console.log(calendar)
@@ -35,11 +38,11 @@ const TimetableBody = () => {
   return (
     <>
       <DragDropContext onDragEnd={onDragEnd}>
-        <TableBody>
+        <TableBody className={classes.root} >
           {tasks.map((row: any, index: number) => {
-            if (index >= calendar.timeline.start*2 && index <= calendar.timeline.end*2) {
+            if (index >= calendar.timeline.start*2 && index <= calendar.timeline.end*2 + 1) {
             return (
-              <TableRow key={index}>
+              <TableRow  key={index}>
                 {row.map((slot: any, index: number) => {
                   console.log(slot.id)
                   return (
@@ -47,16 +50,17 @@ const TimetableBody = () => {
                       {(provided) => {
                         return (
                           <TableCell
-                            className="timeslot"
+                            className={classes.tableCell}
                             ref={provided.innerRef}
                             {...provided.droppableProps}
-                            onClick={()=>console.log(slot)}
                           >
+                            <div className={classes.taskContainer}>
                           {slot.tasks.map((t:any, index: number)=>{
                             return(
                               <Task t={t} key={index} index={index}/>
                             )
                           })}
+                          </div>
                           </TableCell>
                         );
                       }}

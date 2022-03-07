@@ -8,23 +8,26 @@ import {
 } from "@material-ui/core";
 import { useSelector } from "react-redux";
 import { State } from "../../store/reducers";
+import useStyles from './styles'
 
 const Timeline = () => {
+  /**MUI Style */
+  const classes = useStyles()
   const timemarks = [
     0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
     21, 22, 23, 24,
   ];
   const calendar = useSelector((state: State) => state.calendar);
   return (
-    <TableContainer>
+    <TableContainer className={classes.root} >
       <Table aria-label="simple table">
-        <TableHead>
+        <TableHead className={classes.tableHead}>
           <TableRow>Time/Day</TableRow>
         </TableHead>
         <TableBody>
           {timemarks.map((x: number, i: number) => {
             if (x >= calendar.timeline.start && x <= calendar.timeline.end) {
-              return <TableRow key={i}>{`${x}:00`}</TableRow>;
+              return <TableRow className={classes.tableRow} key={i}>{`${x}:00`}</TableRow>;
             } else {
               return null;
             }
