@@ -1,23 +1,33 @@
 import { Actiontype } from "../action-types";
 import { Action } from "../actions";
 
-const datesReducer = (state: any = [], action: Action) => {
+const initialValue ={
+  type: 'week',
+  dates: [],
+  timeline: {start: 6, end: 11}
+}
+
+const datesReducer = (state:any =initialValue, action: Action) => {
   switch (action.type) {
-    case Actiontype.setDates:
-      const selectedDate = action.payload;
+    case Actiontype.setWeek:
+      const {selectedDate,timeline} = action.payload;
       const day = selectedDate.getDay();
       const date = selectedDate.getDate();
       const month = selectedDate.getMonth();
       const year = selectedDate.getFullYear();
+
       let arr = [];
       for (let d = 0; d < 7; d++) {
         arr[d] = (new Date(year,month,date -(day-d))).toLocaleDateString('en-GB')
       }
-      return [...arr]
+      return {...state, dates: [...arr], timeline: timeline}
       
     default:
-      
-      return state;
+      // let ini = []
+      // for (let i = 0; i < 7; i++) {
+      //   ini[i] = (new Date(new Date().getFullYear(),new Date().getMonth(),new Date().getDate() -(new Date()).getDay()-i)).toLocaleDateString('en-GB')
+      // }
+      return {...state};
   }
 };
 

@@ -10,11 +10,15 @@ import {
 } from "react-beautiful-dnd";
 import { bindActionCreators } from "redux";
 import { actionCreators } from "../../store";
+import Task from "../Task/Task";
+import useStyles from './styles'
 const TimetableBody = () => {
-  const tasks = useSelector((state: State) => state.tasks);
+  /**MUI styles */
+  const classes = useStyles()
+  /**Redux */
   const dispatch = useDispatch()
   const {dragItem} = bindActionCreators(actionCreators,dispatch)
-  const {dates} = useSelector((state: State)=>state)
+  const {calendar,tasks} = useSelector((state: State)=>state)
   //Handle Drag
   const onDragEnd = (result: DropResult) => {
     const { destination, source } = result;
@@ -26,40 +30,35 @@ const TimetableBody = () => {
         console.log(result)
         return
     }
-    dragItem(result,dates)
+    dragItem(result,calendar.dates)
   };
+
 
   return (
     <>
       <DragDropContext onDragEnd={onDragEnd}>
-        <TableBody>
+        <TableBody className={classes.root} >
           {tasks.map((row: any, index: number) => {
+            if (index >= calendar.timeline.start*2 && index <= calendar.timeline.end*2 + 1) {
             return (
-              <TableRow key={index}>
+              <TableRow  key={index}>
                 {row.map((slot: any, index: number) => {
                   return (
                     <Droppable droppableId={slot.id} key={index}>
                       {(provided) => {
                         return (
                           <TableCell
-                            className="timeslot"
+                            className={classes.tableCell}
                             ref={provided.innerRef}
                             {...provided.droppableProps}
-                            onClick={()=>console.log(slot)}
                           >
+                            <div className={classes.taskContainer}>
                           {slot.tasks.map((t:any, index: number)=>{
                             return(
-                              <Draggable key={t.id} index={index} draggableId={t.id}>
-                                {(provided)=>{
-                                  return(
-                                    <div className="draggable" ref={provided.innerRef} {...provided.dragHandleProps} {...provided.draggableProps}>
-                                        <small>{t.start.toLocaleString('en-GB')}</small>
-                                    </div>
-                                  )
-                                }}
-                              </Draggable>
+                              <Task t={t} key={index} index={index}/>
                             )
                           })}
+                          </div>
                           </TableCell>
                         );
                       }}
@@ -67,7 +66,7 @@ const TimetableBody = () => {
                   );
                 })}
               </TableRow>
-            );
+            )} else{ return null}
           })}
         </TableBody>
       </DragDropContext>

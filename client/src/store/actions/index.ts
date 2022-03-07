@@ -5,8 +5,8 @@ interface GetTasks {
     payload: any
 }
 
-interface SetDates {
-    type: Actiontype.setDates
+interface SetWeek {
+    type: Actiontype.setWeek
     payload: any
 }
 
@@ -14,4 +14,4 @@ interface DragItem {
     type: Actiontype.dragItem
     payload: any
 }
-export type Action = GetTasks | SetDates |DragItem
+export type Action = GetTasks | SetWeek |DragItem

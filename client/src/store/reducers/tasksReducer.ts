@@ -1,7 +1,6 @@
 import { Actiontype } from "../action-types";
 import { Action } from "../actions";
-import {getTime,getDay,converToNum, calcMinutes} from '../../utils/index'
-
+import { getTime, getDay, converToNum } from "../../utils/index";
 
 const tasksReducer = (state: any = [], action: Action) => {
   switch (action.type) {
@@ -17,36 +16,55 @@ const tasksReducer = (state: any = [], action: Action) => {
     //   return [...state];
 
     /**Draw table and mark items */
-    case Actiontype.getTasks: 
-      let arr: any = []
+    case Actiontype.getTasks:
+      let arr: any = [];
       for (let i = 0; i < 24 * 2; i++) {
         arr.push([]);
         for (let j = 0; j < 7; j++) {
-          let slot = {id: `${i}${j}`,tasks:[]}
+          let slot = { id: `${i}:${j}`, tasks: [] };
           arr[i].push(slot);
           action.payload.map((task: any) => {
-            getTime(task.start) === i && getDay(task.start) === j
-              && arr[i][j].tasks.every((x:any)=>x.id !== task.id) && arr[i][j].tasks.push(task)                         
+            getTime(task.start) === i &&
+              getDay(task.start) === j &&
+              arr[i][j].tasks.every((x: any) => x.id !== task.id) &&
+              arr[i][j].tasks.push({...task,start: (new Date(task.start)),end: (new Date(task.start))});
           });
         }
       }
       return [...arr];
     //Drag Item
-    case Actiontype.dragItem:
-      const {result, dates} = action.payload
-      const {source,destination} = result
-      const dragIndex= converToNum(source.droppableId)
-      const dropIndex = converToNum(destination.droppableId)
-      const dragItem = state[dragIndex[0]][dragIndex[1]].tasks[source.index]
-      const draggedItem = {...dragItem, start: dragItem.start.setDate(dates[dropIndex[1]].split('/')[0]), end:dragItem.end.setDate(dates[dropIndex[1]].split('/')[0])}
-      
-      dragItem.start.setHours(0,dragItem.start.getMinutes() - (dragItem.start.getMinutes() > 30? 30 : 0) + dropIndex[0] * 30)
+    case Actiontype.dragItem: 
+      const { result, dates } = action.payload;
+      const { source, destination } = result;
+      const dragIndex = converToNum(source.droppableId);
+      const dropIndex = converToNum(destination.droppableId);
+      const dragItem = state[dragIndex[0]][dragIndex[1]].tasks[source.index];
+      console.log(Number(dates[dropIndex[1]].split("/")[0]))
+
+      //Set Date
+      const draggedItem = {
+        ...dragItem,
+        start: new Date(dragItem.start.setDate(Number(dates[dropIndex[1]].split("/")[0]))),
+        end: new Date(dragItem.end.setDate(Number(dates[dropIndex[1]].split("/")[0]))),
+      };
+
+      //Set Time
+      dragItem.start.setHours(
+        0,
+        dragItem.start.getMinutes() -
+          (dragItem.start.getMinutes() > 30 ? 30 : 0) +
+          dropIndex[0] * 30
+      );
       //Remove from previous time slot
-      state[dragIndex[0]][dragIndex[1]].tasks.splice(source,1)
+      state[dragIndex[0]][dragIndex[1]].tasks.splice(source.index, 1);
       //Add to new time slot
-      state[dropIndex[0]][dropIndex[1]].tasks.splice(destination.index,0,dragItem)
-      return[...state]
-    default:      
+      state[dropIndex[0]][dropIndex[1]].tasks.splice(
+        destination.index,
+        0,
+        dragItem
+      );
+      return [...state];
+    default:
       return state;
   }
 };
