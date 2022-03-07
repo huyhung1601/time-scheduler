@@ -22,7 +22,7 @@ const Timeline = () => {
     <TableContainer className={classes.root} >
       <Table aria-label="simple table">
         <TableHead className={classes.tableHead}>
-          <TableRow><h4>Time/Day</h4></TableRow>
+          <TableRow></TableRow>
         </TableHead>
         <TableBody>
           {timemarks.map((x: number, i: number) => {

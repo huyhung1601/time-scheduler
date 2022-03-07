@@ -10,7 +10,7 @@ import {
 } from "react-beautiful-dnd";
 import { bindActionCreators } from "redux";
 import { actionCreators } from "../../store";
-import Task from "../Task/Task";
+import Task from "../task/Task";
 import useStyles from './styles'
 const TimetableBody = () => {
   /**MUI styles */

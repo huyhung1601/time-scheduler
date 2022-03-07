@@ -7,7 +7,7 @@ const initialValue ={
   timeline: {start: 6, end: 11}
 }
 
-const datesReducer = (state:any =initialValue, action: Action) => {
+const calendarReducer = (state:any =initialValue, action: Action) => {
   switch (action.type) {
     case Actiontype.setWeek:
       const {selectedDate,timeline} = action.payload;
@@ -31,4 +31,4 @@ const datesReducer = (state:any =initialValue, action: Action) => {
   }
 };
 
-export default datesReducer;
+export default calendarReducer;
