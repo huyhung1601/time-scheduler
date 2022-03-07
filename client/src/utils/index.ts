@@ -1,13 +1,26 @@
 import  {v4} from 'uuid'
+import moment from 'moment'
+
 export const fakeData = [
-  { id:v4(), task: "task 1", start: new Date("03/07/2022 6:31"), end: new Date("03/07/2022 10:15") },
-  { id:v4(), task: "task 2", start: new Date("03/07/2022 6:35"), end: new Date("03/07/2022 10:15") },
-  { id:v4(), task: "task 3", start: new Date("03/08/2022 7:15"), end: new Date("03/08/2022 14:15") },
-  { id:v4(), task: "task 4", start: new Date("03/09/2022 9:15"), end: new Date("03/09/2022 14:15") },
-  { id:v4(), task: "task 5", start: new Date("03/06/2022 10:35"), end: new Date("03/06/2022 10:15") },
-  { id:v4(), task: "task 6", start: new Date("03/06/2022 7:15"), end: new Date("03/06/2022 11:15") },
-  { id:v4(), task: "task 7", start: new Date("03/06/2022 8:15"), end: new Date("03/06/2022 15:15") },
+  { id:v4(), task: "task 1", start: "2022-03-07T06:20", end: "2022-03-07T19:20" },
+  { id:v4(), task: "task 2", start: "2022-03-07T07:20", end: "2022-03-07T19:20" },
+  { id:v4(), task: "task 3", start: "2022-03-08T06:40", end: "2022-03-08T19:20" },
+  { id:v4(), task: "task 4", start: "2022-03-08T10:20", end: "2022-03-08T19:20" },
+  { id:v4(), task: "task 5", start: "2022-03-09T09:20", end: "2022-03-09T19:20" },
+  { id:v4(), task: "task 6", start: "2022-03-09T09:25", end: "2022-03-09T19:20" },
+  { id:v4(), task: "task 7", start: "2022-03-09T10:20", end: "2022-03-09T19:20" },
 ];
+
+export const selectedTasks = async (dates :any) =>{
+  let selected: Array<any> = []
+  await fakeData.forEach((x:any)=>{
+    dates.forEach((d:any)=>{
+      moment(d,"DDMMYYYY").isSame(x,"day") && selected.push(x)
+    })
+  })
+  console.log(selected[0])
+  return selected
+}
 
 export const getDay = (d: any) => {
     return new Date(d).getDay();

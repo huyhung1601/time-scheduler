@@ -1,20 +1,24 @@
 import { Dispatch } from "redux"
+import { selectedTasks } from "../../utils"
 import { Actiontype } from "../action-types"
 
-export const getTasks = (datas: any) =>{
-    return (dispatch: Dispatch) =>{
-        dispatch({
-            type: Actiontype.getTasks,
-            payload: datas
-        })
-    }
-}
+
 
 export const setWeek = (selectedDate: any,timeline: any) =>{
-    return (dispath: Dispatch) =>{
+    return async (dispath: Dispatch) =>{
         dispath({
             type: Actiontype.setWeek,
             payload: {selectedDate,timeline}
+        })        
+    }
+}
+
+export const getTasks = (dates: any) =>{
+    return async (dispatch: Dispatch) =>{
+        const response = await selectedTasks(dates)
+        dispatch({
+            type: Actiontype.getTasks,
+            payload: response
         })
     }
 }

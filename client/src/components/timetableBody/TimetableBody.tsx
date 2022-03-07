@@ -21,7 +21,6 @@ const TimetableBody = () => {
   const {calendar,tasks} = useSelector((state: State)=>state)
   //Handle Drag
   const onDragEnd = (result: DropResult) => {
-    console.log(calendar)
     const { destination, source } = result;
       if (!destination) {
         console.log(destination)
@@ -44,7 +43,6 @@ const TimetableBody = () => {
             return (
               <TableRow  key={index}>
                 {row.map((slot: any, index: number) => {
-                  console.log(slot.id)
                   return (
                     <Droppable droppableId={slot.id} key={index}>
                       {(provided) => {

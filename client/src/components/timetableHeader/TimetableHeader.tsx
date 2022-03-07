@@ -12,7 +12,7 @@ const TimetableHeader = () => {
     <>
     <TableHead >
       <TableRow >
-        {calendar.dates?.map((date: any, index: number)=>{
+        {calendar.dates.map((date: any, index: number)=>{
           return(
             <TableCell className={classes.tableCell} key={index}>
               <small>{date}</small>
