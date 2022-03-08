@@ -6,7 +6,12 @@ export default makeStyles((theme:any)=>({
         fontSize: '12px',
         backgroundColor: '#57aecb'
     },
-    text:{
+    prev:{
+        backgroundColor: 'lightgray'
 
-    }    
+    } ,
+    next:{
+        backgroundColor: 'lightblue'
+
+    }
 }))

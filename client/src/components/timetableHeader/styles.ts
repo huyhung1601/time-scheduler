@@ -11,7 +11,7 @@ export default makeStyles((theme)=>({
         textAlign: 'center'
     },
     today:{
-        backgroundColor: 'lightblue'
+        backgroundColor: '#57aecb'
     }
 
 }))

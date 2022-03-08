@@ -1,6 +1,5 @@
 import { TableCell, TableHead, TableRow } from "@material-ui/core";
 import clsx from 'clsx'
-import React from "react";
 import { useSelector } from "react-redux";
 import { State } from "../../store/reducers";
 import useStyles from './styles'

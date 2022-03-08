@@ -1,23 +1,30 @@
 import React from "react";
+import clsx from 'clsx'
 import { Draggable } from "react-beautiful-dnd";
 import useStyle from './styles'
 const Task = (props: any) => {
     const {t,index} = props
     /**MUI style */
     const classes = useStyle()
+    const {task, prev, next} = classes
+    const compareDate =(date: string) =>{
+      const tday = new Date().getTime()      
+      const time = new Date(date).getTime()
+      return (time - tday)/(1000*24*3600)
+    }
   return (
     <Draggable key={t.id} index={index} draggableId={t.id}>
       {(provided) => {
         return (
           <div
-            className={classes.task}
+            className={clsx(task,{[prev]:compareDate(t.start) <= -1},{[next]:compareDate(t.start) >=0} )}
             ref={provided.innerRef}
             {...provided.dragHandleProps}
             {...provided.draggableProps}
           >
-            <small className={classes.text}>{t.task}</small>
+            <small>{t.task}</small>
             <br/>
-            <small className={classes.text}>{t.start.toLocaleString("en-GB")}</small>
+            <small>{t.start.toLocaleString("en-GB")}</small>
           </div>
         );
       }}
