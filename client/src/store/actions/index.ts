@@ -14,4 +14,9 @@ interface DragItem {
     type: Actiontype.dragItem
     payload: any
 }
-export type Action = GetTasks | SetWeek |DragItem
+
+interface CreateTask {
+    type: Actiontype.createTask
+    payload: any
+}
+export type Action = GetTasks | SetWeek |DragItem | CreateTask

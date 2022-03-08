@@ -12,21 +12,22 @@ import {
   MuiPickersUtilsProvider,
   KeyboardDatePicker,
 } from "@material-ui/pickers";
-import React, { useCallback, useEffect, useState } from "react";
+import React, {  useContext, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { bindActionCreators } from "redux";
 import { actionCreators } from "../../store";
-import { fakeData } from "../../utils"
 import { timeMarks } from "../../utils";
 import useStyles from './styles'
 import { State } from "../../store/reducers";
+import { ToggleContext } from "../../context/Context";
 const Controller = () => {
   /**MUI Theme */
   const classes = useStyles()
-  /**Redux */
+  /**Redux - Context*/
   const dispatch = useDispatch();
   const { setWeek, getTasks } = bindActionCreators(actionCreators, dispatch);
   const {calendar} = useSelector((state:State)=> state)
+  const {openDialog,handleOpen} = useContext(ToggleContext)
   /**First value */
   const [selectedDate, setSelectedDate] = React.useState(new Date());
   const [timeline, setTimeline] = useState({ start: 6, end: 11 });
@@ -40,12 +41,11 @@ const Controller = () => {
   };
   /**Time marks */
   const tMarks = timeMarks(24)
-  /**Fetch data */
+  /**setCalendar */
   useEffect(() => {    
     setWeek(selectedDate,timeline);
   }, [selectedDate,timeline]);
-  
-
+  /**Get Tasks */
   useEffect(()=>{
     getTasks(calendar.dates)
   },[calendar.dates])
@@ -98,6 +98,7 @@ const Controller = () => {
           }}
         />
       </MuiPickersUtilsProvider>
+      <Button variant="outlined" color="primary" onClick={handleOpen} >New Task</Button>
       </Toolbar>
     </AppBar>
   );

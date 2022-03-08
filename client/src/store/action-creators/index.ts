@@ -31,3 +31,13 @@ export const dragItem = (result: any,dates: any) =>{
         })
     }
 }
+
+
+export const createTask = (newTask: any) =>{
+    return(dispatch: Dispatch) =>{
+        dispatch({
+            type: Actiontype.createTask,
+            payload: newTask
+        })
+    }
+}

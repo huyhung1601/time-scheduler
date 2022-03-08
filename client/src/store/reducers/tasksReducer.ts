@@ -27,25 +27,33 @@ const tasksReducer = (state: any = [], action: Action) => {
             getTime(task.start) === i &&
               getDay(task.start) === j &&
               arr[i][j].tasks.every((x: any) => x.id !== task.id) &&
-              arr[i][j].tasks.push({...task,start: (new Date(task.start)),end: (new Date(task.start))});
+              arr[i][j].tasks.push({
+                ...task,
+                start: new Date(task.start),
+                end: new Date(task.end),
+              });
           });
         }
       }
       return [...arr];
-    //Drag Item
-    case Actiontype.dragItem: 
+    /**Drag Item */
+    case Actiontype.dragItem:
       const { result, dates } = action.payload;
       const { source, destination } = result;
       const dragIndex = converToNum(source.droppableId);
       const dropIndex = converToNum(destination.droppableId);
       const dragItem = state[dragIndex[0]][dragIndex[1]].tasks[source.index];
-      console.log(Number(dates[dropIndex[1]].split("/")[0]))
+      console.log(Number(dates[dropIndex[1]].split("/")[0]));
 
       //Set Date
       const draggedItem = {
         ...dragItem,
-        start: new Date(dragItem.start.setDate(Number(dates[dropIndex[1]].split("/")[0]))),
-        end: new Date(dragItem.end.setDate(Number(dates[dropIndex[1]].split("/")[0]))),
+        start: new Date(
+          dragItem.start.setDate(Number(dates[dropIndex[1]].split("/")[0]))
+        ),
+        end: new Date(
+          dragItem.end.setDate(Number(dates[dropIndex[1]].split("/")[0]))
+        ),
       };
 
       //Set Time
@@ -64,6 +72,10 @@ const tasksReducer = (state: any = [], action: Action) => {
         dragItem
       );
       return [...state];
+    /**Create Task */
+    case Actiontype.createTask:
+      console.log(new Date(action.payload.start))
+      return state;
     default:
       return state;
   }

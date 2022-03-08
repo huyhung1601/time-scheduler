@@ -12,6 +12,7 @@ import { bindActionCreators } from "redux";
 import { actionCreators } from "../../store";
 import Task from "../task/Task";
 import useStyles from './styles'
+import TaskDialog from "../taskDialog/TaskDialog";
 const TimetableBody = () => {
   /**MUI styles */
   const classes = useStyles()
@@ -68,7 +69,9 @@ const TimetableBody = () => {
               </TableRow>
             )} else{ return null}
           })}
+          <TaskDialog/>
         </TableBody>
+        
       </DragDropContext>
     </>
   );
