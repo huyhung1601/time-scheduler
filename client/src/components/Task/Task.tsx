@@ -9,7 +9,7 @@ const Task = (props: any) => {
     const {task, prev, next} = classes
     const prevTime =(date: string) =>{
       const tday = new Date().getTime()      
-      const time = new Date(date).getTime()
+      const time = new Date(date).getTime() + (new Date().getHours()*3600 + new Date().getMinutes()*60 + new Date().getSeconds())*1000
       return (time - tday)/(1000*24*3600)
     }
     const nextTime = (date: string) =>{
