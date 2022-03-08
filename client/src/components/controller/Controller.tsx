@@ -98,7 +98,7 @@ const Controller = () => {
           }}
         />
       </MuiPickersUtilsProvider>
-      <Button variant="outlined" color="primary" onClick={handleOpen} >New Task</Button>
+      {/* <Button variant="outlined" color="primary" onClick={handleOpen} >New Task</Button> */}
       </Toolbar>
     </AppBar>
   );
