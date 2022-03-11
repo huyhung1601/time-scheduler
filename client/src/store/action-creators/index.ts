@@ -1,5 +1,5 @@
 import { Dispatch } from "redux"
-import { selectedTasks } from "../../utils"
+import { addNewTask, selectedTasks } from "../../utils"
 import { Actiontype } from "../action-types"
 
 
@@ -33,11 +33,12 @@ export const dragItem = (result: any,dates: any) =>{
 }
 
 
-export const createTask = (newTask: any) =>{
-    return(dispatch: Dispatch) =>{
+export const createTask = (newTask: any,calendar: any) =>{
+    return async (dispatch: Dispatch) =>{
+        const res = await addNewTask(newTask)
         dispatch({
             type: Actiontype.createTask,
-            payload: newTask
+            payload: {task: res,calendar}
         })
     }
 }

@@ -15,7 +15,15 @@ const tasksReducer = (state: any = [], action: Action) => {
     //   }
     //   return [...state];
 
+    /**Create Task */
+    case Actiontype.createTask:
+      const {task ,calendar}= action.payload
+      const date = new Date(task.start)
+      const time = Math.ceil((date.getHours() * 60 + date.getMinutes())/30)
+      const day = date.getDay()
+    return [...state,calendar.dates.includes(date.toLocaleDateString('en-gb')) && state[time][day].tasks.push(task)]
     /**Draw table and mark items */
+    
     case Actiontype.getTasks:
       let arr: any = [];
       for (let i = 0; i < 24 * 2; i++) {
@@ -73,9 +81,7 @@ const tasksReducer = (state: any = [], action: Action) => {
       );
       return [...state];
     /**Create Task */
-    case Actiontype.createTask:
-      console.log(new Date(action.payload.start))
-      return state;
+    
     default:
       return state;
   }

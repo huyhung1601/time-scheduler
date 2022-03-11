@@ -61,9 +61,14 @@ const Controller = () => {
           onChange={handleChange}
         >
           {tMarks.map((x:any,index:number)=>{
-            return(
-              <MenuItem key={index} value={x}>{x}:00</MenuItem>
-            )
+            if (x > timeline.end ){
+              return null
+            } else {
+              return(
+                <MenuItem key={index} value={x}>{x}:00</MenuItem>
+              )
+            }
+            
           })}
         </Select>
       </FormControl>      
@@ -98,7 +103,7 @@ const Controller = () => {
           }}
         />
       </MuiPickersUtilsProvider>
-      {/* <Button variant="outlined" color="primary" onClick={handleOpen} >New Task</Button> */}
+      <Button variant="outlined" color="primary" onClick={handleOpen} >New Task</Button>
       </Toolbar>
     </AppBar>
   );

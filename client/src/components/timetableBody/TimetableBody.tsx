@@ -4,7 +4,6 @@ import { State } from "../../store/reducers";
 import { useDispatch, useSelector } from "react-redux";
 import {
   DragDropContext,
-  Draggable,
   Droppable,
   DropResult,
 } from "react-beautiful-dnd";

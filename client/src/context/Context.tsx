@@ -1,9 +1,9 @@
 import  React, {useState,createContext} from "react"
 
 export interface ToggleContext{
-    openDialog: boolean;
-    handleOpen?: () => void;
-    handleClose?: () => void ;
+    openDialog: boolean
+    handleOpen?: () => void
+    handleClose?: () => void 
 }
 
 const initialValue ={
@@ -17,14 +17,14 @@ export const ToggleContextProvider: React.FC<React.ReactNode> = ({children}) =>{
     const handleOpen = () =>{
         setToggle(true)
     }
-    const handleCLose = () =>{
+    const handleClose = () =>{
         setToggle(false)
     }
     return(
         <ToggleContext.Provider value={{
             openDialog: toggle,
-            handleOpen: handleOpen,
-            handleClose: handleCLose,
+            handleOpen,
+            handleClose,
         }}>
         {children}
         </ToggleContext.Provider>
