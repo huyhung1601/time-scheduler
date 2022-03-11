@@ -21,7 +21,8 @@ const tasksReducer = (state: any = [], action: Action) => {
       const date = new Date(task.start)
       const time = Math.ceil((date.getHours() * 60 + date.getMinutes())/30)
       const day = date.getDay()
-    return [...state,calendar.dates.includes(date.toLocaleDateString('en-gb')) && state[time][day].tasks.push(task)]
+      const newTask = {...task,start: new Date(task.start), end: new Date(task.end)}
+    return [...state,calendar.dates.includes(date.toLocaleDateString('en-gb')) && state[time][day].tasks.push(newTask)]
     /**Draw table and mark items */
     
     case Actiontype.getTasks:
