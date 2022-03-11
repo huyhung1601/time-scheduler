@@ -1,6 +1,6 @@
 export enum Actiontype{
     getTasks = "getTasks",
-    setWeek = "setWeek",
+    setCalendar = "setCalendar",
     dropItem = "dropItem",
     createTask = 'createTask',
     updateTask = 'updateTask'

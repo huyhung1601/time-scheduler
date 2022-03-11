@@ -7,8 +7,11 @@ export default makeStyles(theme=>({
         padding: '2px',
         '& .MuiFormControl-root':{
             margin: '5px'
+        },
+        '& .MuiGrid-item':{
+            display: 'flex',
+            alignItem: 'center'
         }
-        
     },
     
 }))

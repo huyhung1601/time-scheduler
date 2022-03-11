@@ -1,22 +1,22 @@
 import { Dispatch } from "redux"
 import { addNewTask, selectedTasks, serverUpdateTask } from "../../server"
 import { Actiontype } from "../action-types"
-import { TaskProps } from "../actions"
+import { CalendarProps, TaskProps } from "../actions"
 
 
 
-export const setWeek = (selectedDate: any,timeline: any) =>{
+export const setCalendar = ({selectedDate,timeline,type}: CalendarProps) =>{
     return async (dispath: Dispatch) =>{
         dispath({
-            type: Actiontype.setWeek,
-            payload: {selectedDate,timeline}
+            type: Actiontype.setCalendar,
+            payload: {selectedDate,timeline,type}
         })        
     }
 }
 
-export const getTasks = (dates: any) =>{
+export const getTasks = ({selectedDate,type}:any) =>{
     return async (dispatch: Dispatch) =>{
-        const response = await selectedTasks(dates)
+        const response = await selectedTasks({selectedDate,type})
         dispatch({
             type: Actiontype.getTasks,
             payload: response

@@ -27,7 +27,7 @@ const Timeline = () => {
         <TableBody>
           {timemarks.map((x: number, i: number) => {
             if (x >= calendar.timeline.start && x <= calendar.timeline.end) {
-              return <TableRow className={classes.tableRow} key={i}>{`${x}:00`}</TableRow>;
+              return <TableRow className={classes.tableRow} key={i}>{calendar.type =='month' ?`W${x}` : `${x}:00` }</TableRow>;
             } else {
               return null;
             }

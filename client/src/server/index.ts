@@ -23,13 +23,14 @@ export const addNewTask = async (task: any) =>{
   return newTask
 }
 
-export const selectedTasks = async (dates :any) =>{
+export const selectedTasks = async ({selectedDate,type}:any) =>{
+  console.log(selectedDate,type)
   let selected: Array<any> = []
-  await fakeData.forEach((x:any)=>{
-    dates.forEach((d:any)=>{
-      d=== new Date(x.start).toLocaleDateString('en-gb') && selected.push(x)
-    })
-  })
+  // await fakeData.forEach((x:any)=>{
+  //   dates.forEach((d:any)=>{
+  //     d=== new Date(x.start).toLocaleDateString('en-gb') && selected.push(x)
+  //   })
+  // })
   return selected
 }
 

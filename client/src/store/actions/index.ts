@@ -6,14 +6,19 @@ export interface TaskProps {
     start: string
     end: string
 }
+export interface CalendarProps {
+    type: string
+    selectedDate: Date
+    timeline: {start: number, end: number}
+}
 interface GetTasks {
     type: Actiontype.getTasks
     payload: TaskProps[]
 }
 
-interface SetWeek {
-    type: Actiontype.setWeek
-    payload: any
+interface SetCalendar {
+    type: Actiontype.setCalendar
+    payload: CalendarProps
 }
 
 interface DropItem {
@@ -30,4 +35,4 @@ interface UpdateTask {
     type: Actiontype.updateTask
     payload: TaskProps
 }
-export type Action = GetTasks | SetWeek |DropItem | CreateTask |UpdateTask
+export type Action = GetTasks | SetCalendar |DropItem | CreateTask |UpdateTask

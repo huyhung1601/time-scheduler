@@ -9,8 +9,8 @@ const initialValue ={
 
 const calendarReducer = (state:any =initialValue, action: Action) => {
   switch (action.type) {
-    case Actiontype.setWeek:
-      const {selectedDate,timeline} = action.payload;
+    case Actiontype.setCalendar:
+      const {selectedDate,timeline,type} = action.payload;
       const day = selectedDate.getDay();
       const date = selectedDate.getDate();
       const month = selectedDate.getMonth();
@@ -20,7 +20,7 @@ const calendarReducer = (state:any =initialValue, action: Action) => {
       for (let d = 0; d < 7; d++) {
         arr[d] = (new Date(year,month,date -(day-d))).toLocaleDateString('en-GB')
       }
-      return {...state, dates: [...arr], timeline: timeline}
+      return {...state, dates: [...arr], timeline: timeline, type: type}
       
     default:
       // let ini = []

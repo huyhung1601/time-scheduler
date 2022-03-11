@@ -47,7 +47,7 @@ const TimetableHeader = () => {
         {calendar.dates.map((date: any, index: number)=>{
           return(
             <TableCell className={clsx(tableCell,{[today]: sameDate(date)})} key={index}>
-              <small>{day(index)}<br/>{date}</small>
+              <small>{day(index)}<br/>{calendar.type =='week' && date}</small>
             </TableCell>
           )
         })}
