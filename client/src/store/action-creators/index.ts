@@ -1,6 +1,7 @@
 import { Dispatch } from "redux"
-import { addNewTask, selectedTasks } from "../../utils"
+import { addNewTask, selectedTasks, serverUpdateTask } from "../../server"
 import { Actiontype } from "../action-types"
+import { TaskProps } from "../actions"
 
 
 
@@ -23,10 +24,10 @@ export const getTasks = (dates: any) =>{
     }
 }
 
-export const dragItem = (result: any,dates: any) =>{
+export const dropItem = (result: any,dates: any) =>{
     return (dispatch: Dispatch) =>{
         dispatch({
-            type: Actiontype.dragItem,
+            type: Actiontype.dropItem,
             payload: {result, dates}
         })
     }
@@ -39,6 +40,16 @@ export const createTask = (newTask: any,calendar: any) =>{
         dispatch({
             type: Actiontype.createTask,
             payload: {task: res,calendar}
+        })
+    }
+}
+
+export const updateTask = (updateTask: TaskProps)=>{
+    return async (dispatch: Dispatch) =>{
+        const res = await serverUpdateTask(updateTask)
+        dispatch({
+            type: Actiontype,
+            payload: updateTask
         })
     }
 }

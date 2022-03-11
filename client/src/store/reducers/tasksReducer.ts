@@ -46,13 +46,12 @@ const tasksReducer = (state: any = [], action: Action) => {
       }
       return [...arr];
     /**Drag Item */
-    case Actiontype.dragItem:
+    case Actiontype.dropItem:
       const { result, dates } = action.payload;
       const { source, destination } = result;
       const dragIndex = converToNum(source.droppableId);
       const dropIndex = converToNum(destination.droppableId);
       const dragItem = state[dragIndex[0]][dragIndex[1]].tasks[source.index];
-      console.log(Number(dates[dropIndex[1]].split("/")[0]));
 
       //Set Date
       const draggedItem = {
@@ -81,8 +80,9 @@ const tasksReducer = (state: any = [], action: Action) => {
         dragItem
       );
       return [...state];
-    /**Create Task */
-    
+    /**Update Task */
+        case Actiontype.updateTask:
+        return[...state]
     default:
       return state;
   }

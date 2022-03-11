@@ -42,6 +42,7 @@ const TaskDialog = () => {
   /**Hanle Change */
   const handleChange = (e: any): void => {
     setValues({ ...values, [e.target.name]: e.target.value });
+    /**validate(values) becasue compare start = end */
     validate({...values,[e.target.name]: e.target.value});
   };
   /**Create Task */

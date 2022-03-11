@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { TableBody, TableCell, TableRow } from "@material-ui/core";
 import { State } from "../../store/reducers";
 import { useDispatch, useSelector } from "react-redux";
@@ -12,12 +12,14 @@ import { actionCreators } from "../../store";
 import Task from "../task/Task";
 import useStyles from './styles'
 import TaskDialog from "../taskDialog/TaskDialog";
+import { TaskProps } from "../../store/actions";
+import { converToNum } from "../../utils";
 const TimetableBody = () => {
   /**MUI styles */
   const classes = useStyles()
   /**Redux */
   const dispatch = useDispatch()
-  const {dragItem} = bindActionCreators(actionCreators,dispatch)
+  const {dropItem,updateTask} = bindActionCreators(actionCreators,dispatch)
   const {calendar,tasks} = useSelector((state: State)=>state)
   //Handle Drag
   const onDragEnd = (result: DropResult) => {
@@ -30,7 +32,12 @@ const TimetableBody = () => {
         console.log(result)
         return
     }
-    dragItem(result,calendar.dates)
+    //Drop Item        
+    dropItem(result,calendar.dates) 
+    const indexs= converToNum(destination.droppableId) 
+    const droppedItem = tasks[indexs[0]][indexs[1]].tasks[destination.index]
+    const modifiedTask = {...droppedItem, start: droppedItem.start.toISOString(),end: droppedItem.end.toISOString()}
+    updateTask(modifiedTask)
   };
 
 

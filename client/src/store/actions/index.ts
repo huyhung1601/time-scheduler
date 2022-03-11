@@ -1,8 +1,14 @@
 import { Actiontype } from "../action-types";
 
+export interface TaskProps {
+    id?: string
+    task: string
+    start: string
+    end: string
+}
 interface GetTasks {
     type: Actiontype.getTasks
-    payload: any
+    payload: TaskProps[]
 }
 
 interface SetWeek {
@@ -10,13 +16,18 @@ interface SetWeek {
     payload: any
 }
 
-interface DragItem {
-    type: Actiontype.dragItem
+interface DropItem {
+    type: Actiontype.dropItem
     payload: any
 }
 
 interface CreateTask {
     type: Actiontype.createTask
-    payload: any
+    payload: {task: TaskProps, calendar: any}
 }
-export type Action = GetTasks | SetWeek |DragItem | CreateTask
+
+interface UpdateTask {
+    type: Actiontype.updateTask
+    payload: TaskProps
+}
+export type Action = GetTasks | SetWeek |DropItem | CreateTask |UpdateTask
