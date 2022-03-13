@@ -17,7 +17,7 @@ import React, { useContext, useEffect, useLayoutEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { bindActionCreators } from "redux";
 import { actionCreators } from "../../store";
-import { timeMarks } from "../../utils";
+import { daysCurrentMonth1, firstDayOfMonth, timeMarks } from "../../utils";
 import useStyles from "./styles";
 import { State } from "../../store/reducers";
 import { ToggleContext } from "../../context/Context";
@@ -26,13 +26,16 @@ const Controller = () => {
   const classes = useStyles();
   /**Redux - Context*/
   const dispatch = useDispatch();
-  const { setCalendar, getTasks,drawCalendar } = bindActionCreators(actionCreators, dispatch);
-  const { calendar,tasks } = useSelector((state: State) => state);
+  const { setCalendar, getTasks, drawCalendar } = bindActionCreators(
+    actionCreators,
+    dispatch
+  );
+  const { calendar, tasks } = useSelector((state: State) => state);
   const { handleOpen } = useContext(ToggleContext);
   /**First value */
   const [selectedDate, setSelectedDate] = React.useState(new Date());
   const [timeline, setTimeline] = useState({ start: 6, end: 11 });
-  const [type,setType] = useState('week')
+  const [type, setType] = useState("week");
   /**Dates pick-up */
   const handleDateChange = (date: any): void => {
     setSelectedDate(date);
@@ -42,26 +45,25 @@ const Controller = () => {
     setTimeline({ ...timeline, [e.target.name]: e.target.value });
   };
   /**Choose calendar */
-  const chooseCalendar =(type: string): void =>{
-    setType(type)
-    type == 'month' ? setTimeline({start:0, end: 5}) : setTimeline({start:6, end: 11})
-  }
+  const chooseCalendar = (type: string): void => {
+    setType(type);
+  };
   /**Time marks */
   const tMarks = timeMarks(24);
   /**setCalendar */
   useEffect(() => {
-    setCalendar({selectedDate, timeline,type});
-  }, [selectedDate, timeline,type]);
+    setCalendar({ selectedDate, timeline, type });
+  }, [selectedDate, timeline, type]);
   /**Get Tasks */
   useEffect(() => {
-    const query = {type: type, selectedDate: selectedDate.toISOString()}
+    const query = { type: type, selectedDate: selectedDate.toISOString() };
     getTasks(query);
   }, [calendar.dates]);
   /**Draw Calendar */
-  useLayoutEffect(()=>{
-    drawCalendar(tasks.tasks,selectedDate)
-  },[tasks.tasks])
-  
+  useLayoutEffect(() => {
+    drawCalendar(tasks.tasks, selectedDate);
+  }, [tasks.tasks]);
+
   return (
     <AppBar position="static" className={classes.root}>
       <Toolbar>
@@ -74,7 +76,7 @@ const Controller = () => {
                 name="start"
                 value={timeline.start}
                 onChange={handleChange}
-                disabled={calendar.type == 'month'}
+                disabled={calendar.type == "month"}
               >
                 {tMarks.map((x: any, index: number) => {
                   if (x > timeline.end) {
@@ -95,8 +97,7 @@ const Controller = () => {
                 value={timeline.end}
                 name="end"
                 onChange={(e) => handleChange(e)}
-                disabled={calendar.type == 'month'}
-
+                disabled={calendar.type == "month"}
               >
                 {tMarks.map((x: any, index: number) => {
                   if (x < timeline.start + 5) {
@@ -130,8 +131,8 @@ const Controller = () => {
           </Grid>
           <Grid item sm />
           <Grid item>
-            <Button onClick={()=>chooseCalendar('week')}>Week</Button>
-            <Button onClick={()=>chooseCalendar('month')}>Month</Button>
+            <Button onClick={() => chooseCalendar("week")}>Week</Button>
+            <Button onClick={() => chooseCalendar("month")}>Month</Button>
           </Grid>
         </Grid>
       </Toolbar>

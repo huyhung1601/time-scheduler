@@ -34,6 +34,7 @@ export default makeStyles((theme)=>({
         },
         '& .containerBody':{
             display: 'flex',
+            justifyContent: 'center',
             flexWrap: 'wrap',
         }
     }

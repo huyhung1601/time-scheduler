@@ -1,6 +1,7 @@
 import { Actiontype } from "../action-types";
 import { Action } from "../actions";
-import { getTime, getDay,getDate } from "../../utils/index";
+import { getTime, getDay,getDate, daysCurrentMonth1, firstDayOfMonth } from "../../utils/index";
+import { fireEvent } from "@testing-library/react";
 const initialValue ={
   type: 'week',
   selectedDate: new Date(),
@@ -17,17 +18,15 @@ const calendarReducer = (state:any =initialValue, action: Action) => {
       const date = selectedDate.getDate();
       const month = selectedDate.getMonth();
       const year = selectedDate.getFullYear();
-
+      const weeks = Math.ceil((daysCurrentMonth1(selectedDate) + 1 + firstDayOfMonth(selectedDate)) / 7)
       let arr = [];
       for (let d = 0; d < 7; d++) {
         arr[d] = (new Date(year,month,date -(day-d))).toLocaleDateString('en-GB')
       }
-      return {...state, dates: [...arr], timeline: timeline, type: type, selectedDate: selectedDate}
+      return {...state, dates: [...arr], timeline: type==='week' ? timeline : {start:0, end: weeks}, type: type, selectedDate: selectedDate}
     case Actiontype.drawCalendar:
       const {tasks} =action.payload
-      const monthSelected = state.selectedDate.getMonth()
-      const yearSelected = state.selectedDate.getFullYear()
-      const firstDay = new Date(yearSelected,monthSelected,1).getDay()
+      const firstDay = firstDayOfMonth(state.selectedDate)
 
       let table: any = [];
       if (state.type === 'week') {
@@ -49,7 +48,7 @@ const calendarReducer = (state:any =initialValue, action: Action) => {
           }
         }
       } else {
-        for (let i=0;i<6;i++){
+        for (let i=0;i<state.timeline.end ;i++){
           table.push([])
           for(let j=0;j<7;j++){
             let slot = {id: `${i*7 +j +1- firstDay}:${j}`,tasks:[]}

@@ -42,7 +42,6 @@ const TimetableBody = () => {
     )[0];
     updateTask(modifiedTask);
   };
-  console.log(calendar.selectedDate);
 
   return (
     <>
@@ -51,7 +50,7 @@ const TimetableBody = () => {
           {body.map((row: any, index: number) => {
             if (
               (type == "week" && index >= start * 2 && index <= end * 2 + 1) ||
-              (type == "month" && index >= start && index <= end)
+              (type == "month" && index >= start && index <=end )
             ) {
               return (
                 <TableRow key={index}>

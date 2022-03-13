@@ -40,6 +40,13 @@ export const daysCurrentMonth1 = (d: any) =>{
   return new Date(y, m + 1, 0).getDate();
 }
 
+export const firstDayOfMonth = (d: any)=>{
+  const y = d.getFullYear()
+  const m = d.getMonth()
+  const firstDay = new Date(y,m,1).getDay()
+  return firstDay
+}
+
 export const calcMinutes = (half: number, minutes:number) =>{
   return half * 30 + minutes
 }
