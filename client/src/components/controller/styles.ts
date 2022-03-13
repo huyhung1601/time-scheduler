@@ -8,9 +8,12 @@ export default makeStyles(theme=>({
         '& .MuiFormControl-root':{
             margin: '5px'
         },
-        '& .MuiGrid-item':{
+        '& .MuiGrid-root':{
             display: 'flex',
-            alignItem: 'center'
+            alignItems: 'center',
+        },
+        '& .MuiButton-root':{
+            height: '40px'
         }
     },
     

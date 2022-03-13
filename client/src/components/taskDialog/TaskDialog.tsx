@@ -12,16 +12,12 @@ import { bindActionCreators } from "redux";
 import { ToggleContext } from "../../context/Context";
 import { actionCreators } from "../../store";
 import useStyles from "./styles";
+import { TaskProps } from "../../store/actions";
 
 type Errs = {
   task: string;
   start: string;
   end: string;
-};
-type Task = {
-  task?: string;
-  start?: string;
-  end?: string;
 };
 const initialValue = {
   task: "",
@@ -37,7 +33,7 @@ const TaskDialog = () => {
   const { createTask } = bindActionCreators(actionCreators, dispatch);
   const { calendar } = useSelector((state: State) => state);
   /**first value */
-  const [values, setValues] = useState<Task>(initialValue);
+  const [values, setValues] = useState<TaskProps>(initialValue);
   const [errs, setErrs] = useState({} as Errs);
   /**Hanle Change */
   const handleChange = (e: any): void => {
@@ -50,7 +46,7 @@ const TaskDialog = () => {
     validate();
     if (validate()) {
       const newTask = values;
-      createTask(newTask, calendar);
+      createTask(newTask);
       handleClose && handleClose();
       setErrs({} as Errs);
       setValues(initialValue);
@@ -60,7 +56,6 @@ const TaskDialog = () => {
   const validate = (fieldValues = values) => {
     let temp = {} as Errs;   
     const compare = new Date(fieldValues.end!).getTime() - new Date(fieldValues.start!).getTime();
-    console.log(compare)
     if ("task" in fieldValues) {
       temp.task = fieldValues.task?.trim() === "" ? "please fill the task" : "";
     }

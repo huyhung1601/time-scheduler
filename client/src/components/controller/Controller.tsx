@@ -13,7 +13,7 @@ import {
   MuiPickersUtilsProvider,
   KeyboardDatePicker,
 } from "@material-ui/pickers";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useLayoutEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { bindActionCreators } from "redux";
 import { actionCreators } from "../../store";
@@ -26,9 +26,9 @@ const Controller = () => {
   const classes = useStyles();
   /**Redux - Context*/
   const dispatch = useDispatch();
-  const { setCalendar, getTasks } = bindActionCreators(actionCreators, dispatch);
-  const { calendar } = useSelector((state: State) => state);
-  const { openDialog, handleOpen } = useContext(ToggleContext);
+  const { setCalendar, getTasks,drawCalendar } = bindActionCreators(actionCreators, dispatch);
+  const { calendar,tasks } = useSelector((state: State) => state);
+  const { handleOpen } = useContext(ToggleContext);
   /**First value */
   const [selectedDate, setSelectedDate] = React.useState(new Date());
   const [timeline, setTimeline] = useState({ start: 6, end: 11 });
@@ -44,7 +44,7 @@ const Controller = () => {
   /**Choose calendar */
   const chooseCalendar =(type: string): void =>{
     setType(type)
-    type == 'month' ? setTimeline({start:0, end: 4}) : setTimeline({start:6, end: 11})
+    type == 'month' ? setTimeline({start:0, end: 5}) : setTimeline({start:6, end: 11})
   }
   /**Time marks */
   const tMarks = timeMarks(24);
@@ -54,14 +54,19 @@ const Controller = () => {
   }, [selectedDate, timeline,type]);
   /**Get Tasks */
   useEffect(() => {
-    getTasks({type,selectedDate});
+    const query = {type: type, selectedDate: selectedDate.toISOString()}
+    getTasks(query);
   }, [calendar.dates]);
+  /**Draw Calendar */
+  useLayoutEffect(()=>{
+    drawCalendar(tasks.tasks,selectedDate)
+  },[tasks.tasks])
   
   return (
     <AppBar position="static" className={classes.root}>
       <Toolbar>
         <Grid container spacing={2} alignItems="center">
-          <Grid item alignItems="center">
+          <Grid item>
             <Button onClick={() => handleDateChange(new Date())}>Today</Button>
             <FormControl>
               <InputLabel>Start</InputLabel>

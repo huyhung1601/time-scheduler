@@ -10,10 +10,16 @@ export interface CalendarProps {
     type: string
     selectedDate: Date
     timeline: {start: number, end: number}
+    body?: Array<any>
 }
 interface GetTasks {
     type: Actiontype.getTasks
     payload: TaskProps[]
+}
+
+interface DrawCalendar {
+    type: Actiontype.drawCalendar
+    payload: {tasks: TaskProps[],selectedDate: Date}
 }
 
 interface SetCalendar {
@@ -23,16 +29,16 @@ interface SetCalendar {
 
 interface DropItem {
     type: Actiontype.dropItem
-    payload: any
+    payload: {result: any, calendar: any}
 }
 
 interface CreateTask {
     type: Actiontype.createTask
-    payload: {task: TaskProps, calendar: any}
+    payload: TaskProps
 }
 
 interface UpdateTask {
     type: Actiontype.updateTask
     payload: TaskProps
 }
-export type Action = GetTasks | SetCalendar |DropItem | CreateTask |UpdateTask
+export type Action = GetTasks | SetCalendar |DropItem | CreateTask |UpdateTask | DrawCalendar

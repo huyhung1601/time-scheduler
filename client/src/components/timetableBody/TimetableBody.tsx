@@ -1,83 +1,110 @@
-import React, { useEffect } from "react";
 import { TableBody, TableCell, TableRow } from "@material-ui/core";
+import clsx from "clsx";
 import { State } from "../../store/reducers";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  DragDropContext,
-  Droppable,
-  DropResult,
-} from "react-beautiful-dnd";
+import { DragDropContext, Droppable, DropResult } from "react-beautiful-dnd";
 import { bindActionCreators } from "redux";
 import { actionCreators } from "../../store";
 import Task from "../task/Task";
-import useStyles from './styles'
+import useStyles from "./styles";
 import TaskDialog from "../taskDialog/TaskDialog";
+import { converToNum, daysCurrentMonth, daysCurrentMonth1 } from "../../utils";
 import { TaskProps } from "../../store/actions";
-import { converToNum } from "../../utils";
 const TimetableBody = () => {
   /**MUI styles */
-  const classes = useStyles()
+  const classes = useStyles();
+  const { month, week, empty } = classes;
   /**Redux */
-  const dispatch = useDispatch()
-  const {dropItem,updateTask} = bindActionCreators(actionCreators,dispatch)
-  const {calendar,tasks} = useSelector((state: State)=>state)
+  const dispatch = useDispatch();
+  const { dropItem, updateTask } = bindActionCreators(actionCreators, dispatch);
+  const { calendar, tasks } = useSelector((state: State) => state);
+  const { type, body } = calendar;
+  const { start, end } = calendar.timeline;
   //Handle Drag
   const onDragEnd = (result: DropResult) => {
     const { destination, source } = result;
-      if (!destination) {
-        console.log(destination)
-        return;
-      }
-      if(destination.index === source.index && destination.droppableId === source.droppableId){
-        console.log(result)
-        return
+    if (!destination) {
+      console.log(destination);
+      return;
     }
-    //Drop Item        
-    dropItem(result,calendar.dates) 
-    const indexs= converToNum(destination.droppableId) 
-    const droppedItem = tasks[indexs[0]][indexs[1]].tasks[destination.index]
-    const modifiedTask = {...droppedItem, start: droppedItem.start.toISOString(),end: droppedItem.end.toISOString()}
-    updateTask(modifiedTask)
+    if (
+      destination.index === source.index &&
+      destination.droppableId === source.droppableId
+    ) {
+      console.log(result);
+      return;
+    }
+    //Drop Item
+    dropItem(result, calendar);
+    //Sent to server
+    const modifiedTask = tasks.tasks.filter(
+      (t: TaskProps) => t.id === result.draggableId
+    )[0];
+    updateTask(modifiedTask);
   };
-
+  console.log(calendar.selectedDate);
 
   return (
     <>
       <DragDropContext onDragEnd={onDragEnd}>
-        <TableBody className={classes.root} >
-          {tasks.map((row: any, index: number) => {
-            if (index >= calendar.timeline.start*2 && index <= calendar.timeline.end*2 + 1) {
-            return (
-              <TableRow  key={index}>
-                {row.map((slot: any, index: number) => {
-                  return (
-                    <Droppable droppableId={slot.id} key={index}>
-                      {(provided) => {
-                        return (
-                          <TableCell
-                            className={classes.tableCell}
-                            ref={provided.innerRef}
-                            {...provided.droppableProps}
-                          >
-                            <div className={classes.taskContainer}>
-                          {slot.tasks.map((t:any, index: number)=>{
-                            return(
-                              <Task t={t} key={index} index={index}/>
-                            )
-                          })}
-                          </div>
-                          </TableCell>
-                        );
-                      }}
-                    </Droppable>                    
-                  );
-                })}
-              </TableRow>
-            )} else{ return null}
+        <TableBody className={classes.root}>
+          {body.map((row: any, index: number) => {
+            if (
+              (type == "week" && index >= start * 2 && index <= end * 2 + 1) ||
+              (type == "month" && index >= start && index <= end)
+            ) {
+              return (
+                <TableRow key={index}>
+                  {row.map((slot: any, index: number) => {
+                    const id = converToNum(slot.id)[0];
+                    if (
+                      type === "month" &&
+                      (id < 1 || id > daysCurrentMonth1(calendar.selectedDate))
+                    ) {
+                      return (
+                        <TableCell className={month}>
+                          <div className={empty}>N/A</div>
+                        </TableCell>
+                      );
+                    }
+                    return (
+                      <Droppable droppableId={slot.id} key={index}>
+                        {(provided) => {
+                          return (
+                            <TableCell
+                              className={clsx(
+                                { [month]: type === "month" },
+                                { [week]: type === "week" }
+                              )}
+                              ref={provided.innerRef}
+                              {...provided.droppableProps}
+                            >
+                              <div className={classes.taskContainer}>
+                                <div className="containerHeader">
+                                  {type === "month" && <small>{id}</small>}
+                                </div>
+                                <div className="containerBody">
+                                  {slot.tasks.map((t: any, index: number) => {
+                                    return (
+                                      <Task t={t} key={index} index={index} />
+                                    );
+                                  })}
+                                </div>
+                              </div>
+                            </TableCell>
+                          );
+                        }}
+                      </Droppable>
+                    );
+                  })}
+                </TableRow>
+              );
+            } else {
+              return null;
+            }
           })}
-          <TaskDialog/>
+          <TaskDialog />
         </TableBody>
-        
       </DragDropContext>
     </>
   );

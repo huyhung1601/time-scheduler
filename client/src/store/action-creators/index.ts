@@ -16,30 +16,39 @@ export const setCalendar = ({selectedDate,timeline,type}: CalendarProps) =>{
 
 export const getTasks = ({selectedDate,type}:any) =>{
     return async (dispatch: Dispatch) =>{
-        const response = await selectedTasks({selectedDate,type})
+        const res = await selectedTasks({selectedDate,type})
         dispatch({
             type: Actiontype.getTasks,
-            payload: response
+            payload: res
         })
     }
 }
 
-export const dropItem = (result: any,dates: any) =>{
+export const drawCalendar = (tasks:TaskProps[],selectedDate:Date)=>{
+    return (dispatch: Dispatch) =>{
+        dispatch({
+            type: Actiontype.drawCalendar,
+            payload: {tasks,selectedDate}
+        })
+    }
+}
+
+export const dropItem = (result: any,calendar: any) =>{
     return (dispatch: Dispatch) =>{
         dispatch({
             type: Actiontype.dropItem,
-            payload: {result, dates}
+            payload: {result, calendar}
         })
     }
 }
 
 
-export const createTask = (newTask: any,calendar: any) =>{
+export const createTask = (newTask: TaskProps) =>{
     return async (dispatch: Dispatch) =>{
         const res = await addNewTask(newTask)
         dispatch({
             type: Actiontype.createTask,
-            payload: {task: res,calendar}
+            payload: res
         })
     }
 }

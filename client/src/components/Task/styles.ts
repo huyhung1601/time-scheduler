@@ -1,10 +1,12 @@
-import {makeStyles} from '@material-ui/core'
+import {makeStyles, withWidth} from '@material-ui/core'
 
 export default makeStyles((theme:any)=>({
     task:{
-        marginLeft: '2px',
-        fontSize: '12px',
+        width: '98%',
+        margin:'1px',
+        fontSize: '11px',
         backgroundColor: '#57aecb'
+        
     },
     prev:{
         backgroundColor: 'lightgray'
