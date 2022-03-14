@@ -34,7 +34,7 @@ interface DropItem {
 
 interface CreateTask {
     type: Actiontype.createTask
-    payload: TaskProps
+    payload: any
 }
 
 interface UpdateTask {

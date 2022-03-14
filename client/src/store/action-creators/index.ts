@@ -43,12 +43,12 @@ export const dropItem = (result: any,calendar: any) =>{
 }
 
 
-export const createTask = (newTask: TaskProps) =>{
+export const createTask = (newTask: TaskProps,calendar: any) =>{
     return async (dispatch: Dispatch) =>{
         const res = await addNewTask(newTask)
         dispatch({
             type: Actiontype.createTask,
-            payload: res
+            payload: {res,calendar}
         })
     }
 }

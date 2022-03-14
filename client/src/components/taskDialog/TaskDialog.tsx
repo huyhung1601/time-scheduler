@@ -46,7 +46,7 @@ const TaskDialog = () => {
     validate();
     if (validate()) {
       const newTask = values;
-      createTask(newTask);
+      createTask(newTask,calendar);
       handleClose && handleClose();
       setErrs({} as Errs);
       setValues(initialValue);
