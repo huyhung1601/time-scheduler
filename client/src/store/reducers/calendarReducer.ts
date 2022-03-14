@@ -18,7 +18,7 @@ const calendarReducer = (state:any =initialValue, action: Action) => {
       const date = selectedDate.getDate();
       const month = selectedDate.getMonth();
       const year = selectedDate.getFullYear();
-      const weeks = Math.ceil((daysCurrentMonth1(selectedDate) + 1 + firstDayOfMonth(selectedDate)) / 7)
+      const weeks = Math.ceil((daysCurrentMonth1(selectedDate) + firstDayOfMonth(selectedDate)) / 7)
       let arr = [];
       for (let d = 0; d < 7; d++) {
         arr[d] = (new Date(year,month,date -(day-d))).toLocaleDateString('en-GB')

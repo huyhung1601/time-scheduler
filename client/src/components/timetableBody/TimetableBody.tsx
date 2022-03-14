@@ -10,6 +10,7 @@ import useStyles from "./styles";
 import TaskDialog from "../taskDialog/TaskDialog";
 import { converToNum, daysCurrentMonth, daysCurrentMonth1 } from "../../utils";
 import { TaskProps } from "../../store/actions";
+import { useEffect, useState } from "react";
 const TimetableBody = () => {
   /**MUI styles */
   const classes = useStyles();
@@ -36,12 +37,10 @@ const TimetableBody = () => {
     }
     //Drop Item
     dropItem(result, calendar);
-    //Sent to server
-    const modifiedTask = tasks.tasks.filter(
-      (t: TaskProps) => t.id === result.draggableId
-    )[0];
-    updateTask(modifiedTask);
   };
+  useEffect(()=>{
+    tasks.modifiedTask !== {} && updateTask(tasks.modifiedTask);
+  },[tasks.modifiedTask])
 
   return (
     <>
@@ -50,7 +49,7 @@ const TimetableBody = () => {
           {body.map((row: any, index: number) => {
             if (
               (type == "week" && index >= start * 2 && index <= end * 2 + 1) ||
-              (type == "month" && index >= start && index <=end )
+              (type == "month" && index >= start && index <=end +1)
             ) {
               return (
                 <TableRow key={index}>

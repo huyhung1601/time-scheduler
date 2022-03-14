@@ -5,11 +5,13 @@ import { converToNum, updateDateTime } from "../../utils/index";
 interface StateProps{
   loading: Boolean
   tasks: any
+  modifiedTask: TaskProps
 }
 
 const initialState: StateProps ={
   loading: false,
   tasks: [],
+  modifiedTask: {} as TaskProps
 }
 const tasksReducer = (state: StateProps = initialState, action: Action) => {
   switch (action.type) {
@@ -26,10 +28,6 @@ const tasksReducer = (state: StateProps = initialState, action: Action) => {
       const { result, calendar } = action.payload;
       const {dates,type,selectedDate} = calendar
       const { source, destination } = result;
-      //first Day
-      const monthSelected = selectedDate.getMonth()
-      const yearSelected = selectedDate.getFullYear()
-      const firstDay = new Date(yearSelected,monthSelected,1).getDay()
       //index
       const dropIndex = converToNum(destination.droppableId);
       //Set Date
@@ -42,7 +40,8 @@ const tasksReducer = (state: StateProps = initialState, action: Action) => {
         start: updateDateTime(dragItem.start,newD,newT),    
         end: updateDateTime(dragItem.end,newD,newT)     
       };
-      return {...state,tasks: state.tasks.map((t: TaskProps)=>t.id === draggedItem.id ? draggedItem : t)};
+      return {...state,tasks: state.tasks.map((t: TaskProps)=>t.id === draggedItem.id ? draggedItem : t), modifiedTask: draggedItem};
+
     /**Update Task */
         case Actiontype.updateTask:
         return{...state}
