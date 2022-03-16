@@ -31,16 +31,16 @@ const tasksReducer = (state: StateProps = initialState, action: Action) => {
       const yCompare = yOfNewTask === yOfCal;
       const mCompare = mOfNewTask === mOfCal;
       const dateOfTask = new Date(newTask.start).toLocaleDateString("en-gb");
-      console.log(calendarCT, dateOfTask);
       return {
         ...state,
         tasks: [
           ...state.tasks,
-          yCompare
-            ? calendarCT.type === "month"
-              ? mCompare && newTask
-              : calendarCT.dates.some(dateOfTask) && newTask
-            : null,
+          yCompare &&
+            mCompare &&
+            ((calendarCT.type === "month" && newTask) ||
+              (calendarCT.type === "week" &&
+                calendarCT.dates.includes(dateOfTask) &&
+                newTask)),
         ],
       };
 
