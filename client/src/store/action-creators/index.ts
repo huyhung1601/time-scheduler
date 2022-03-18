@@ -5,11 +5,11 @@ import { CalendarProps, TaskProps } from "../actions"
 
 
 
-export const setCalendar = ({selectedDate,timeline,type}: CalendarProps) =>{
+export const setCalendar = ({selectedDate,timeline,type,by}: CalendarProps) =>{
     return async (dispath: Dispatch) =>{
         dispath({
             type: Actiontype.setCalendar,
-            payload: {selectedDate,timeline,type}
+            payload: {selectedDate,timeline,type,by}
         })        
     }
 }

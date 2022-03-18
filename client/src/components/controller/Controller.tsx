@@ -36,6 +36,7 @@ const Controller = () => {
   const [selectedDate, setSelectedDate] = React.useState(new Date());
   const [timeline, setTimeline] = useState({ start: 6, end: 11 });
   const [type, setType] = useState("week");
+  const [by,setBy] = useState("time")
   /**Dates pick-up */
   const handleDateChange = (date: any): void => {
     setSelectedDate(date);
@@ -48,12 +49,16 @@ const Controller = () => {
   const chooseCalendar = (type: string): void => {
     setType(type);
   };
+  /**Arranged by */
+  const arrangedBy = (e: any): void =>{
+    setBy(e.target.value)
+  }
   /**Time marks */
   const tMarks = timeMarks(24);
   /**setCalendar */
   useEffect(() => {
-    setCalendar({ selectedDate, timeline, type });
-  }, [selectedDate, timeline, type]);
+    setCalendar({ selectedDate, timeline, type,by });
+  }, [selectedDate, timeline, type,by]);
   /**Get Tasks */
   useEffect(() => {
     const query = { type: type, selectedDate: selectedDate.toISOString() };
@@ -76,9 +81,9 @@ const Controller = () => {
                 name="start"
                 value={timeline.start}
                 onChange={handleChange}
-                disabled={calendar.type == "month"}
+                disabled={calendar.type == "month" || calendar.by == 'task'}
               >
-                {tMarks.map((x: any, index: number) => {
+                {calendar.by === 'time' && tMarks.map((x: any, index: number) => {
                   if (x > timeline.end) {
                     return null;
                   } else {
@@ -97,9 +102,10 @@ const Controller = () => {
                 value={timeline.end}
                 name="end"
                 onChange={(e) => handleChange(e)}
-                disabled={calendar.type == "month"}
+                disabled={calendar.type == "month" || calendar.by == 'task'}
               >
-                {tMarks.map((x: any, index: number) => {
+                
+                {calendar.by === 'time' && tMarks.map((x: any, index: number) => {
                   if (x < timeline.start + 5) {
                     return null;
                   } else {
@@ -131,6 +137,20 @@ const Controller = () => {
           </Grid>
           <Grid item sm />
           <Grid item>
+            <FormControl>
+              <Select
+                name="by"
+                value={calendar.by}
+                onChange={arrangedBy}
+              >
+                <MenuItem value='time'>
+                  Time
+                </MenuItem>
+                <MenuItem value='task'>
+                  Task
+                </MenuItem>
+              </Select>
+            </FormControl>
             <Button onClick={() => chooseCalendar("week")}>Week</Button>
             <Button onClick={() => chooseCalendar("month")}>Month</Button>
           </Grid>

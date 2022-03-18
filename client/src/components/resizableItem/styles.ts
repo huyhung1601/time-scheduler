@@ -1,39 +1,59 @@
 import { makeStyles } from "@material-ui/styles";
 
 export default makeStyles((theme) => ({
-  root: {
+  itemContainer: {
     position: "relative",
     width: "100%",
     height: "50px",
-    backgroundColor: "gray",
+    
+  },
+  itemInfos:{
+    '& .itemInfo':{
+      marginRight: '10px'
+    }
   },
   resizableItem: {
     position: "relative",
-    top: "2px",
-    cursor: "pointer",
-    width: " 50px",
+    bottom: "2px",
+    minWidth: "1%",
     height: "46px",
-    backgroundColor: "white",
     display: "flex",
     alignItems: "center",
-    justifyContent: "space-between",
-    borderRadius: "5px",
-    "& .resizer": {
-      position: "absolute",
-      zIndex: "2px",
-      width: "2px",
-      height: "50%",
-      backgroundColor: "black",
+    justifyContent: "space-between",    
+    flexDirection: 'column',
+    '& .timebar':{
+      background: 'linear-gradient(90deg, #FFC0CB 50%, #00FFFF 50%)',
+
+      width: "100%",
+      height: '23px',
+      position: "relative",
+      cursor: "pointer",
+      borderRadius: "5px",
+      '&:hover':{
+        "& .resizer":{
+          visibility: 'visible'
+        }
+      },
+      "& .resizer": {
+        visibility: 'hidden',
+        position: "absolute",
+        zIndex: "2px",
+        width: "5px",
+        height: "100%",
+        backgroundColor: "black",
+      },
+      "& .left": {        
+        cursor: "w-resize",
+        left: "-1px",      
+        borderRadius: "5px 0 0 5px",
+      },
+      "& .right": {
+        cursor: "e-resize",
+        right: "-1px",
+        borderRadius: "0 5px 5px 0",
+
+      },
     },
-    "& .left": {
-      cursor: "w-resize",
-      color: "red",
-      left: "-1px",
-    },
-    "& .right": {
-      cursor: "e-resize",
-      color: "red",
-      right: "-1px",
-    },
+
   },
 }));

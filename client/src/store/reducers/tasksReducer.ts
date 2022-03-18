@@ -2,9 +2,11 @@ import { Actiontype } from "../action-types";
 import { Action, TaskProps } from "../actions";
 import { converToNum, updateDateTime } from "../../utils/index";
 
+
+
 interface StateProps {
   loading: Boolean;
-  tasks: any;
+  tasks: TaskProps[];
   modifiedTask: TaskProps;
 }
 

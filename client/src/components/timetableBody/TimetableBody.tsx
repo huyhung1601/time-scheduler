@@ -39,7 +39,7 @@ const TimetableBody = () => {
     dropItem(result, calendar);
   };
   useEffect(()=>{
-    tasks.modifiedTask !== {} && updateTask(tasks.modifiedTask);
+    tasks.modifiedTask  && updateTask(tasks.modifiedTask);
   },[tasks.modifiedTask])
 
   return (
@@ -82,7 +82,7 @@ const TimetableBody = () => {
                                   {type === "month" && <small>{id}</small>}
                                 </div>
                                 <div className="containerBody">
-                                  {slot.tasks.map((t: any, index: number) => {
+                                  {slot.tasks.map((t: TaskProps, index: number) => {
                                     return (
                                       <Task t={t} key={index} index={index} />
                                     );

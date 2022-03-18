@@ -2,6 +2,7 @@ import { makeStyles } from "@material-ui/styles"
 
 export default makeStyles(theme=>({
     root:{
+        height: '70px',
         backgroundColor: '#fff',
         width: '100%',
         padding: '2px',
