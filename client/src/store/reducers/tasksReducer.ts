@@ -80,7 +80,6 @@ const tasksReducer = (state: StateProps = initialState, action: Action) => {
         start: updateDateTime(dragItem.start, newD, newT),
         end: updateDateTime(dragItem.end, newD + 1, newT),
       };
-      console.log(draggedItem);
       return {
         ...state,
         tasks: state.tasks.map((t: TaskProps) =>
@@ -91,6 +90,7 @@ const tasksReducer = (state: StateProps = initialState, action: Action) => {
 
     /**Update Task */
     case Actiontype.updateTask:
+      console.log('haha')
       return {
         ...state,
         tasks: state.tasks

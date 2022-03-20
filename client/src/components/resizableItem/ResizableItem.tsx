@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { bindActionCreators } from "redux";
 import { useTaskDialogContext } from "../../context/TaskDialogContext";
+import useDebounce from "../../hooks/useDebounce";
 import { actionCreators } from "../../store";
 import { State } from "../../store/reducers";
 import { removeTimezone, toISOStringNoZ } from "../../utils";
@@ -13,6 +14,7 @@ const ResizableItem: React.FC<any> = ({ task }) => {
   /**MUI style */
   const classes = useStyle();
   /**Redux & context */
+  
   const dispatch = useDispatch();
   const { calendar } = useSelector((state: State) => state);
   const { timeline, type, by } = calendar;
@@ -35,9 +37,7 @@ const ResizableItem: React.FC<any> = ({ task }) => {
       (itemRef.current.style.width = itemWidth + "%");
   }, [task, by, type]);
   /**Update Task */
-  useEffect(() => {
-    updateTask(movingTask);
-  }, [movingTask]);
+  useDebounce(()=>updateTask(movingTask),1000,[movingTask])
   /**Hangle move */
   const onMove = (e: any): void => {
     let prevX = e.pageX;
@@ -94,7 +94,6 @@ const ResizableItem: React.FC<any> = ({ task }) => {
         if (currentResize.classList.contains("right")) {
           itemRef.current.style.width =((rect.width - (prevX - e.pageX)) / wrapWidth) * 100 > 1 &&
             ((rect.width - (prevX - e.pageX)) / wrapWidth) * 100 + "%";
-
           setMovingTask({
             ...movingTask,
             end: toISOStringNoZ(removeTimezone( new Date(

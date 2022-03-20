@@ -38,7 +38,6 @@ const TimetableBody = () => {
   };
   useEffect(()=>{
     tasks.modifiedTask  && updateTask(tasks.modifiedTask)
-    console.log(tasks.modifiedTask)
   },[tasks.modifiedTask])
 
   return (
