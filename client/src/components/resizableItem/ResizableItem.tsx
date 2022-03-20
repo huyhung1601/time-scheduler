@@ -26,7 +26,6 @@ const ResizableItem: React.FC<any> = ({ task }) => {
   const endTime = new Date(movingTask.end).getTime();
   const linearGradient =
     ((todayTime - startTime) / (endTime - startTime)) * 100;
-
   const itemX =
     (100 * (startTime - timeline.start)) / (timeline.end - timeline.start);
   const itemWidth =
@@ -36,8 +35,7 @@ const ResizableItem: React.FC<any> = ({ task }) => {
       (itemRef.current.style.left = itemX + "%") &&
       (itemRef.current.style.width = itemWidth + "%");
   }, [task, by, type]);
-  /**Update Task */
-  useDebounce(()=>updateTask(movingTask),1000,[movingTask])
+  
   /**Hangle move */
   const onMove = (e: any): void => {
     let prevX = e.pageX;
@@ -135,10 +133,13 @@ const ResizableItem: React.FC<any> = ({ task }) => {
     document.addEventListener("mousemove", mouseMove);
     document.addEventListener("mouseup", mouseUp);
   };
-  /**Edit Task */
+  /**Update Task */  
+  useDebounce(()=>updateTask(movingTask) ,1000,[movingTask])  
+  /**Edit Task */  
   const openTaskEdit = () => {
     editTask && editTask(movingTask);
   };
+  
   return (
     <div className={classes.itemContainer}>
       <div onClick={openTaskEdit} className={classes.itemInfos}>

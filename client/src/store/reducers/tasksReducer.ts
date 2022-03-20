@@ -90,7 +90,6 @@ const tasksReducer = (state: StateProps = initialState, action: Action) => {
 
     /**Update Task */
     case Actiontype.updateTask:
-      console.log('haha')
       return {
         ...state,
         tasks: state.tasks

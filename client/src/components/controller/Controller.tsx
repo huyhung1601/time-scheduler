@@ -13,11 +13,11 @@ import {
   MuiPickersUtilsProvider,
   KeyboardDatePicker,
 } from "@material-ui/pickers";
-import React, { useContext, useEffect, useLayoutEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { bindActionCreators } from "redux";
 import { actionCreators } from "../../store";
-import { daysCurrentMonth1, firstDayOfMonth, timeMarks } from "../../utils";
+import {  timeMarks } from "../../utils";
 import useStyles from "./styles";
 import { State } from "../../store/reducers";
 import {  useTaskDialogContext } from "../../context/TaskDialogContext";

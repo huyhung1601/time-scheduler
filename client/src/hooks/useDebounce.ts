@@ -8,3 +8,4 @@ const useDebounce = (callback: any, delay: any, dependencies: any) => {
 }
 
 export default useDebounce
+

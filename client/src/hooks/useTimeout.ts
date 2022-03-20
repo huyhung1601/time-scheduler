@@ -5,7 +5,7 @@ const useTimeout = (callback:any,delay:any) => {
 const timeoutRef = useRef<any>()
  useEffect(()=>{
      callbackRef.current = callback
- },callback)
+ },[callback])
  
  const set = useCallback(()=>{
     timeoutRef.current = setTimeout(()=>callbackRef.current(),delay)
