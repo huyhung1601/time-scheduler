@@ -53,12 +53,12 @@ export const createTask = (newTask: TaskProps,calendar: any) =>{
     }
 }
 
-export const updateTask = (updateTask: TaskProps)=>{
+export const updateTask = (updatedTask: TaskProps)=>{
     return async (dispatch: Dispatch) =>{
-        const res = await serverUpdateTask(updateTask)
+        const res = await serverUpdateTask(updatedTask)
         dispatch({
-            type: Actiontype,
-            payload: updateTask
+            type: Actiontype.updateTask,
+            payload: res
         })
     }
 }

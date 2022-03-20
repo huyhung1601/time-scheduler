@@ -5,8 +5,10 @@ export default makeStyles((theme:any)=>({
         width: '98%',
         margin:'1px',
         fontSize: '11px',
-        backgroundColor: '#57aecb'
-        
+        backgroundColor: '#57aecb',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-evenly'
     },
     prev:{
         backgroundColor: 'lightgray'

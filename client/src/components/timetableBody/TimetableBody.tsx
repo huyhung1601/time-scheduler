@@ -25,14 +25,12 @@ const TimetableBody = () => {
   const onDragEnd = (result: DropResult) => {
     const { destination, source } = result;
     if (!destination) {
-      console.log(destination);
       return;
     }
     if (
       destination.index === source.index &&
       destination.droppableId === source.droppableId
     ) {
-      console.log(result);
       return;
     }
     //Drop Item

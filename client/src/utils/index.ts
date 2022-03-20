@@ -14,8 +14,8 @@ export const getDate = (d: any) => {
 
 export const updateDateTime = (d: any, newD: any, newT?: any) => {
   const newDate = new Date(d);
-  const updatedDate = removedTimezone(new Date(newDate.setDate(newD)));
-  const updatedDateAndTime = newT && removedTimezone(new Date(updatedDate.setHours(0, newT)));
+  const updatedDate = removeTimezone(new Date(newDate.setDate(newD)));
+  const updatedDateAndTime = newT && removeTimezone(new Date(updatedDate.setHours(0, newT)));
   
   return newT 
     ? toISOStringNoZ(updatedDateAndTime)
@@ -67,6 +67,6 @@ export const toISOStringNoZ = (date: Date) => {
   return date.toISOString().split(":").slice(0, -1).join(":");
 };
 
-export const removedTimezone = (date: Date) => {
+export const removeTimezone = (date: Date) => {
   return new Date(date.getTime() - date.getTimezoneOffset() * 60000)
 }

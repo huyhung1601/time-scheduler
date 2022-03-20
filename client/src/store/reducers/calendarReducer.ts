@@ -25,7 +25,7 @@ const calendarReducer = (state: any = initialValue, action: Action) => {
       const date = selectedDate.getDate();
       const month = selectedDate.getMonth();
       const year = selectedDate.getFullYear();
-      const startOfWeek = new Date(year, month, date - day).getTime();
+      const startOfWeek = new Date(year, month, date - day).getTime()  ;
       const endOfWeek = new Date(year, month, date - day + 7,0,0,-1).getTime();
       const startOfMonth = new Date(year,month,1).getTime()
       const endOfMonth = new Date(year, month +1, 1,0,0,-1).getTime()
@@ -79,11 +79,7 @@ const calendarReducer = (state: any = initialValue, action: Action) => {
             tasks.map((task: any) => {
               getDate(task.start) === i * 7 + j + 1 - firstDay &&
                 table[i][j].tasks.every((x: any) => x.id !== task.id) &&
-                table[i][j].tasks.push({
-                  ...task,
-                  start: new Date(task.start),
-                  end: new Date(task.end),
-                });
+                table[i][j].tasks.push(task);
             });
           }
         }

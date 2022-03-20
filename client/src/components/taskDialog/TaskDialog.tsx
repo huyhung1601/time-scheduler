@@ -26,7 +26,7 @@ const TaskDialog = () => {
   /**Redux && context */
   const dispatch = useDispatch();
   const { task,openDialog, handleClose, handleTaskChange } = useTaskDialogContext()
-  const { createTask } = bindActionCreators(actionCreators, dispatch);
+  const { updateTask, createTask } = bindActionCreators(actionCreators, dispatch);
   const { calendar } = useSelector((state: State) => state);
   /**Hanle Change */
   const onChange = (e: any): string |void => {
@@ -42,7 +42,7 @@ const TaskDialog = () => {
     if (validate()) {
       const newTask = task;
       console.log(newTask)
-      createTask(newTask,calendar);
+      newTask.id ? updateTask(newTask) :createTask(newTask,calendar);
       handleClose && handleClose();
       setErrs({} as Errs);
     }
@@ -52,7 +52,7 @@ const TaskDialog = () => {
   const validate = (fieldValues = task) => {
     let temp = {} as Errs;   
     const compare = new Date(fieldValues.end!).getTime() - new Date(fieldValues.start!).getTime();
-    if ("task" in fieldValues) {
+    if ("name" in fieldValues) {
       temp.task = fieldValues.name?.trim() === "" ? "please fill the task" : "";
     }
     if ("start" in fieldValues) {

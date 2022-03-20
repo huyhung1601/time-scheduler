@@ -23,6 +23,7 @@ const Task = (props: any) => {
     const openTaskEdit = (): void =>{
       editTask && editTask(t)
     }
+
   return (
     <Draggable key={t.id} index={index} draggableId={t.id}>
       {(provided) => {

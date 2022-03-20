@@ -24,7 +24,7 @@ export default makeStyles((theme) => ({
     justifyContent: "space-between",    
     flexDirection: 'column',
     '& .timebar':{
-
+      minWidth: '2%',
       width: "100%",
       height: '15px',
       position: "relative",

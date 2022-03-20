@@ -4,9 +4,9 @@ import { bindActionCreators } from "redux";
 import { useTaskDialogContext } from "../../context/TaskDialogContext";
 import { actionCreators } from "../../store";
 import { State } from "../../store/reducers";
+import { removeTimezone, toISOStringNoZ } from "../../utils";
 import useStyle from "./styles";
 const ResizableItem: React.FC<any> = ({ task }) => {
-  console.log(task);
   const itemRef = useRef<any>(null);
   let isResizing = false;
   const [movingTask, setMovingTask] = useState(task);
@@ -56,15 +56,15 @@ const ResizableItem: React.FC<any> = ({ task }) => {
           prevX = e.pageX;
           setMovingTask({
             ...task,
-            start: new Date(
+            start: toISOStringNoZ(removeTimezone (new Date(
               timeline.start +
                 ((timeline.end - timeline.start) / wrapWidth) * (rect.x - 11)
-            ).toISOString(),
-            end: new Date(
+            ))),
+            end: toISOStringNoZ(removeTimezone(new Date(
               timeline.start +
                 ((timeline.end - timeline.start) / wrapWidth) *
                   (rect.x + rect.width - 11)
-            ).toISOString(),
+            ))),
           });
         }
       }
@@ -92,34 +92,34 @@ const ResizableItem: React.FC<any> = ({ task }) => {
           (rect.width * 100) /
           Number(itemRef.current.style.width.replace("%", ""));
         if (currentResize.classList.contains("right")) {
-          itemRef.current.style.width =
+          itemRef.current.style.width =((rect.width - (prevX - e.pageX)) / wrapWidth) * 100 > 1 &&
             ((rect.width - (prevX - e.pageX)) / wrapWidth) * 100 + "%";
 
           setMovingTask({
             ...movingTask,
-            end: new Date(
+            end: toISOStringNoZ(removeTimezone( new Date(
               timeline.start +
                 ((timeline.end - timeline.start) / wrapWidth) *
                   (rect.left + rect.width - 11)
-            ).toISOString(),
+            ))),
           });
         } else {
           itemRef.current.style.left =
             ((rect.x - 11 - (prevX - e.pageX)) / wrapWidth) * 100 + "%";
 
-          itemRef.current.style.width =
+          itemRef.current.style.width = ((rect.width + (prevX - e.pageX)) / wrapWidth) * 100 >1 &&
             ((rect.width + (prevX - e.pageX)) / wrapWidth) * 100 + "%";
           setMovingTask({
             ...task,
-            start: new Date(
+            start: toISOStringNoZ(removeTimezone(new Date(
               timeline.start +
                 ((timeline.end - timeline.start) / wrapWidth) * (rect.x - 11)
-            ).toISOString(),
-            end: new Date(
+            ))),
+            end: toISOStringNoZ(removeTimezone(new Date(
               timeline.start +
                 ((timeline.end - timeline.start) / wrapWidth) *
                   (rect.x + rect.width - 11)
-            ).toISOString(),
+            ))),
           });
         }
         prevX = e.pageX;
@@ -185,4 +185,4 @@ const ResizableItem: React.FC<any> = ({ task }) => {
   );
 };
 
-export default ResizableItem;
+export default React.memo(ResizableItem);

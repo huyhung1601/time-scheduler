@@ -2,8 +2,6 @@ import { Actiontype } from "../action-types";
 import { Action, TaskProps } from "../actions";
 import { converToNum, updateDateTime } from "../../utils/index";
 
-
-
 interface StateProps {
   loading: Boolean;
   tasks: TaskProps[];
@@ -19,7 +17,13 @@ const tasksReducer = (state: StateProps = initialState, action: Action) => {
   switch (action.type) {
     /**Get Tasks */
     case Actiontype.getTasks:
-      return { ...state, tasks: action.payload };
+      return {
+        ...state,
+        tasks: action.payload.sort(
+          (a: TaskProps, b: TaskProps) =>
+            new Date(a.start).getTime() - new Date(b.start).getTime()
+        ),
+      };
 
     /**Create Task */
     case Actiontype.createTask:
@@ -43,7 +47,10 @@ const tasksReducer = (state: StateProps = initialState, action: Action) => {
               (calendarCT.type === "week" &&
                 calendarCT.dates.includes(dateOfTask) &&
                 newTask)),
-        ],
+        ].sort(
+          (a: TaskProps, b: TaskProps) =>
+            new Date(a.start).getTime() - new Date(b.start).getTime()
+        ),
       };
 
     /**Drop Item */
@@ -71,9 +78,9 @@ const tasksReducer = (state: StateProps = initialState, action: Action) => {
       const draggedItem = {
         ...dragItem,
         start: updateDateTime(dragItem.start, newD, newT),
-        end: updateDateTime(dragItem.end, newD +1, newT),
+        end: updateDateTime(dragItem.end, newD + 1, newT),
       };
-      console.log(draggedItem)
+      console.log(draggedItem);
       return {
         ...state,
         tasks: state.tasks.map((t: TaskProps) =>
@@ -84,7 +91,17 @@ const tasksReducer = (state: StateProps = initialState, action: Action) => {
 
     /**Update Task */
     case Actiontype.updateTask:
-      return { ...state };
+      return {
+        ...state,
+        tasks: state.tasks
+          .map((t: TaskProps) =>
+            t.id === action.payload.id ? action.payload : t
+          )
+          .sort(
+            (a: TaskProps, b: TaskProps) =>
+              new Date(a.start).getTime() - new Date(b.start).getTime()
+          ),
+      };
     default:
       return state;
   }
