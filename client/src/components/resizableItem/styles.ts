@@ -4,8 +4,11 @@ export default makeStyles((theme) => ({
   itemContainer: {
     position: "relative",
     width: "100%",
-    height: "50px",
-    
+    height: "40px",
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+    borderBottom: '1px solid lightgray'
   },
   itemInfos:{
     '& .itemInfo':{
@@ -16,16 +19,14 @@ export default makeStyles((theme) => ({
     position: "relative",
     bottom: "2px",
     minWidth: "1%",
-    height: "46px",
     display: "flex",
     alignItems: "center",
     justifyContent: "space-between",    
     flexDirection: 'column',
     '& .timebar':{
-      background: 'linear-gradient(90deg, #FFC0CB 50%, #00FFFF 50%)',
 
       width: "100%",
-      height: '23px',
+      height: '15px',
       position: "relative",
       cursor: "pointer",
       borderRadius: "5px",

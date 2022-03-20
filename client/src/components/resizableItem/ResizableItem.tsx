@@ -1,23 +1,30 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { bindActionCreators } from "redux";
+import { useTaskDialogContext } from "../../context/TaskDialogContext";
 import { actionCreators } from "../../store";
 import { State } from "../../store/reducers";
 import useStyle from "./styles";
 const ResizableItem: React.FC<any> = ({ task }) => {
+  console.log(task);
   const itemRef = useRef<any>(null);
   let isResizing = false;
   const [movingTask, setMovingTask] = useState(task);
   /**MUI style */
   const classes = useStyle();
-  /**Redux */
+  /**Redux & context */
   const dispatch = useDispatch();
   const { calendar } = useSelector((state: State) => state);
   const { timeline, type, by } = calendar;
   const { updateTask } = bindActionCreators(actionCreators, dispatch);
+  const { editTask } = useTaskDialogContext();
   //Item Style
-  const startTime = new Date(task.start).getTime();
-  const endTime = new Date(task.end).getTime();
+  const todayTime = new Date().getTime();
+  const startTime = new Date(movingTask.start).getTime();
+  const endTime = new Date(movingTask.end).getTime();
+  const linearGradient =
+    ((todayTime - startTime) / (endTime - startTime)) * 100;
+
   const itemX =
     (100 * (startTime - timeline.start)) / (timeline.end - timeline.start);
   const itemWidth =
@@ -45,18 +52,18 @@ const ResizableItem: React.FC<any> = ({ task }) => {
         //Moving
         if (!isResizing) {
           itemRef.current.style.left =
-            rect.left - 10 - (prevX - e.pageX) + "px";
+            ((rect.x - 11 - (prevX - e.pageX)) / wrapWidth) * 100 + "%";
           prevX = e.pageX;
           setMovingTask({
             ...task,
             start: new Date(
               timeline.start +
-                ((timeline.end - timeline.start) / wrapWidth) * (rect.x - 10)
+                ((timeline.end - timeline.start) / wrapWidth) * (rect.x - 11)
             ).toISOString(),
             end: new Date(
               timeline.start +
                 ((timeline.end - timeline.start) / wrapWidth) *
-                  (rect.x + rect.width - 10)
+                  (rect.x + rect.width - 11)
             ).toISOString(),
           });
         }
@@ -87,29 +94,31 @@ const ResizableItem: React.FC<any> = ({ task }) => {
         if (currentResize.classList.contains("right")) {
           itemRef.current.style.width =
             ((rect.width - (prevX - e.pageX)) / wrapWidth) * 100 + "%";
+
           setMovingTask({
             ...movingTask,
             end: new Date(
               timeline.start +
                 ((timeline.end - timeline.start) / wrapWidth) *
-                  (rect.left + rect.width - 10)
+                  (rect.left + rect.width - 11)
             ).toISOString(),
           });
         } else {
           itemRef.current.style.left =
-            rect.left - 10 - (prevX - e.pageX) + "px";
+            ((rect.x - 11 - (prevX - e.pageX)) / wrapWidth) * 100 + "%";
+
           itemRef.current.style.width =
             ((rect.width + (prevX - e.pageX)) / wrapWidth) * 100 + "%";
           setMovingTask({
             ...task,
             start: new Date(
               timeline.start +
-                ((timeline.end - timeline.start) / wrapWidth) * (rect.x - 10)
+                ((timeline.end - timeline.start) / wrapWidth) * (rect.x - 11)
             ).toISOString(),
             end: new Date(
               timeline.start +
                 ((timeline.end - timeline.start) / wrapWidth) *
-                  (rect.x + rect.width - 10)
+                  (rect.x + rect.width - 11)
             ).toISOString(),
           });
         }
@@ -127,34 +136,47 @@ const ResizableItem: React.FC<any> = ({ task }) => {
     document.addEventListener("mousemove", mouseMove);
     document.addEventListener("mouseup", mouseUp);
   };
-
+  /**Edit Task */
+  const openTaskEdit = () => {
+    editTask && editTask(movingTask);
+  };
   return (
     <div className={classes.itemContainer}>
-<div className={classes.itemInfos}>
-          <small className="itemInfo">{task.task}</small>
-          <small className="itemInfo">
-            Start:
-            {new Date(movingTask.start).toLocaleString("en-GB", {
-              year: "numeric",
-              month: "numeric",
-              day: "numeric",
-              hour: "2-digit",
-              minute: "2-digit",
-            })}
-          </small>
-          <small className="itemInfo">
-            End: 
-            {new Date(movingTask.end).toLocaleString("en-GB", {
-              year: "numeric",
-              month: "numeric",
-              day: "numeric",
-              hour: "2-digit",
-              minute: "2-digit",
-            })}
-          </small>
-        </div>
-      <div ref={itemRef} onMouseDown={onMove} className={classes.resizableItem}>       
-        <div className="timebar">
+      <div onClick={openTaskEdit} className={classes.itemInfos}>
+        <small className="itemInfo">{task.name}</small>
+        <small className="itemInfo">
+          Start:
+          {new Date(movingTask.start).toLocaleString("en-GB", {
+            year: "numeric",
+            month: "numeric",
+            day: "numeric",
+            hour: "2-digit",
+            minute: "2-digit",
+          })}
+        </small>
+        <small className="itemInfo">
+          End:
+          {new Date(movingTask.end).toLocaleString("en-GB", {
+            year: "numeric",
+            month: "numeric",
+            day: "numeric",
+            hour: "2-digit",
+            minute: "2-digit",
+          })}
+        </small>
+      </div>
+      <div ref={itemRef} onMouseDown={onMove} className={classes.resizableItem}>
+        <div
+          className="timebar"
+          style={{
+            background:
+              todayTime > endTime
+                ? "lightgray"
+                : todayTime < startTime
+                ? "lightblue"
+                : `linear-gradient(to right, lightgray 0%,lightgray ${linearGradient}%,#57aecb ${linearGradient}%,#57aecb 100%)`,
+          }}
+        >
           <div onMouseDown={onResize} className="resizer left"></div>
           <div onMouseDown={onResize} className="resizer right"></div>
         </div>

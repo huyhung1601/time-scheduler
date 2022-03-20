@@ -2,14 +2,14 @@ import { Actiontype } from "../action-types";
 
 export interface TaskProps {
   id?: string;
-  task: string;
+  name: string;
   start: string;
   end: string;
 }
 export interface CalendarProps {
   type: string;
   selectedDate: Date;
-  dates?: string[];
+  dates?: string[] | [];
   timeline: { start: number; end: number };
   body?: Array<any>;
   by: string

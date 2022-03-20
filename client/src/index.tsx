@@ -4,14 +4,14 @@ import "./index.css";
 import App from "./App";
 import { Provider } from "react-redux";
 import { store } from "./store/store";
-import {ToggleContextProvider } from "./context/Context";
+import {TaskDialogContextProvider } from "./context/TaskDialogContext";
 
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
-      <ToggleContextProvider >
+      <TaskDialogContextProvider >
       <App />
-      </ToggleContextProvider>
+      </TaskDialogContextProvider>
     </Provider>
   </React.StrictMode>,
   document.getElementById("root")

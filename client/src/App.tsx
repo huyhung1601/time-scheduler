@@ -1,10 +1,11 @@
 import React from "react";
 import useStyle from './styles'
 import Controller from "./components/controller/Controller";
-import TaskScheduler from "./components/TaskScheduler/TaskScheduler";
 import TimeScheduler from "./components/timeScheduler/TimeScheduler";
 import { useSelector } from "react-redux";
 import { State } from "./store/reducers";
+import TaskScheduler from "./components/taskScheduler/TaskScheduler";
+import TaskDialog from "./components/taskDialog/TaskDialog";
 
 function App() {
   /**MUI style */
@@ -17,6 +18,7 @@ function App() {
       <div className={classes.tableContainer}>
         {calendar.by === 'time' && <TimeScheduler/>}
         {calendar.by === 'task' && <TaskScheduler />}
+        <TaskDialog />
       </div>
     </div>
   );

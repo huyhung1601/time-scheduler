@@ -2,6 +2,7 @@ import React from "react";
 import clsx from 'clsx'
 import { Draggable } from "react-beautiful-dnd";
 import useStyle from './styles'
+import { useTaskDialogContext } from "../../context/TaskDialogContext";
 const Task = (props: any) => {
     const {t,index} = props
     /**MUI style */
@@ -16,7 +17,11 @@ const Task = (props: any) => {
       const tday = new Date().getTime()
       const time = new Date(date).getTime() - (new Date(date).getHours()*3600 + new Date(date).getMinutes()*60 + new Date(date).getSeconds())*1000
       return (time - tday)/(1000*24*3600)
-
+    }
+    /**Context*/
+    const {editTask} = useTaskDialogContext()
+    const openTaskEdit = (): void =>{
+      editTask && editTask(t)
     }
   return (
     <Draggable key={t.id} index={index} draggableId={t.id}>
@@ -27,10 +32,17 @@ const Task = (props: any) => {
             ref={provided.innerRef}
             {...provided.dragHandleProps}
             {...provided.draggableProps}
+            onClick={openTaskEdit}
           >
-            <small>{t.task}</small>
+            <small>{t.name}</small>
             <br/>
-            <small>{t.start.toLocaleString("en-GB")}</small>
+            <small>{new Date(t.start).toLocaleString("en-GB", {
+            year: "numeric",
+            month: "numeric",
+            day: "numeric",
+            hour: "2-digit",
+            minute: "2-digit",
+          })}</small>
           </div>
         );
       }}

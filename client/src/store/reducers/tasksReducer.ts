@@ -71,8 +71,9 @@ const tasksReducer = (state: StateProps = initialState, action: Action) => {
       const draggedItem = {
         ...dragItem,
         start: updateDateTime(dragItem.start, newD, newT),
-        end: updateDateTime(dragItem.end, newD, newT),
+        end: updateDateTime(dragItem.end, newD +1, newT),
       };
+      console.log(draggedItem)
       return {
         ...state,
         tasks: state.tasks.map((t: TaskProps) =>

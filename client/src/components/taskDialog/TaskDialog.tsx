@@ -6,10 +6,10 @@ import {
   TextField,
 } from "@material-ui/core";
 import { State } from "../../store/reducers";
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { bindActionCreators } from "redux";
-import { ToggleContext } from "../../context/Context";
+import { useTaskDialogContext } from "../../context/TaskDialogContext";
 import { actionCreators } from "../../store";
 import useStyles from "./styles";
 import { TaskProps } from "../../store/actions";
@@ -19,45 +19,41 @@ type Errs = {
   start: string;
   end: string;
 };
-const initialValue = {
-  task: "",
-  start: "",
-  end: "",
-};
+
 const TaskDialog = () => {
   /**MUI styles */
   const classes = useStyles();
   /**Redux && context */
   const dispatch = useDispatch();
-  const { openDialog, handleClose } = useContext(ToggleContext);
+  const { task,openDialog, handleClose, handleTaskChange } = useTaskDialogContext()
   const { createTask } = bindActionCreators(actionCreators, dispatch);
   const { calendar } = useSelector((state: State) => state);
-  /**first value */
-  const [values, setValues] = useState<TaskProps>(initialValue);
-  const [errs, setErrs] = useState({} as Errs);
   /**Hanle Change */
-  const handleChange = (e: any): void => {
-    setValues({ ...values, [e.target.name]: e.target.value });
+  const onChange = (e: any): string |void => {
+    let name = e.target.name
+    let value = e.target.value
+    handleTaskChange && handleTaskChange(name,value)
     /**validate(values) becasue compare start = end */
-    validate({...values,[e.target.name]: e.target.value});
+    validate({...task,[e.target.name]: e.target.value});
   };
   /**Create Task */
   const handleSubmit = (): void => {
     validate();
     if (validate()) {
-      const newTask = values;
+      const newTask = task;
+      console.log(newTask)
       createTask(newTask,calendar);
       handleClose && handleClose();
       setErrs({} as Errs);
-      setValues(initialValue);
     }
   };
   /**Validate */
-  const validate = (fieldValues = values) => {
+  const [errs, setErrs] = useState({} as Errs);
+  const validate = (fieldValues = task) => {
     let temp = {} as Errs;   
     const compare = new Date(fieldValues.end!).getTime() - new Date(fieldValues.start!).getTime();
     if ("task" in fieldValues) {
-      temp.task = fieldValues.task?.trim() === "" ? "please fill the task" : "";
+      temp.task = fieldValues.name?.trim() === "" ? "please fill the task" : "";
     }
     if ("start" in fieldValues) {
       temp.start =
@@ -72,12 +68,11 @@ const TaskDialog = () => {
           : "";
     }
     setErrs({ ...temp });
-    if (fieldValues == values)
+    if (fieldValues == task)
       return Object.values(temp).every((x) => x === "");
   };
   /**Close Dialog */
   const closeDialog = () => {
-    setValues(initialValue);
     setErrs({} as Errs);
     handleClose && handleClose();
   };
@@ -85,9 +80,9 @@ const TaskDialog = () => {
     <Dialog className={classes.root} open={openDialog} onClose={closeDialog}>
       <DialogContent>
         <TextField
-          name="task"
-          onChange={handleChange}
-          value={values.task}
+          name="name"
+          onChange={onChange}
+          value={task.name}
           label="Task"
           fullWidth
           {...(errs.task && { error: true, helperText: errs.task })}
@@ -96,9 +91,9 @@ const TaskDialog = () => {
           <TextField
             label="start"
             type="datetime-local"
-            value={values.start}
+            value={task.start}
             name="start"
-            onChange={handleChange}
+            onChange={onChange}
             InputLabelProps={{
               shrink: true,
             }}
@@ -107,9 +102,9 @@ const TaskDialog = () => {
           <TextField
             label="end"
             type="datetime-local"
-            value={values.end}
+            value={task.end}
             name="end"
-            onChange={handleChange}
+            onChange={onChange}
             InputLabelProps={{
               shrink: true,
             }}

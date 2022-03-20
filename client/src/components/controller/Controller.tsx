@@ -20,7 +20,7 @@ import { actionCreators } from "../../store";
 import { daysCurrentMonth1, firstDayOfMonth, timeMarks } from "../../utils";
 import useStyles from "./styles";
 import { State } from "../../store/reducers";
-import { ToggleContext } from "../../context/Context";
+import {  useTaskDialogContext } from "../../context/TaskDialogContext";
 const Controller = () => {
   /**MUI Theme */
   const classes = useStyles();
@@ -31,7 +31,7 @@ const Controller = () => {
     dispatch
   );
   const { calendar, tasks } = useSelector((state: State) => state);
-  const { handleOpen } = useContext(ToggleContext);
+  const { handleOpen } = useTaskDialogContext();
   /**First value */
   const [selectedDate, setSelectedDate] = React.useState(new Date());
   const [timeline, setTimeline] = useState({ start: 6, end: 11 });

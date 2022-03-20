@@ -44,12 +44,15 @@ const TimetableHeader = () => {
     <>
     <TableHead >
       <TableRow >
-        {calendar.dates.map((date: any, index: number)=>{
-          return(
-            <TableCell className={clsx(tableCell,{[today]: sameDate(date)})} key={index}>
-              <small>{day(index)}<br/>{calendar.type =='week' && date}</small>
-            </TableCell>
-          )
+        {calendar.dates.map((date: any, index: number)=> {
+          if (index < 7) {
+            return(
+              <TableCell className={clsx(tableCell,{[today]: sameDate(date)})} key={index}>
+                <small>{day(index)}<br/>{calendar.type =='week' && date}</small>
+              </TableCell>
+            )
+          } else return null
+          
         })}
       </TableRow>
     </TableHead>

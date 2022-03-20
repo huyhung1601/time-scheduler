@@ -29,14 +29,15 @@ const calendarReducer = (state: any = initialValue, action: Action) => {
       const endOfWeek = new Date(year, month, date - day + 7,0,0,-1).getTime();
       const startOfMonth = new Date(year,month,1).getTime()
       const endOfMonth = new Date(year, month +1, 1,0,0,-1).getTime()
+      const daysOfMonth = new Date(year, month +1,0).getDate()
       const weeks = Math.ceil(
         (daysCurrentMonth1(selectedDate) + firstDayOfMonth(selectedDate)) / 7
       );
-      let arr = [];
-      for (let d = 0; d < 7; d++) {
-        arr[d] = new Date(year, month, date - (day - d)).toLocaleDateString(
+      let arr = [];      
+      for (let d = 0; d < (type === 'week' ? 7 : daysOfMonth); d++) {
+        arr[d] = type ==='week' ?  new Date(year, month, date - (day - d)).toLocaleDateString(
           "en-GB"
-        );
+        ): new Date(year,month,d+1).toLocaleDateString('en-gb')
       }
       return {
         ...state,
@@ -65,11 +66,7 @@ const calendarReducer = (state: any = initialValue, action: Action) => {
               getTime(task.start) === i &&
                 getDay(task.start) === j &&
                 table[i][j].tasks.every((x: any) => x.id !== task.id) &&
-                table[i][j].tasks.push({
-                  ...task,
-                  start: new Date(task.start),
-                  end: new Date(task.end),
-                });
+                table[i][j].tasks.push(task);
             });
           }
         }

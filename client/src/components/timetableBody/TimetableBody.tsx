@@ -39,7 +39,8 @@ const TimetableBody = () => {
     dropItem(result, calendar);
   };
   useEffect(()=>{
-    tasks.modifiedTask  && updateTask(tasks.modifiedTask);
+    tasks.modifiedTask  && updateTask(tasks.modifiedTask)
+    console.log(tasks.modifiedTask)
   },[tasks.modifiedTask])
 
   return (
@@ -101,7 +102,6 @@ const TimetableBody = () => {
               return null;
             }
           })}
-          <TaskDialog />
         </TableBody>
       </DragDropContext>
     </>
