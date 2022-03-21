@@ -1,11 +1,11 @@
 import { combineReducers } from "redux";
-import datesReducer from "./datesReducer";
+import calendarReducer from "./calendarReducer";
 import tasksReducer from "./tasksReducer";
 
 
 const reducers = combineReducers({
     tasks: tasksReducer,
-    calendar: datesReducer
+    calendar: calendarReducer
 })
 
 export default reducers

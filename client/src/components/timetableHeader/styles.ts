@@ -7,7 +7,11 @@ export default makeStyles((theme)=>({
     tableCell:{
         padding: '0px',
         margin: '0px',
-        height: '60px'
+        height: '60px',   
+        textAlign: 'center'
+    },
+    today:{
+        backgroundColor: '#57aecb'
     }
 
 }))
