@@ -7,10 +7,10 @@ import { bindActionCreators } from "redux";
 import { actionCreators } from "../../store";
 import Task from "../task/Task";
 import useStyles from "./styles";
-import TaskDialog from "../taskDialog/TaskDialog";
+import { useTaskDialogContext } from "../../context/TaskDialogContext";
 import { converToNum, daysCurrentMonth, daysCurrentMonth1 } from "../../utils";
 import { TaskProps } from "../../store/actions";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect } from "react";
 const TimetableBody = () => {
   /**MUI styles */
   const classes = useStyles();
@@ -39,7 +39,11 @@ const TimetableBody = () => {
   useEffect(()=>{
     tasks.modifiedTask  && updateTask(tasks.modifiedTask)
   },[tasks.modifiedTask])
-
+  /**open TaskDialog */
+  const {editTask} = useTaskDialogContext()
+  const openTaskDialog = useCallback((t)=>{
+    editTask && editTask(t)
+  },[])
   return (
     <>
       <DragDropContext onDragEnd={onDragEnd}>
@@ -82,7 +86,7 @@ const TimetableBody = () => {
                                 <div className="containerBody">
                                   {slot.tasks.map((t: TaskProps, index: number) => {
                                     return (
-                                      <Task t={t} key={index} index={index} />
+                                      <Task openTaskDialog={openTaskDialog} t={t} key={index} index={index} />
                                     );
                                   })}
                                 </div>

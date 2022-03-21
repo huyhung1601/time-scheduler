@@ -1,13 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { bindActionCreators } from "redux";
-import { useTaskDialogContext } from "../../context/TaskDialogContext";
 import useDebounce from "../../hooks/useDebounce";
-import { actionCreators } from "../../store";
 import { State } from "../../store/reducers";
 import { removeTimezone, toISOStringNoZ } from "../../utils";
 import useStyle from "./styles";
-const ResizableItem: React.FC<any> = ({ task }) => {
+const ResizableItem: React.FC<any> = (props) => {
+  const {task, openTaskDialog,handleUpdateTask} = props
   const itemRef = useRef<any>(null);
   let isResizing = false;
   const [movingTask, setMovingTask] = useState(task);
@@ -17,11 +15,8 @@ const ResizableItem: React.FC<any> = ({ task }) => {
   /**MUI style */
   const classes = useStyle();
   /**Redux & context */  
-  const dispatch = useDispatch();
   const { calendar } = useSelector((state: State) => state);
   const { timeline, type, by } = calendar;
-  const { updateTask } = bindActionCreators(actionCreators, dispatch);
-  const { editTask } = useTaskDialogContext();
   //Item Style
   const todayTime = new Date().getTime();
   const startTime = new Date(task.start).getTime();
@@ -36,7 +31,7 @@ const ResizableItem: React.FC<any> = ({ task }) => {
     itemRef.current &&
       (itemRef.current.style.left = itemX + "%") &&
       (itemRef.current.style.width = itemWidth + "%");
-  }, [task, by, type]);
+  }, [task]);
   
   /**Hangle move */
   const onMove = (e: any): void => {
@@ -136,15 +131,12 @@ const ResizableItem: React.FC<any> = ({ task }) => {
     document.addEventListener("mouseup", mouseUp);
   };
   /**Update Task */  
-  useDebounce(()=>updateTask(movingTask) ,1000,[movingTask])  
-  /**Edit Task */  
-  const openTaskEdit = () => {
-    editTask && editTask(movingTask);
-  };
+  useDebounce(()=>handleUpdateTask(movingTask) ,1000,[movingTask])  
   
+  console.log(task)
   return (
     <div className={classes.itemContainer}>
-      <div onClick={openTaskEdit} className={classes.itemInfos}>
+      <div onClick={()=>openTaskDialog(movingTask)} className={classes.itemInfos}>
         <small className="itemInfo">{task.name}</small>
         <small className="itemInfo">
           Start:
