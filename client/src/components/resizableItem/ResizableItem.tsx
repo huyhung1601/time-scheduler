@@ -11,10 +11,12 @@ const ResizableItem: React.FC<any> = ({ task }) => {
   const itemRef = useRef<any>(null);
   let isResizing = false;
   const [movingTask, setMovingTask] = useState(task);
+  useEffect(()=>{
+    setMovingTask(task)
+  },[task])
   /**MUI style */
   const classes = useStyle();
-  /**Redux & context */
-  
+  /**Redux & context */  
   const dispatch = useDispatch();
   const { calendar } = useSelector((state: State) => state);
   const { timeline, type, by } = calendar;
@@ -22,8 +24,8 @@ const ResizableItem: React.FC<any> = ({ task }) => {
   const { editTask } = useTaskDialogContext();
   //Item Style
   const todayTime = new Date().getTime();
-  const startTime = new Date(movingTask.start).getTime();
-  const endTime = new Date(movingTask.end).getTime();
+  const startTime = new Date(task.start).getTime();
+  const endTime = new Date(task.end).getTime();
   const linearGradient =
     ((todayTime - startTime) / (endTime - startTime)) * 100;
   const itemX =

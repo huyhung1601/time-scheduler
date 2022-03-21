@@ -17,12 +17,14 @@ const tasksReducer = (state: StateProps = initialState, action: Action) => {
   switch (action.type) {
     /**Get Tasks */
     case Actiontype.getTasks:
+      const dateTime = new Date().getTime();
+      
       return {
         ...state,
         tasks: action.payload.sort(
           (a: TaskProps, b: TaskProps) =>
-            new Date(a.start).getTime() - new Date(b.start).getTime()
-        ),
+          new Date(a.start).getTime() - new Date(b.start).getTime()          
+        )
       };
 
     /**Create Task */
@@ -37,6 +39,7 @@ const tasksReducer = (state: StateProps = initialState, action: Action) => {
       const yCompare = yOfNewTask === yOfCal;
       const mCompare = mOfNewTask === mOfCal;
       const dateOfTask = new Date(newTask.start).toLocaleDateString("en-gb");
+
       return {
         ...state,
         tasks: [
@@ -56,8 +59,8 @@ const tasksReducer = (state: StateProps = initialState, action: Action) => {
     /**Drop Item */
     case Actiontype.dropItem:
       const { result, calendar } = action.payload;
-      const { dates, type, selectedDate } = calendar;
-      const { source, destination } = result;
+      const { dates, type } = calendar;
+      const { destination } = result;
       //index
       const dropIndex = converToNum(destination.droppableId);
       //Set Date

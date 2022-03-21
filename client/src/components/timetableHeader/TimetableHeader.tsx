@@ -4,10 +4,7 @@ import { useSelector } from "react-redux";
 import { State } from "../../store/reducers";
 import useStyles from './styles'
 const TimetableHeader = () => {
-  const sameDate = (date: any) =>{
-    let tday = (new Date()).toLocaleDateString('en-gb')
-    return tday === date
-  }
+  const tday = new Date().getDay()
   /**MUI Styles */
   const classes = useStyles()
   const {tableCell,today} = classes
@@ -47,7 +44,7 @@ const TimetableHeader = () => {
         {calendar.dates.map((date: any, index: number)=> {
           if (index < 7) {
             return(
-              <TableCell className={clsx(tableCell,{[today]: sameDate(date)})} key={index}>
+              <TableCell className={clsx(tableCell,{[today]: index === tday})} key={index}>
                 <small>{day(index)}<br/>{calendar.type =='week' && date}</small>
               </TableCell>
             )
