@@ -3,8 +3,7 @@ import useDebounce from "../../hooks/useDebounce";
 import useStyle from "./styles";
 import useMeasureActingItem from "../../hooks/useMeasureActingItem";
 const ResizableItem: React.FC<any> = (props) => {
-  const {task, openTaskDialog,handleUpdateTask,memorizedTimeline} = props
-  const itemRef = useRef<any>(null);
+  const { task, openTaskDialog, handleUpdateTask, memorizedTimeline } = props;
   /**MUI style */
   const classes = useStyle();
   //Item Style
@@ -14,23 +13,25 @@ const ResizableItem: React.FC<any> = (props) => {
   const linearGradient =
     ((todayTime - startTime) / (endTime - startTime)) * 100;
   const itemX =
-    (100 * (startTime - memorizedTimeline.start)) / (memorizedTimeline.end - memorizedTimeline.start);
+    (100 * (startTime - memorizedTimeline.start)) /
+    (memorizedTimeline.end - memorizedTimeline.start);
   const itemWidth =
-    (100 * (endTime - startTime)) / (memorizedTimeline.end - memorizedTimeline.start);
-  useEffect(() => {
-    itemRef.current &&
-      (itemRef.current.style.left = itemX + "%") &&
-      (itemRef.current.style.width = itemWidth + "%");
-  }, [task]);
-
+    (100 * (endTime - startTime)) /
+    (memorizedTimeline.end - memorizedTimeline.start);
   /**Measure Acting Item */
-  const [onMove, onResize, actingItem ] = useMeasureActingItem ({task, memorizedTimeline,itemRef })  
-  
-  /**Update Task */  
-  useDebounce(()=>handleUpdateTask(actingItem) ,1000,[actingItem])  
+  const [onMove, onResize, actingItem, itemRef] = useMeasureActingItem({
+    task,
+    memorizedTimeline,itemX,itemWidth,
+  });
+
+  /**Update Task */
+  useDebounce(() => handleUpdateTask(actingItem), 1000, [actingItem]);
   return (
     <div className={classes.itemContainer}>
-      <div onClick={()=>openTaskDialog(actingItem)} className={classes.itemInfos}>
+      <div
+        onClick={() => openTaskDialog(actingItem)}
+        className={classes.itemInfos}
+      >
         <small className="itemInfo">{task.name}</small>
         <small className="itemInfo">
           Start:
@@ -53,8 +54,8 @@ const ResizableItem: React.FC<any> = (props) => {
           })}
         </small>
       </div>
-      <div ref={itemRef} onMouseDown={onMove}  className={classes.resizableItem}>
-        <div          
+      <div ref={itemRef} onMouseDown={onMove} className={classes.resizableItem}>
+        <div
           className="timebar"
           style={{
             background:

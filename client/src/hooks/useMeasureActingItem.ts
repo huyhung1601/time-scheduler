@@ -1,9 +1,23 @@
-import React, { useCallback, useRef,useState } from 'react'
+import React, { useCallback, useRef,useState,useEffect } from 'react'
+import { ITask } from '../context/TaskDialogContext'
 import { toISOStringNoZ,removeTimezone } from '../utils'
-const useMeasureActingItem= ({task,memorizedTimeline,itemRef}: {task: any,memorizedTimeline:any,itemRef:any}) =>{
+
+interface IProps {
+  task: any,
+  memorizedTimeline: any,
+  itemX: number,
+  itemWidth: number,
+}
+const useMeasureActingItem= ({task,memorizedTimeline,itemX,itemWidth}: IProps) =>{
     const [actingItem,setActingItem] = useState(task)
+    const itemRef = useRef<any>()
     let isResizing = false
     
+  useEffect(() => {
+    itemRef.current &&
+      (itemRef.current.style.left = itemX + "%") &&
+      (itemRef.current.style.width = itemWidth + "%");
+  }, [task]);
   // /**Hangle move */
   const onMove = (e: any) => {
     let prevX = e.pageX;
@@ -102,7 +116,7 @@ const useMeasureActingItem= ({task,memorizedTimeline,itemRef}: {task: any,memori
     document.addEventListener("mousemove", mouseMove);
     document.addEventListener("mouseup", mouseUp);
   };
-    return[onMove,onResize,actingItem]
+    return[onMove,onResize,actingItem,itemRef]
 }
 
 export default useMeasureActingItem
