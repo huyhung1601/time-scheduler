@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
 import ResizableItem from '../resizableItem/ResizableItem'
 import {useDispatch,useSelector} from 'react-redux'
 import {State} from '../../store/reducers'
@@ -15,7 +15,10 @@ const TaskTable = () => {
   const dispatch = useDispatch()
   const { updateTask } = bindActionCreators(actionCreators, dispatch);
 
-  const { tasks } = useSelector((state: State) => state);
+  const { tasks,calendar } = useSelector((state: State) => state);
+  const memorizedTimeline = useMemo(()=>{
+    return calendar.timeline
+  },[calendar])
   const { editTask } = useTaskDialogContext();
 
   const openTaskDialog = useCallback((movingTask)=>{
@@ -29,7 +32,7 @@ const TaskTable = () => {
     <div className={classes.taskTable}>      
         {tasks.tasks.map((task: TaskProps)=>{
           return(
-          <ResizableItem handleUpdateTask={handleUpdateTask} openTaskDialog={openTaskDialog} key={task.id} task={task}/>
+          <ResizableItem memorizedTimeline={memorizedTimeline} handleUpdateTask={handleUpdateTask} openTaskDialog={openTaskDialog} key={task.id} task={task}/>
           )
         })}
     </div>
