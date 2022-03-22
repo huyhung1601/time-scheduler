@@ -1,27 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { bindActionCreators } from "redux";
-import { useTaskDialogContext } from "../../context/TaskDialogContext";
 import useDebounce from "../../hooks/useDebounce";
-import { actionCreators } from "../../store";
-import { State } from "../../store/reducers";
-import { removeTimezone, toISOStringNoZ } from "../../utils";
 import useStyle from "./styles";
-const ResizableItem: React.FC<any> = ({ task }) => {
-  const itemRef = useRef<any>(null);
-  let isResizing = false;
-  const [movingTask, setMovingTask] = useState(task);
-  useEffect(()=>{
-    setMovingTask(task)
-  },[task])
+import useMeasureActingItem from "../../hooks/useMeasureActingItem";
+const ResizableItem: React.FC<any> = (props) => {
+  const { task, openTaskDialog, handleUpdateTask, memorizedTimeline } = props;
   /**MUI style */
   const classes = useStyle();
-  /**Redux & context */  
-  const dispatch = useDispatch();
-  const { calendar } = useSelector((state: State) => state);
-  const { timeline, type, by } = calendar;
-  const { updateTask } = bindActionCreators(actionCreators, dispatch);
-  const { editTask } = useTaskDialogContext();
   //Item Style
   const todayTime = new Date().getTime();
   const startTime = new Date(task.start).getTime();
@@ -29,126 +13,29 @@ const ResizableItem: React.FC<any> = ({ task }) => {
   const linearGradient =
     ((todayTime - startTime) / (endTime - startTime)) * 100;
   const itemX =
-    (100 * (startTime - timeline.start)) / (timeline.end - timeline.start);
+    (100 * (startTime - memorizedTimeline.start)) /
+    (memorizedTimeline.end - memorizedTimeline.start);
   const itemWidth =
-    (100 * (endTime - startTime)) / (timeline.end - timeline.start);
-  useEffect(() => {
-    itemRef.current &&
-      (itemRef.current.style.left = itemX + "%") &&
-      (itemRef.current.style.width = itemWidth + "%");
-  }, [task, by, type]);
-  
-  /**Hangle move */
-  const onMove = (e: any): void => {
-    let prevX = e.pageX;
-    let wrapWidth = 0;
-    //Mouse move
-    const mouseMove = (e: any): void => {
-      if (itemRef.current) {
-        const rect = itemRef.current.getBoundingClientRect();
-        wrapWidth =
-          (rect.width * 100) /
-          Number(itemRef.current.style.width.replace("%", ""));
-        //Moving
-        if (!isResizing) {
-          itemRef.current.style.left =
-            ((rect.x - 11 - (prevX - e.pageX)) / wrapWidth) * 100 + "%";
-          prevX = e.pageX;
-          setMovingTask({
-            ...task,
-            start: toISOStringNoZ(removeTimezone (new Date(
-              timeline.start +
-                ((timeline.end - timeline.start) / wrapWidth) * (rect.x - 11)
-            ))),
-            end: toISOStringNoZ(removeTimezone(new Date(
-              timeline.start +
-                ((timeline.end - timeline.start) / wrapWidth) *
-                  (rect.x + rect.width - 11)
-            ))),
-          });
-        }
-      }
-    };
+    (100 * (endTime - startTime)) /
+    (memorizedTimeline.end - memorizedTimeline.start);
+  /**Measure Acting Item */
+  const [onMove, onResize, actingItem, itemRef] = useMeasureActingItem({
+    task,
+    memorizedTimeline,itemX,itemWidth,
+  });
 
-    //Mouse up
-    const mouseUp = (e: any): void => {
-      document.removeEventListener("mousemove", mouseMove);
-      document.removeEventListener("mouseup", mouseUp);
-    };
-    //Add events
-    document.addEventListener("mousemove", mouseMove);
-    document.addEventListener("mouseup", mouseUp);
-  };
-  /**Hanlde Resise */
-  const onResize = (e: any): void => {
-    let prevX = e.pageX;
-    let wrapWidth = 0;
-    isResizing = true;
-    const currentResize = e.target;
-    const mouseMove = (e: any) => {
-      if (itemRef.current && isResizing) {
-        const rect = itemRef.current.getBoundingClientRect();
-        wrapWidth =
-          (rect.width * 100) /
-          Number(itemRef.current.style.width.replace("%", ""));
-        if (currentResize.classList.contains("right")) {
-          itemRef.current.style.width =((rect.width - (prevX - e.pageX)) / wrapWidth) * 100 > 1 &&
-            ((rect.width - (prevX - e.pageX)) / wrapWidth) * 100 + "%";
-          setMovingTask({
-            ...movingTask,
-            end: toISOStringNoZ(removeTimezone( new Date(
-              timeline.start +
-                ((timeline.end - timeline.start) / wrapWidth) *
-                  (rect.left + rect.width - 11)
-            ))),
-          });
-        } else {
-          itemRef.current.style.left =
-            ((rect.x - 11 - (prevX - e.pageX)) / wrapWidth) * 100 + "%";
-
-          itemRef.current.style.width = ((rect.width + (prevX - e.pageX)) / wrapWidth) * 100 >1 &&
-            ((rect.width + (prevX - e.pageX)) / wrapWidth) * 100 + "%";
-          setMovingTask({
-            ...task,
-            start: toISOStringNoZ(removeTimezone(new Date(
-              timeline.start +
-                ((timeline.end - timeline.start) / wrapWidth) * (rect.x - 11)
-            ))),
-            end: toISOStringNoZ(removeTimezone(new Date(
-              timeline.start +
-                ((timeline.end - timeline.start) / wrapWidth) *
-                  (rect.x + rect.width - 11)
-            ))),
-          });
-        }
-        prevX = e.pageX;
-      }
-    };
-
-    /**Mouse up*/
-    const mouseUp = (e: any): void => {
-      document.removeEventListener("mousemove", mouseMove);
-      document.removeEventListener("mouseup", mouseUp);
-      isResizing = false;
-    };
-    //Add events
-    document.addEventListener("mousemove", mouseMove);
-    document.addEventListener("mouseup", mouseUp);
-  };
-  /**Update Task */  
-  useDebounce(()=>updateTask(movingTask) ,1000,[movingTask])  
-  /**Edit Task */  
-  const openTaskEdit = () => {
-    editTask && editTask(movingTask);
-  };
-  
+  /**Update Task */
+  useDebounce(() => handleUpdateTask(actingItem), 1000, [actingItem]);
   return (
     <div className={classes.itemContainer}>
-      <div onClick={openTaskEdit} className={classes.itemInfos}>
+      <div
+        onClick={() => openTaskDialog(actingItem)}
+        className={classes.itemInfos}
+      >
         <small className="itemInfo">{task.name}</small>
         <small className="itemInfo">
           Start:
-          {new Date(movingTask.start).toLocaleString("en-GB", {
+          {new Date(actingItem.start).toLocaleString("en-GB", {
             year: "numeric",
             month: "numeric",
             day: "numeric",
@@ -158,7 +45,7 @@ const ResizableItem: React.FC<any> = ({ task }) => {
         </small>
         <small className="itemInfo">
           End:
-          {new Date(movingTask.end).toLocaleString("en-GB", {
+          {new Date(actingItem.end).toLocaleString("en-GB", {
             year: "numeric",
             month: "numeric",
             day: "numeric",

@@ -41,7 +41,6 @@ const TaskDialog = () => {
     validate();
     if (validate()) {
       const newTask = task;
-      console.log(newTask)
       newTask.id ? updateTask(newTask) :createTask(newTask,calendar);
       handleClose && handleClose();
       setErrs({} as Errs);
