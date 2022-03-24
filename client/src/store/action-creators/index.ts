@@ -1,5 +1,5 @@
 import { Dispatch } from "redux"
-import { addNewTask, selectedTasks, serverUpdateTask } from "../../server"
+import { addNewTask, selectedTasks, serverCreateCategory, serverGetCategories, serverUpdateTask } from "../../server"
 import { Actiontype } from "../action-types"
 import { CalendarProps, TaskProps } from "../actions"
 
@@ -58,6 +58,26 @@ export const updateTask = (updatedTask: TaskProps)=>{
         const res = await serverUpdateTask(updatedTask)
         dispatch({
             type: Actiontype.updateTask,
+            payload: res
+        })
+    }
+}
+
+export const getCategories = () =>{
+    return async (dispatch: Dispatch)=>{
+        const res = await serverGetCategories()
+        dispatch({
+            type: Actiontype.getCategories,
+            payload: res
+        })
+    }
+}
+
+export const createCategory = (category: any)=>{
+    return async (dispatch: Dispatch) =>{
+        const res = await serverCreateCategory(category)
+        dispatch({
+            type: Actiontype.createCategory,
             payload: res
         })
     }

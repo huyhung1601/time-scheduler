@@ -4,11 +4,12 @@ import { toISOStringNoZ,removeTimezone } from '../utils'
 
 interface IProps {
   task: any,
-  memorizedTimeline: any,
+  timeline: any,
   itemX: number,
   itemWidth: number,
+  type: string
 }
-const useMeasureActingItem= ({task,memorizedTimeline,itemX,itemWidth}: IProps) =>{
+const useMeasureActingItem= ({task,timeline,itemX,itemWidth,type}: IProps) =>{
     const [actingItem,setActingItem] = useState(task)
     const itemRef = useRef<any>()
     let isResizing = false
@@ -17,7 +18,7 @@ const useMeasureActingItem= ({task,memorizedTimeline,itemX,itemWidth}: IProps) =
     itemRef.current &&
       (itemRef.current.style.left = itemX + "%") &&
       (itemRef.current.style.width = itemWidth + "%");
-  }, [task]);
+  }, [task,type]);
   // /**Hangle move */
   const onMove = (e: any) => {
     let prevX = e.pageX;
@@ -37,12 +38,12 @@ const useMeasureActingItem= ({task,memorizedTimeline,itemX,itemWidth}: IProps) =
           setActingItem({
             ...task,
             start: toISOStringNoZ(removeTimezone (new Date(
-              memorizedTimeline.start +
-                ((memorizedTimeline.end - memorizedTimeline.start) / wrapWidth) * (rect.x - 11)
+              timeline.start +
+                ((timeline.end - timeline.start) / wrapWidth) * (rect.x - 11)
             ))),
             end: toISOStringNoZ(removeTimezone(new Date(
-              memorizedTimeline.start +
-                ((memorizedTimeline.end - memorizedTimeline.start) / wrapWidth) *
+              timeline.start +
+                ((timeline.end - timeline.start) / wrapWidth) *
                   (rect.x + rect.width - 11)
             ))),
           });
@@ -78,8 +79,8 @@ const useMeasureActingItem= ({task,memorizedTimeline,itemX,itemWidth}: IProps) =
             setActingItem({
             ...actingItem,
             end: toISOStringNoZ(removeTimezone( new Date(
-              memorizedTimeline.start +
-                ((memorizedTimeline.end - memorizedTimeline.start) / wrapWidth) *
+              timeline.start +
+                ((timeline.end - timeline.start) / wrapWidth) *
                   (rect.left + rect.width - 11)
             ))),
           });
@@ -92,12 +93,12 @@ const useMeasureActingItem= ({task,memorizedTimeline,itemX,itemWidth}: IProps) =
             setActingItem({
             ...task,
             start: toISOStringNoZ(removeTimezone(new Date(
-              memorizedTimeline.start +
-                ((memorizedTimeline.end - memorizedTimeline.start) / wrapWidth) * (rect.x - 11)
+              timeline.start +
+                ((timeline.end - timeline.start) / wrapWidth) * (rect.x - 11)
             ))),
             end: toISOStringNoZ(removeTimezone(new Date(
-              memorizedTimeline.start +
-                ((memorizedTimeline.end - memorizedTimeline.start) / wrapWidth) *
+              timeline.start +
+                ((timeline.end - timeline.start) / wrapWidth) *
                   (rect.x + rect.width - 11)
             ))),
           });
@@ -116,7 +117,7 @@ const useMeasureActingItem= ({task,memorizedTimeline,itemX,itemWidth}: IProps) =
     document.addEventListener("mousemove", mouseMove);
     document.addEventListener("mouseup", mouseUp);
   };
-    return[onMove,onResize,actingItem,itemRef]
+    return[onMove,onResize,actingItem,itemRef,]
 }
 
 export default useMeasureActingItem

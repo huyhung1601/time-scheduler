@@ -3,9 +3,9 @@ import { Action, TaskProps } from "../actions";
 import { converToNum, updateDateTime } from "../../utils/index";
 
 interface StateProps {
-  loading: Boolean;
-  tasks: TaskProps[];
-  modifiedTask: TaskProps;
+  loading: Boolean
+  tasks: TaskProps[]
+  modifiedTask: TaskProps
 }
 
 const initialState: StateProps = {

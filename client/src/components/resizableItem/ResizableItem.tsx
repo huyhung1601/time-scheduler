@@ -3,7 +3,7 @@ import useDebounce from "../../hooks/useDebounce";
 import useStyle from "./styles";
 import useMeasureActingItem from "../../hooks/useMeasureActingItem";
 const ResizableItem: React.FC<any> = (props) => {
-  const { task, openTaskDialog, handleUpdateTask, memorizedTimeline } = props;
+  const { task, openTaskDialog, handleUpdateTask, timeline,type } = props;
   /**MUI style */
   const classes = useStyle();
   //Item Style
@@ -13,15 +13,15 @@ const ResizableItem: React.FC<any> = (props) => {
   const linearGradient =
     ((todayTime - startTime) / (endTime - startTime)) * 100;
   const itemX =
-    (100 * (startTime - memorizedTimeline.start)) /
-    (memorizedTimeline.end - memorizedTimeline.start);
+    (100 * (startTime - timeline.start)) /
+    (timeline.end - timeline.start);
   const itemWidth =
     (100 * (endTime - startTime)) /
-    (memorizedTimeline.end - memorizedTimeline.start);
+    (timeline.end - timeline.start);
   /**Measure Acting Item */
   const [onMove, onResize, actingItem, itemRef] = useMeasureActingItem({
-    task,
-    memorizedTimeline,itemX,itemWidth,
+    task,type,
+    timeline,itemX,itemWidth,
   });
 
   /**Update Task */

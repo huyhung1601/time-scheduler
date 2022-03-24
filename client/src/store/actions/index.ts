@@ -14,6 +14,12 @@ export interface CalendarProps {
   body?: Array<any>;
   by: string
 }
+
+interface GetCategories {
+  type: Actiontype.getCategories
+  payload: any
+}
+
 interface GetTasks {
   type: Actiontype.getTasks;
   payload: TaskProps[];
@@ -43,10 +49,14 @@ interface UpdateTask {
   type: Actiontype.updateTask;
   payload: TaskProps;
 }
+
+interface CreateCategory {
+  type: Actiontype.createCategory
+}
 export type Action =
   | GetTasks
   | SetCalendar
   | DropItem
   | CreateTask
   | UpdateTask
-  | DrawCalendar;
+  | DrawCalendar |GetCategories | CreateCategory;

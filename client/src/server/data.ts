@@ -92,3 +92,9 @@ export const fakeData = [
       end: "2022-04-27T19:20",
     },
   ];
+
+export const fakeCategories=[
+  {id: v4(), title: 'family', type: 'family'},
+  {id: v4(), title: 'work', type: 'work'},
+  {id: v4(), title: 'education', type: 'education'},
+]

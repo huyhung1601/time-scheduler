@@ -1,10 +1,10 @@
 import { v4 } from "uuid";
-import { fakeData } from "./data";
+import { fakeCategories, fakeData } from "./data";
 
 
 export const addNewTask = async (task: any) => {
-  const newTask = { id: v4(), ...task };
-  await fakeData.push(newTask);
+  const newTask = await { id: v4(), ...task };
+  fakeData.push(newTask);
   return newTask;
 };
 
@@ -45,3 +45,14 @@ export const serverUpdateTask = async (task: any) => {
   fakeData[index] = task;
   return task;
 };
+
+export const serverGetCategories = async () =>{
+  return fakeCategories
+}
+
+export const serverCreateCategory = async (category: any) =>{
+  const newCategory = await {id: v4(), ...category}
+  fakeCategories.push(newCategory)
+  return newCategory
+}
+
