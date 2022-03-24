@@ -4,8 +4,6 @@ import { makeStyles } from "@material-ui/styles";
 export default makeStyles((theme) => ({
   taskSchedulerContainer: {
     minHeight: "calc(100vh - 90px)",
-    border: "1px solid black",
-    borderRadius: "5px",
     "& .month":{
       textAlign: 'center',
       flexDirection: 'column',
