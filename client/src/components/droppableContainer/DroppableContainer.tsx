@@ -11,7 +11,7 @@ const DroppableContainer: React.FC<IProps> = (props) => {
     <Droppable droppableId={droppableId}>
       {(provided) => {
         return (
-            <div ref={provided.innerRef} {...provided.droppableProps}>
+            <div style={{width: '100%'}} ref={provided.innerRef} {...provided.droppableProps}>
             {children}
             </div>
         );

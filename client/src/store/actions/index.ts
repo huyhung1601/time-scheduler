@@ -5,6 +5,7 @@ export interface TaskProps {
   name: string;
   start: string;
   end: string;
+  category: string;
 }
 export interface CalendarProps {
   type: string;

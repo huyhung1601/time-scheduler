@@ -12,7 +12,7 @@ export default makeStyles ((theme)=>({
         },
         '& .cardBody':{
             backgroundColor: 'white',
-            height: '100px',
+
         }
     }
 }))

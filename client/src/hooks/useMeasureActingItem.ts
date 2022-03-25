@@ -32,19 +32,20 @@ const useMeasureActingItem= ({task,timeline,itemX,itemWidth,type}: IProps) =>{
           Number(itemRef.current.style.width.replace("%", ""));
         //Moving
         if (!isResizing) {
+          console.log(rect,prevX)
           itemRef.current.style.left =
-            ((rect.x - 11 - (prevX - e.pageX)) / wrapWidth) * 100 + "%";
+            ((rect.x - 10 - (prevX - e.pageX)) / wrapWidth) * 100 + "%";
           prevX = e.pageX;
           setActingItem({
             ...task,
             start: toISOStringNoZ(removeTimezone (new Date(
               timeline.start +
-                ((timeline.end - timeline.start) / wrapWidth) * (rect.x - 11)
+                ((timeline.end - timeline.start) / wrapWidth) * (rect.x - 10)
             ))),
             end: toISOStringNoZ(removeTimezone(new Date(
               timeline.start +
                 ((timeline.end - timeline.start) / wrapWidth) *
-                  (rect.x + rect.width - 11)
+                  (rect.x + rect.width - 10)
             ))),
           });
         }
@@ -81,12 +82,12 @@ const useMeasureActingItem= ({task,timeline,itemX,itemWidth,type}: IProps) =>{
             end: toISOStringNoZ(removeTimezone( new Date(
               timeline.start +
                 ((timeline.end - timeline.start) / wrapWidth) *
-                  (rect.left + rect.width - 11)
+                  (rect.left + rect.width - 10)
             ))),
           });
         } else {
           itemRef.current.style.left =
-            ((rect.x - 11 - (prevX - e.pageX)) / wrapWidth) * 100 + "%";
+            ((rect.x - 10 - (prevX - e.pageX)) / wrapWidth) * 100 + "%";
 
           itemRef.current.style.width = ((rect.width + (prevX - e.pageX)) / wrapWidth) * 100 >1 &&
             ((rect.width + (prevX - e.pageX)) / wrapWidth) * 100 + "%";
@@ -94,12 +95,12 @@ const useMeasureActingItem= ({task,timeline,itemX,itemWidth,type}: IProps) =>{
             ...task,
             start: toISOStringNoZ(removeTimezone(new Date(
               timeline.start +
-                ((timeline.end - timeline.start) / wrapWidth) * (rect.x - 11)
+                ((timeline.end - timeline.start) / wrapWidth) * (rect.x - 10)
             ))),
             end: toISOStringNoZ(removeTimezone(new Date(
               timeline.start +
                 ((timeline.end - timeline.start) / wrapWidth) *
-                  (rect.x + rect.width - 11)
+                  (rect.x + rect.width - 10)
             ))),
           });
         }

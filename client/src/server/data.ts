@@ -6,7 +6,7 @@ export const fakeData = [
       name: "task 1",
       start: "2022-03-16T06:20",
       end: "2022-03-29T19:20",
-      category: 'family',
+      category: '2',
       participants: []
     },
     {
@@ -14,7 +14,7 @@ export const fakeData = [
       name: "task 2",
       start: "2022-03-16T07:20",
       end: "2022-03-19T19:20",
-      category: 'family',
+      category: '2',
       participants: []
     },
     {
@@ -22,7 +22,7 @@ export const fakeData = [
       name: "task 3",
       start: "2022-03-21T06:40",
       end: "2022-03-22T19:20",
-      category: 'family',
+      category: '2',
       participants: []
     },
     {
@@ -30,7 +30,7 @@ export const fakeData = [
       name: "task 4",
       start: "2022-03-21T10:20",
       end: "2022-03-22T19:20",
-      category: 'family',
+      category: '3',
       participants: []
     },
     {
@@ -38,7 +38,7 @@ export const fakeData = [
       name: "task 5",
       start: "2022-03-23T09:20",
       end: "2022-03-24T19:20",
-      category: 'education',
+      category: '3',
       participants: []
     },
     {
@@ -46,7 +46,7 @@ export const fakeData = [
       name: "task 6",
       start: "2022-03-24T09:25",
       end: "2022-03-26T19:20",
-      category: 'education',
+      category: '4',
       participants: []
     },
     {
@@ -54,7 +54,7 @@ export const fakeData = [
       name: "task 7",
       start: "2022-03-24T10:20",
       end: "2022-03-27T19:20",
-      category: 'education',
+      category: '4',
       participants: []
     },
     {
@@ -62,7 +62,7 @@ export const fakeData = [
       name: "task 8",
       start: "2022-03-19T09:20",
       end: "2022-03-30T19:20",
-      category: 'education',
+      category: '5',
       participants: []
     },
     {
@@ -70,7 +70,7 @@ export const fakeData = [
       name: "task 9",
       start: "2022-03-19T07:20",
       end: "2022-03-25T19:20",
-      category: 'work',
+      category: '5',
       participants: []
     },
     {
@@ -78,7 +78,7 @@ export const fakeData = [
       name: "task 10",
       start: "2022-03-18T07:40",
       end: "2022-03-23T19:20",
-      category: 'work',
+      category: '5',
       participants: []
     },
     {
@@ -86,7 +86,7 @@ export const fakeData = [
       name: "task 11",
       start: "2022-03-19T9:20",
       end: "2022-03-23T19:20",
-      category: 'work',
+      category: '1',
       participants: []
     },
     {
@@ -94,7 +94,7 @@ export const fakeData = [
       name: "task 12",
       start: "2022-03-20T09:20",
       end: "2022-03-24T19:20",
-      category: 'none',
+      category: '1',
       participants: []
     },
     {
@@ -102,7 +102,7 @@ export const fakeData = [
       name: "task 13",
       start: "2022-03-20T09:25",
       end: "2022-03-22T19:20",
-      category: 'none',
+      category: '1',
       participants: []
     },
     {
@@ -110,7 +110,7 @@ export const fakeData = [
       name: "task 14",
       start: "2022-03-23T6:20",
       end: "2022-03-24T19:20",
-      category: 'none',
+      category: '1',
       participants: []
     },
     {
@@ -118,14 +118,16 @@ export const fakeData = [
       name: "task 15",
       start: "2022-04-23T6:20",
       end: "2022-04-27T19:20",
-      category: 'family',
+      category: '1',
       participants: []
     },
   ];
 
 export const fakeCategories=[
-  {id: v4(), title: 'project', type: 'project', tasks:['1','2','3']},
-  {id: v4(), title: 'project', type: 'project', tasks:['1','2','3']},
-  {id: v4(), title: 'work', type: 'work', tasks:['4','5','6']},
-  {id: v4(), title: 'education', type: 'education', tasks:['7','8','9']},
+  {id: '1', title: 'none', type: 'none', },
+  
+  {id: '2', title: 'project1', type: 'project', },
+  {id: '3', title: 'project2', type: 'project', },
+  {id: '4', title: 'work', type: 'work', },
+  {id: '5', title: 'education', type: 'education', },
 ]

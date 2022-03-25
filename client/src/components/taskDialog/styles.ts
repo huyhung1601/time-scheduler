@@ -12,5 +12,8 @@ export default makeStyles (()=>({
         alignItems: 'center',
         justifyContent:'center',
         
+    },
+    category:{
+        
     }
 }))

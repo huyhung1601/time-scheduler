@@ -1,11 +1,10 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState } from "react";
 import useDebounce from "../../hooks/useDebounce";
 import useStyle from "./styles";
 import useMeasureActingItem from "../../hooks/useMeasureActingItem";
 import { Draggable } from "react-beautiful-dnd";
-import { ScriptSnapshot } from "typescript";
 const ResizableItem: React.FC<any> = (props) => {
-  const { task, openTaskDialog, handleUpdateTask, timeline, type, index } = props;
+  const { task, openTaskDialog, handleUpdateTask, type,timeline, index } = props;
   const [isDragging, setIsDragging] = useState(false)
   /**MUI style */
   const classes = useStyle();
@@ -73,7 +72,7 @@ const ResizableItem: React.FC<any> = (props) => {
           ref={itemRef}
           onMouseDown={onMove}
           className={classes.resizableItem}
-          style={{visibility: isDragging ?'hidden':'visible'}}
+          style={{visibility: isDragging ? 'hidden' : 'visible'}}
         >
           <div
             className="timebar"

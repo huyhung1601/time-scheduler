@@ -6,12 +6,13 @@ const TaskScheduler = () => {
   /**MUI style */
   const classes = useStyle();
   /**Redux */
-  const { calendar,categories } = useSelector((state: State) => state);
+  const { calendar,categories,tasks } = useSelector((state: State) => state);
   const today = new Date().toLocaleDateString("en-gb");
   const todayHour = new Date().getHours()
   const timemarks = [0,6,12,18]
   return (
     <div className={classes.taskSchedulerContainer}>
+      <div className={classes.taskSchedulerTimeline}>
       {calendar.type === "week" && (
         <div className="timeline week">
           {calendar.dates.map((d: string, i: number) => {
@@ -46,7 +47,8 @@ const TaskScheduler = () => {
         </div>
          
         </div>}
-      <Tasktable categories ={categories.categories} />
+        </div>
+      <Tasktable tasks={tasks.tasks} categories ={categories.categories} />
     </div>
   );
 };

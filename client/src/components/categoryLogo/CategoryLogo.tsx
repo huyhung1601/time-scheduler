@@ -7,12 +7,12 @@ interface IProps {
 const CategoryLogo = (props:IProps) => {
     const {logo} = props
   return (
-    <>
+    <div style={{marginRight: '15px'}}>
         {logo == 'work' && <Work/>}
         {logo == 'family' && <SupervisorAccount/>}
         {logo == 'education' && <CastForEducation/>}
         {logo == 'project' && <AccountTree/> }
-    </>
+    </div>
   )
 }
 

@@ -14,15 +14,15 @@ import DroppableContainer from "../droppableContainer/DroppableContainer";
 
 interface IProps {
   categories: any;
+  tasks: any;
 }
-const Tasktable = ({ categories }: IProps) => {
-  console.log(categories);
+const Tasktable = ({ categories, tasks }: IProps) => {
   /**MUI style */
   const classes = useStyle();
   /**Redux & context*/
   const dispatch = useDispatch();
   const { updateTask } = bindActionCreators(actionCreators, dispatch);
-  const { tasks, calendar } = useSelector((state: State) => state);
+  const { calendar } = useSelector((state: State) => state);
   const { editTask } = useTaskDialogContext();
   //Handle Drag & Drop
   const onDragEnd = (result: DropResult) => {
@@ -51,21 +51,25 @@ const Tasktable = ({ categories }: IProps) => {
     <DragDropContext onDragEnd={onDragEnd}>
       <div className={classes.tasktable}>
         <div className={classes.tasktableTop}>
-          <div className="logo">
-            <PlaylistAddIcon color="primary" />
-          </div>
-          <div className="title"> Create New Category</div>
+          Top Menu
         </div>
         <div className={classes.tasktableBody}>
           {categories.map((c: any) => {
-            return (              
-                <DroppableContainer droppableId={c.id}>
-                  <CategoryCard key={c.id} category={c} />
-                </DroppableContainer>
+            return (
+              <DroppableContainer droppableId={c.id}>
+                <CategoryCard
+                  openTaskDialog={openTaskDialog}
+                  handleUpdateTask={handleUpdateTask}
+                  calendar={calendar}
+                  tasks={tasks}
+                  key={c.id}
+                  category={c}
+                />
+              </DroppableContainer>
             );
           })}
-          <DroppableContainer droppableId="uncategorized">
-            {tasks.tasks.map((task: TaskProps, index: number) => {
+          {/* <DroppableContainer droppableId="uncategorized">
+            {tasks.map((task: TaskProps, index: number) => {
               return (
                 <ResizableItem
                   type={calendar.type}
@@ -78,7 +82,7 @@ const Tasktable = ({ categories }: IProps) => {
                 />
               );
             })}
-          </DroppableContainer>
+          </DroppableContainer> */}
         </div>
       </div>
     </DragDropContext>
