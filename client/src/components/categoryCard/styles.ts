@@ -7,7 +7,7 @@ export default makeStyles ((theme)=>({
         margin: '3px 0px 3px 0px',
         '& .cardHeader':{
             display: 'flex',
-            textAlign: 'center',
+            alignItems: 'center',
 
         },
         '& .cardBody':{

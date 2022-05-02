@@ -1,17 +1,20 @@
-import { AccountTree, CastForEducation, SupervisorAccount, Work } from '@material-ui/icons'
-import React from 'react'
- 
+import { AccountTree, CastForEducation, SupervisorAccount, Work,NotListedLocation } from '@material-ui/icons'
+import useStyles from './styles' 
+
 interface IProps {
     logo: string
+    fontSize?: "small" | "inherit" | "default" | "large" | "medium" | undefined
 }
 const CategoryLogo = (props:IProps) => {
-    const {logo} = props
+  const classes = useStyles()
+    const {logo,fontSize} = props
   return (
-    <div style={{marginRight: '15px'}}>
-        {logo == 'work' && <Work/>}
-        {logo == 'family' && <SupervisorAccount/>}
-        {logo == 'education' && <CastForEducation/>}
-        {logo == 'project' && <AccountTree/> }
+    <div className={classes.root}>
+        {logo== 'none' && <NotListedLocation fontSize={fontSize } color='primary'/> }
+        {logo == 'work' && <Work fontSize={fontSize } color='primary'/>}
+        {logo == 'family' && <SupervisorAccount fontSize={fontSize} color='primary'/>}
+        {logo == 'education' && <CastForEducation fontSize={fontSize } color='primary'/>}
+        {logo == 'project' && <AccountTree fontSize={fontSize} color='primary'/> }
     </div>
   )
 }

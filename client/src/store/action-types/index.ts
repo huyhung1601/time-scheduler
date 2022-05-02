@@ -6,5 +6,6 @@ export enum Actiontype{
     dropItem = "dropItem",
     createTask = 'createTask',
     updateTask = 'updateTask',
-    createCategory = "createCategory"
+    createCategory = "createCategory",
+    changeCategory = "changeCategory"
 }

@@ -75,14 +75,11 @@ const ResizableItem: React.FC<any> = (props) => {
           style={{visibility: isDragging ? 'hidden' : 'visible'}}
         >
           <div
-            className="timebar"
+            className={`timebar ${(todayTime > endTime && 'lightgray') || (todayTime< startTime && 'lightgreen')}` }
             style={{
               background:
-                todayTime > endTime
-                  ? "lightgray"
-                  : todayTime < startTime
-                  ? "lightblue"
-                  : `linear-gradient(to right, lightgray 0%,lightgray ${linearGradient}%,#57aecb ${linearGradient}%,#57aecb 100%)`,
+                todayTime < endTime && todayTime > startTime && `linear-gradient(to right, lightgray 0%,lightgray ${linearGradient}%,#57aecb ${linearGradient}%,#57aecb 100%) ` || ''
+                  
             }}
           >
             <div onMouseDown={onResize} className="resizer left"></div>

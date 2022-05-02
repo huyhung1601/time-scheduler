@@ -2,7 +2,6 @@ import useStyles from "./styles";
 import CategoryLogo from "../categoryLogo/CategoryLogo";
 import ResizableItem from "../resizableItem/ResizableItem";
 import { TaskProps } from "../../store/actions";
-import { Droppable } from "react-beautiful-dnd";
 interface IProps {
   category: any;
   tasks: TaskProps[]
@@ -15,11 +14,11 @@ const CategoryCard = ({ category,tasks,calendar,openTaskDialog,handleUpdateTask 
   return (
     <div className={classes.cardContainer}>
       <div className="cardHeader">
-      <CategoryLogo logo = {category.type}/>
+      <CategoryLogo logo = {category.logo}/>
       <div className="title">{category.title}</div>
       </div>
       <div className="cardBody">
-      {tasks.map((task: TaskProps, index: number) => task.category === category.id && 
+      {tasks.map((task: TaskProps, index: number) => task.categoryId === category.id && 
                 <ResizableItem
                   type={calendar.type}
                   timeline={calendar.timeline}
@@ -29,7 +28,6 @@ const CategoryCard = ({ category,tasks,calendar,openTaskDialog,handleUpdateTask 
                   task={task}
                   index={index}
                 />
-              
             )}
       </div>
     </div>

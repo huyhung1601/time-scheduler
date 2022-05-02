@@ -1,19 +1,23 @@
-import { makeStyles } from "@material-ui/core";
+import { makeStyles } from "@material-ui/styles";
 
-export default makeStyles (()=>({
-    root:{
-        '& .MuiFormControl-root':{
-            margin: '5px'
-        }
-        
+export default makeStyles(() => ({
+  root: {
+    "& .MuiPaper-root": {
+      padding: "0",
     },
-    dateContainer:{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent:'center',
-        
+    "& .MuiDialogContent-root": {
+      minHeight: "150px",
     },
-    category:{
-        
-    }
-}))
+  },
+  taskContainer: {
+    display: "grid",
+    gridTemplateColumns: "repeat(2, 1fr)",
+    gap: "10px",
+  },
+  dateContainer: {
+    display: "grid",
+    gridTemplateColumns: "repeat(2, 1fr)",
+    gap: "10px",
+  },
+  category: {},
+}));

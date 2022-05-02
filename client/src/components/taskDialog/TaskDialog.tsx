@@ -18,17 +18,17 @@ type Errs = {
   task: string;
   start: string;
   end: string;
-  
+  categoryId: string;
 };
 
-const TaskDialog = () => {
+const TaskDialog = (props: any) => {
   /**MUI styles */
   const classes = useStyles();
   /**Redux && context */
   const dispatch = useDispatch();
   const { task, openDialog, handleClose, handleTaskChange } =
     useTaskDialogContext();
-  const { updateTask, createTask } = bindActionCreators(
+  const { updateTask, createTask, createCategory } = bindActionCreators(
     actionCreators,
     dispatch
   );
@@ -40,6 +40,9 @@ const TaskDialog = () => {
     handleTaskChange && handleTaskChange(name, value);
     /**validate(values) becasue compare start = end */
     validate({ ...task, [e.target.name]: e.target.value });
+  };
+  const onSelect = (selectedCategory: any) => {
+    handleTaskChange && handleTaskChange("categoryId", selectedCategory.id);
   };
   /**Create Task */
   const handleSubmit = (): void => {
@@ -53,7 +56,7 @@ const TaskDialog = () => {
   };
   /**Validate */
   const [errs, setErrs] = useState({} as Errs);
-  const validate = (fieldValues = task) => {
+  const validate = (fieldValues = task): any => {
     let temp = {} as Errs;
     const compare =
       new Date(fieldValues.end!).getTime() -
@@ -78,7 +81,7 @@ const TaskDialog = () => {
           : "";
     }
     setErrs({ ...temp });
-    if (fieldValues == task) return Object.values(temp).every((x) => x === "");
+    if (fieldValues === task) return Object.values(temp).every((x) => x === "");
   };
   /**Close Dialog */
   const closeDialog = () => {
@@ -88,14 +91,27 @@ const TaskDialog = () => {
   return (
     <Dialog className={classes.root} open={openDialog} onClose={closeDialog}>
       <DialogContent>
-        <TextField
-          name="name"
-          onChange={onChange}
-          value={task.name}
-          label="Task"
-          fullWidth
-          {...(errs.task && { error: true, helperText: errs.task })}
-        />
+        <div className={classes.taskContainer}>
+          <div className="taskContainerLeft">
+            <TextField
+              name="name"
+              onChange={onChange}
+              value={task.name}
+              label="Task"
+              fullWidth
+              {...(errs.task && { error: true, helperText: errs.task })}
+            />
+          </div>
+          <div className="taskContainerRight">
+            <CategoryOptions
+              task={task}
+              onSelect={onSelect}
+              categories={categories.categories}
+              createCategory={createCategory}
+            />
+          </div>
+        </div>
+
         <div className={classes.dateContainer}>
           <TextField
             label="start"
@@ -120,7 +136,6 @@ const TaskDialog = () => {
             {...(errs.end && { error: true, helperText: errs.end })}
           />
         </div>
-          <CategoryOptions categories={categories.categories}/>
       </DialogContent>
       <DialogActions>
         <Button color="primary" onClick={closeDialog}>

@@ -1,14 +1,11 @@
-import { useCallback } from "react";
-import ResizableItem from "../resizableItem/ResizableItem";
+import { useCallback, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { State } from "../../store/reducers";
 import useStyle from "./styles";
-import { TaskProps } from "../../store/actions";
 import { useTaskDialogContext } from "../../context/TaskDialogContext";
 import { bindActionCreators } from "redux";
 import { actionCreators } from "../../store";
-import PlaylistAddIcon from "@material-ui/icons/PlaylistAdd";
-import { DragDropContext, Droppable, DropResult } from "react-beautiful-dnd";
+import { DragDropContext, DropResult } from "react-beautiful-dnd";
 import CategoryCard from "../categoryCard/CategoryCard";
 import DroppableContainer from "../droppableContainer/DroppableContainer";
 
@@ -21,7 +18,10 @@ const Tasktable = ({ categories, tasks }: IProps) => {
   const classes = useStyle();
   /**Redux & context*/
   const dispatch = useDispatch();
-  const { updateTask } = bindActionCreators(actionCreators, dispatch);
+  const { updateTask, changeCategory } = bindActionCreators(
+    actionCreators,
+    dispatch
+  );
   const { calendar } = useSelector((state: State) => state);
   const { editTask } = useTaskDialogContext();
   //Handle Drag & Drop
@@ -36,9 +36,12 @@ const Tasktable = ({ categories, tasks }: IProps) => {
     ) {
       return;
     }
-    console.log(destination, result);
-    //Drop Item
+    changeCategory(result);
   };
+
+  useEffect(() => {
+    updateTask && updateTask(tasks.modifdiedTask);
+  }, [tasks.modifiedTask]);
 
   const openTaskDialog = useCallback((movingTask) => {
     editTask && editTask(movingTask);
@@ -50,9 +53,6 @@ const Tasktable = ({ categories, tasks }: IProps) => {
   return (
     <DragDropContext onDragEnd={onDragEnd}>
       <div className={classes.tasktable}>
-        <div className={classes.tasktableTop}>
-          Top Menu
-        </div>
         <div className={classes.tasktableBody}>
           {categories.map((c: any) => {
             return (
@@ -68,21 +68,6 @@ const Tasktable = ({ categories, tasks }: IProps) => {
               </DroppableContainer>
             );
           })}
-          {/* <DroppableContainer droppableId="uncategorized">
-            {tasks.map((task: TaskProps, index: number) => {
-              return (
-                <ResizableItem
-                  type={calendar.type}
-                  timeline={calendar.timeline}
-                  handleUpdateTask={handleUpdateTask}
-                  openTaskDialog={openTaskDialog}
-                  key={task.id}
-                  task={task}
-                  index={index}
-                />
-              );
-            })}
-          </DroppableContainer> */}
         </div>
       </div>
     </DragDropContext>

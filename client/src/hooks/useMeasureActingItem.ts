@@ -1,24 +1,30 @@
-import React, { useCallback, useRef,useState,useEffect } from 'react'
-import { ITask } from '../context/TaskDialogContext'
-import { toISOStringNoZ,removeTimezone } from '../utils'
+import { useRef, useState, useEffect } from "react";
+import { toISOStringNoZ, deductTimezoneOffset } from "../utils";
 
 interface IProps {
-  task: any,
-  timeline: any,
-  itemX: number,
-  itemWidth: number,
-  type: string
+  task: any;
+  timeline: any;
+  itemX: number;
+  itemWidth: number;
+  type: string;
 }
-const useMeasureActingItem= ({task,timeline,itemX,itemWidth,type}: IProps) =>{
-    const [actingItem,setActingItem] = useState(task)
-    const itemRef = useRef<any>()
-    let isResizing = false
-    
+const useMeasureActingItem = ({
+  task,
+  timeline,
+  itemX,
+  itemWidth,
+  type,
+}: IProps) => {
+  const [actingItem, setActingItem] = useState(task);
+  const itemRef = useRef<any>();
+  let isResizing = false;
+
   useEffect(() => {
     itemRef.current &&
       (itemRef.current.style.left = itemX + "%") &&
       (itemRef.current.style.width = itemWidth + "%");
-  }, [task,type]);
+    setActingItem(task);
+  }, [task, type]);
   // /**Hangle move */
   const onMove = (e: any) => {
     let prevX = e.pageX;
@@ -32,21 +38,29 @@ const useMeasureActingItem= ({task,timeline,itemX,itemWidth,type}: IProps) =>{
           Number(itemRef.current.style.width.replace("%", ""));
         //Moving
         if (!isResizing) {
-          console.log(rect,prevX)
           itemRef.current.style.left =
             ((rect.x - 10 - (prevX - e.pageX)) / wrapWidth) * 100 + "%";
           prevX = e.pageX;
           setActingItem({
             ...task,
-            start: toISOStringNoZ(removeTimezone (new Date(
-              timeline.start +
-                ((timeline.end - timeline.start) / wrapWidth) * (rect.x - 10)
-            ))),
-            end: toISOStringNoZ(removeTimezone(new Date(
-              timeline.start +
-                ((timeline.end - timeline.start) / wrapWidth) *
-                  (rect.x + rect.width - 10)
-            ))),
+            start: toISOStringNoZ(
+              deductTimezoneOffset(
+                new Date(
+                  timeline.start +
+                    ((timeline.end - timeline.start) / wrapWidth) *
+                      (rect.x - 10)
+                )
+              )
+            ),
+            end: toISOStringNoZ(
+              deductTimezoneOffset(
+                new Date(
+                  timeline.start +
+                    ((timeline.end - timeline.start) / wrapWidth) *
+                      (rect.x + rect.width - 10)
+                )
+              )
+            ),
           });
         }
       }
@@ -61,9 +75,8 @@ const useMeasureActingItem= ({task,timeline,itemX,itemWidth,type}: IProps) =>{
     document.addEventListener("mousemove", mouseMove);
     document.addEventListener("mouseup", mouseUp);
   };
-    /**Hanlde Resise */
+  /**Hanlde Resise */
   const onResize = (e: any) => {
-    
     let prevX = e.pageX;
     let wrapWidth = 0;
     isResizing = true;
@@ -75,33 +88,48 @@ const useMeasureActingItem= ({task,timeline,itemX,itemWidth,type}: IProps) =>{
           (rect.width * 100) /
           Number(itemRef.current.style.width.replace("%", ""));
         if (currentResize.classList.contains("right")) {
-          itemRef.current.style.width =((rect.width - (prevX - e.pageX)) / wrapWidth) * 100 > 1 &&
+          itemRef.current.style.width =
+            ((rect.width - (prevX - e.pageX)) / wrapWidth) * 100 > 1 &&
             ((rect.width - (prevX - e.pageX)) / wrapWidth) * 100 + "%";
-            setActingItem({
+          setActingItem({
             ...actingItem,
-            end: toISOStringNoZ(removeTimezone( new Date(
-              timeline.start +
-                ((timeline.end - timeline.start) / wrapWidth) *
-                  (rect.left + rect.width - 10)
-            ))),
+            end: toISOStringNoZ(
+              deductTimezoneOffset(
+                new Date(
+                  timeline.start +
+                    ((timeline.end - timeline.start) / wrapWidth) *
+                      (rect.left + rect.width - 10)
+                )
+              )
+            ),
           });
         } else {
           itemRef.current.style.left =
             ((rect.x - 10 - (prevX - e.pageX)) / wrapWidth) * 100 + "%";
 
-          itemRef.current.style.width = ((rect.width + (prevX - e.pageX)) / wrapWidth) * 100 >1 &&
+          itemRef.current.style.width =
+            ((rect.width + (prevX - e.pageX)) / wrapWidth) * 100 > 1 &&
             ((rect.width + (prevX - e.pageX)) / wrapWidth) * 100 + "%";
-            setActingItem({
+          setActingItem({
             ...task,
-            start: toISOStringNoZ(removeTimezone(new Date(
-              timeline.start +
-                ((timeline.end - timeline.start) / wrapWidth) * (rect.x - 10)
-            ))),
-            end: toISOStringNoZ(removeTimezone(new Date(
-              timeline.start +
-                ((timeline.end - timeline.start) / wrapWidth) *
-                  (rect.x + rect.width - 10)
-            ))),
+            start: toISOStringNoZ(
+              deductTimezoneOffset(
+                new Date(
+                  timeline.start +
+                    ((timeline.end - timeline.start) / wrapWidth) *
+                      (rect.x - 10)
+                )
+              )
+            ),
+            end: toISOStringNoZ(
+              deductTimezoneOffset(
+                new Date(
+                  timeline.start +
+                    ((timeline.end - timeline.start) / wrapWidth) *
+                      (rect.x + rect.width - 10)
+                )
+              )
+            ),
           });
         }
         prevX = e.pageX;
@@ -118,7 +146,7 @@ const useMeasureActingItem= ({task,timeline,itemX,itemWidth,type}: IProps) =>{
     document.addEventListener("mousemove", mouseMove);
     document.addEventListener("mouseup", mouseUp);
   };
-    return[onMove,onResize,actingItem,itemRef,]
-}
+  return [onMove, onResize, actingItem, itemRef];
+};
 
-export default useMeasureActingItem
+export default useMeasureActingItem;

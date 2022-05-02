@@ -1,7 +1,6 @@
 import { v4 } from "uuid";
 import { fakeCategories, fakeData } from "./data";
 
-
 export const addNewTask = async (task: any) => {
   const newTask = await { id: v4(), ...task };
   fakeData.push(newTask);
@@ -15,8 +14,10 @@ export const selectedTasks = async ({ selectedDate, type }: any) => {
   const month = new Date(selectedDate).getMonth();
   const year = new Date(selectedDate).getFullYear();
 
-  // tasks year of 
-  const tasksOfYear = await fakeData.filter(t=>new Date(t.start).getFullYear() === year)
+  // tasks year of
+  const tasksOfYear = await fakeData.filter(
+    (t) => new Date(t.start).getFullYear() === year
+  );
   let selected: Array<any> = [];
   let dates: Array<any> = [];
 
@@ -26,17 +27,16 @@ export const selectedTasks = async ({ selectedDate, type }: any) => {
         "en-gb"
       );
     }
-    dates.forEach(d=>{
-      tasksOfYear.forEach(t=>{
-        d=== new Date(t.start).toLocaleDateString('en-gb') && selected.push(t)
-      })
-    })
-
-  } else {    
-      tasksOfYear.forEach((t: any) =>{
-        new Date(t.start).getMonth() == month && selected.push(t)
-      })
-  }    
+    dates.forEach((d) => {
+      tasksOfYear.forEach((t) => {
+        d === new Date(t.start).toLocaleDateString("en-gb") && selected.push(t);
+      });
+    });
+  } else {
+    tasksOfYear.forEach((t: any) => {
+      new Date(t.start).getMonth() === month && selected.push(t);
+    });
+  }
   return selected;
 };
 
@@ -46,13 +46,12 @@ export const serverUpdateTask = async (task: any) => {
   return task;
 };
 
-export const serverGetCategories = async () =>{
-  return fakeCategories
-}
+export const serverGetCategories = async () => {
+  return fakeCategories;
+};
 
-export const serverCreateCategory = async (category: any) =>{
-  const newCategory = await {id: v4(), ...category}
-  fakeCategories.push(newCategory)
-  return newCategory
-}
-
+export const serverCreateCategory = async (category: any) => {
+  const newCategory = await { id: v4(), ...category };
+  fakeCategories.push(newCategory);
+  return newCategory;
+};

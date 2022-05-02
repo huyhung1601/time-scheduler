@@ -2,8 +2,12 @@ import React from "react";
 import clsx from 'clsx'
 import { Draggable } from "react-beautiful-dnd";
 import useStyle from './styles'
+import { useSelector } from "react-redux";
+import {State} from '../../store/reducers'
+import CategoryLogo from "../categoryLogo/CategoryLogo";
 const Task = (props: any) => {
     const {t,index,openTaskDialog} = props
+    const {categories} = useSelector((state: State) => state)
     /**MUI style */
     const classes = useStyle()
     const {task, prev, next} = classes
@@ -18,6 +22,8 @@ const Task = (props: any) => {
       return (time - tday)/(1000*24*3600)
     }
     
+    const logo = categories.categories.filter((x:any)=> x.id == t.categoryId)[0].logo
+
   return (
     <Draggable key={t.id} index={index} draggableId={t.id}>
       {(provided) => {
@@ -29,15 +35,16 @@ const Task = (props: any) => {
             {...provided.draggableProps}
             onClick={()=>openTaskDialog(t)}
           >
+            <CategoryLogo fontSize="small" logo={logo} />
             <small>{t.name}</small>
             <br/>
-            <small>{new Date(t.start).toLocaleString("en-GB", {
+            {/* <small>{new Date(t.start).toLocaleString("en-GB", {
             year: "numeric",
             month: "numeric",
             day: "numeric",
             hour: "2-digit",
             minute: "2-digit",
-          })}</small>
+          })}</small> */}
           </div>
         );
       }}
