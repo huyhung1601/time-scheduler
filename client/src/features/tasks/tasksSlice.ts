@@ -67,6 +67,7 @@ export const tasksSlice = createSlice({
       };
       state.tasks[state.tasks.indexOf(changingCategoryTask)] =
         changedCategoryTask;
+      state.droppedTask = changedCategoryTask;
     },
     dropToChangeDate: (
       state: ITasksState,

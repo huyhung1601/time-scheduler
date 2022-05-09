@@ -1,9 +1,9 @@
 import useStyle from "./styles";
-import Controller from "./components/controller/Controller";
-import TimeScheduler from "./components/timeScheduler/TimeScheduler";
+import Controller from "./components/calendarHeader/CalendarHeader";
+import { TimeScheduler } from "./components/time";
 import { useDispatch, useSelector } from "react-redux";
-import TaskScheduler from "./components/taskScheduler/TaskScheduler";
-import TaskDialog from "./components/taskDialog/TaskDialog";
+import { TaskScheduler } from "./components/task";
+import { TaskFormDialog } from "./components/taskForm";
 import { useEffect } from "react";
 import { getCategories } from "./features/categories/categoriesSlice";
 import { RootState } from "./app/store";
@@ -25,7 +25,7 @@ function App() {
       <div className={classes.tableContainer}>
         {calendar.by === "time" && <TimeScheduler calendar={calendar} />}
         {calendar.by === "task" && <TaskScheduler />}
-        <TaskDialog />
+        <TaskFormDialog />
       </div>
     </div>
   );
