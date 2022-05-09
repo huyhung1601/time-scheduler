@@ -12,14 +12,10 @@ export const getDate = (d: any) => {
   return new Date(d).getDate();
 };
 
-export const updateDateTime = (d: any, newD: any, newT?: any) => {
-  const newDate = new Date(d);
-  const updatedDate = removeTimezone(new Date(newDate.setDate(newD)));
-  const updatedDateAndTime = newT && removeTimezone(new Date(updatedDate.setHours(0, newT)));
-  
-  return newT 
-    ? toISOStringNoZ(updatedDateAndTime)
-    : toISOStringNoZ(updatedDate);
+export const updateDateTime = (duration: number,newT: any, newD: any, newM:any, newY :any) => {
+  const newDate = new Date(newY,newM -1,newD).setHours(0,newT) + duration
+  const updatedDate = deductTimezoneOffset(new Date(newDate));
+  return toISOStringNoZ(updatedDate)
 };
 
 export const converToNum = (id: string) => {
@@ -67,6 +63,6 @@ export const toISOStringNoZ = (date: Date) => {
   return date.toISOString().split(":").slice(0, -1).join(":");
 };
 
-export const removeTimezone = (date: Date) => {
+export const deductTimezoneOffset = (date: Date) => {
   return new Date(date.getTime() - date.getTimezoneOffset() * 60000)
 }

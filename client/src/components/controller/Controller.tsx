@@ -13,7 +13,7 @@ import {
   MuiPickersUtilsProvider,
   KeyboardDatePicker,
 } from "@material-ui/pickers";
-import React, { useEffect, useLayoutEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { bindActionCreators } from "redux";
 import { actionCreators } from "../../store";
@@ -65,7 +65,7 @@ const Controller = () => {
     getTasks(query);
   }, [calendar.dates]);
   /**Draw Calendar */
-  useLayoutEffect(() => {
+  useEffect(() => {
     drawCalendar(tasks.tasks, selectedDate);
   }, [tasks.tasks]);
 

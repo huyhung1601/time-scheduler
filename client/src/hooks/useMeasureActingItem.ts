@@ -1,23 +1,30 @@
-import React, { useCallback, useRef,useState,useEffect } from 'react'
-import { ITask } from '../context/TaskDialogContext'
-import { toISOStringNoZ,removeTimezone } from '../utils'
+import { useRef, useState, useEffect } from "react";
+import { toISOStringNoZ, deductTimezoneOffset } from "../utils";
 
 interface IProps {
-  task: any,
-  memorizedTimeline: any,
-  itemX: number,
-  itemWidth: number,
+  task: any;
+  timeline: any;
+  itemX: number;
+  itemWidth: number;
+  type: string;
 }
-const useMeasureActingItem= ({task,memorizedTimeline,itemX,itemWidth}: IProps) =>{
-    const [actingItem,setActingItem] = useState(task)
-    const itemRef = useRef<any>()
-    let isResizing = false
-    
+const useMeasureActingItem = ({
+  task,
+  timeline,
+  itemX,
+  itemWidth,
+  type,
+}: IProps) => {
+  const [actingItem, setActingItem] = useState(task);
+  const itemRef = useRef<any>();
+  let isResizing = false;
+
   useEffect(() => {
     itemRef.current &&
       (itemRef.current.style.left = itemX + "%") &&
       (itemRef.current.style.width = itemWidth + "%");
-  }, [task]);
+    setActingItem(task);
+  }, [task, type]);
   // /**Hangle move */
   const onMove = (e: any) => {
     let prevX = e.pageX;
@@ -32,19 +39,28 @@ const useMeasureActingItem= ({task,memorizedTimeline,itemX,itemWidth}: IProps) =
         //Moving
         if (!isResizing) {
           itemRef.current.style.left =
-            ((rect.x - 11 - (prevX - e.pageX)) / wrapWidth) * 100 + "%";
+            ((rect.x - 10 - (prevX - e.pageX)) / wrapWidth) * 100 + "%";
           prevX = e.pageX;
           setActingItem({
             ...task,
-            start: toISOStringNoZ(removeTimezone (new Date(
-              memorizedTimeline.start +
-                ((memorizedTimeline.end - memorizedTimeline.start) / wrapWidth) * (rect.x - 11)
-            ))),
-            end: toISOStringNoZ(removeTimezone(new Date(
-              memorizedTimeline.start +
-                ((memorizedTimeline.end - memorizedTimeline.start) / wrapWidth) *
-                  (rect.x + rect.width - 11)
-            ))),
+            start: toISOStringNoZ(
+              deductTimezoneOffset(
+                new Date(
+                  timeline.start +
+                    ((timeline.end - timeline.start) / wrapWidth) *
+                      (rect.x - 10)
+                )
+              )
+            ),
+            end: toISOStringNoZ(
+              deductTimezoneOffset(
+                new Date(
+                  timeline.start +
+                    ((timeline.end - timeline.start) / wrapWidth) *
+                      (rect.x + rect.width - 10)
+                )
+              )
+            ),
           });
         }
       }
@@ -59,9 +75,8 @@ const useMeasureActingItem= ({task,memorizedTimeline,itemX,itemWidth}: IProps) =
     document.addEventListener("mousemove", mouseMove);
     document.addEventListener("mouseup", mouseUp);
   };
-    /**Hanlde Resise */
+  /**Hanlde Resise */
   const onResize = (e: any) => {
-    
     let prevX = e.pageX;
     let wrapWidth = 0;
     isResizing = true;
@@ -73,33 +88,48 @@ const useMeasureActingItem= ({task,memorizedTimeline,itemX,itemWidth}: IProps) =
           (rect.width * 100) /
           Number(itemRef.current.style.width.replace("%", ""));
         if (currentResize.classList.contains("right")) {
-          itemRef.current.style.width =((rect.width - (prevX - e.pageX)) / wrapWidth) * 100 > 1 &&
+          itemRef.current.style.width =
+            ((rect.width - (prevX - e.pageX)) / wrapWidth) * 100 > 1 &&
             ((rect.width - (prevX - e.pageX)) / wrapWidth) * 100 + "%";
-            setActingItem({
+          setActingItem({
             ...actingItem,
-            end: toISOStringNoZ(removeTimezone( new Date(
-              memorizedTimeline.start +
-                ((memorizedTimeline.end - memorizedTimeline.start) / wrapWidth) *
-                  (rect.left + rect.width - 11)
-            ))),
+            end: toISOStringNoZ(
+              deductTimezoneOffset(
+                new Date(
+                  timeline.start +
+                    ((timeline.end - timeline.start) / wrapWidth) *
+                      (rect.left + rect.width - 10)
+                )
+              )
+            ),
           });
         } else {
           itemRef.current.style.left =
-            ((rect.x - 11 - (prevX - e.pageX)) / wrapWidth) * 100 + "%";
+            ((rect.x - 10 - (prevX - e.pageX)) / wrapWidth) * 100 + "%";
 
-          itemRef.current.style.width = ((rect.width + (prevX - e.pageX)) / wrapWidth) * 100 >1 &&
+          itemRef.current.style.width =
+            ((rect.width + (prevX - e.pageX)) / wrapWidth) * 100 > 1 &&
             ((rect.width + (prevX - e.pageX)) / wrapWidth) * 100 + "%";
-            setActingItem({
+          setActingItem({
             ...task,
-            start: toISOStringNoZ(removeTimezone(new Date(
-              memorizedTimeline.start +
-                ((memorizedTimeline.end - memorizedTimeline.start) / wrapWidth) * (rect.x - 11)
-            ))),
-            end: toISOStringNoZ(removeTimezone(new Date(
-              memorizedTimeline.start +
-                ((memorizedTimeline.end - memorizedTimeline.start) / wrapWidth) *
-                  (rect.x + rect.width - 11)
-            ))),
+            start: toISOStringNoZ(
+              deductTimezoneOffset(
+                new Date(
+                  timeline.start +
+                    ((timeline.end - timeline.start) / wrapWidth) *
+                      (rect.x - 10)
+                )
+              )
+            ),
+            end: toISOStringNoZ(
+              deductTimezoneOffset(
+                new Date(
+                  timeline.start +
+                    ((timeline.end - timeline.start) / wrapWidth) *
+                      (rect.x + rect.width - 10)
+                )
+              )
+            ),
           });
         }
         prevX = e.pageX;
@@ -116,7 +146,7 @@ const useMeasureActingItem= ({task,memorizedTimeline,itemX,itemWidth}: IProps) =
     document.addEventListener("mousemove", mouseMove);
     document.addEventListener("mouseup", mouseUp);
   };
-    return[onMove,onResize,actingItem,itemRef]
-}
+  return [onMove, onResize, actingItem, itemRef];
+};
 
-export default useMeasureActingItem
+export default useMeasureActingItem;

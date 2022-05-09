@@ -8,7 +8,7 @@ export default makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'space-between',
-    borderBottom: '1px solid lightgray'
+    borderBottom: '1px solid lightgray',
   },
   itemInfos:{
     '& .itemInfo':{
@@ -23,7 +23,9 @@ export default makeStyles((theme) => ({
     alignItems: "center",
     justifyContent: "space-between",    
     flexDirection: 'column',
-    '& .timebar':{
+    '& .timebar':{   
+      background: 'linear-gradient(-45deg, rgba(0,0,0,0.22), rgba(255,255,255,0.25))',
+      boxShadow: '1px 0px 6px 0 rgba(0, 0, 0, 0.25); -2px -2px 15px 0 rgba(255, 255, 255, 0.3)',
       minWidth: '2%',
       width: "100%",
       height: '15px',
@@ -55,6 +57,11 @@ export default makeStyles((theme) => ({
 
       },
     },
-
+    '& .lightgray':{
+      backgroundColor: 'lightgray'
+    },
+    '& .lightgreen':{
+      backgroundColor: 'lightgreen'
+    }
   },
 }));

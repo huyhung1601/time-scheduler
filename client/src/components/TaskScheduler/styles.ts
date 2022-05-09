@@ -2,10 +2,8 @@ import zIndex from "@material-ui/core/styles/zIndex";
 import { makeStyles } from "@material-ui/styles";
 
 export default makeStyles((theme) => ({
-  taskSchedulerContainer: {
-    minHeight: "calc(100vh - 90px)",
-    border: "1px solid black",
-    borderRadius: "5px",
+  taskSchedulerTimeline:{
+    width: '100%',
     "& .month":{
       textAlign: 'center',
       flexDirection: 'column',
@@ -79,6 +77,9 @@ export default makeStyles((theme) => ({
         backgroundColor: "#57aecb",
       },
     },
-    
+  },
+  taskSchedulerContainer: {
+    height: "calc(100vh - 90px)",  
+    overflow: 'auto',
   },
 }));

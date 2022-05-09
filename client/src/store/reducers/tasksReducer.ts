@@ -1,6 +1,7 @@
 import { Actiontype } from "../action-types";
 import { Action, TaskProps } from "../actions";
 import { converToNum, updateDateTime } from "../../utils/index";
+import { ITask } from "../../context/TaskDialogContext";
 
 interface StateProps {
   loading: Boolean;
@@ -10,21 +11,21 @@ interface StateProps {
 
 const initialState: StateProps = {
   loading: false,
-  tasks: [],
+  tasks: [] as TaskProps[],
   modifiedTask: {} as TaskProps,
 };
-const tasksReducer = (state: StateProps = initialState, action: Action) => {
+const tasksReducer = (state: any = initialState, action: Action) => {
   switch (action.type) {
     /**Get Tasks */
     case Actiontype.getTasks:
       const dateTime = new Date().getTime();
-      
+
       return {
         ...state,
         tasks: action.payload.sort(
           (a: TaskProps, b: TaskProps) =>
-          new Date(a.start).getTime() - new Date(b.start).getTime()          
-        )
+            new Date(a.start).getTime() - new Date(b.start).getTime()
+        ),
       };
 
     /**Create Task */
@@ -68,20 +69,26 @@ const tasksReducer = (state: StateProps = initialState, action: Action) => {
         (t: TaskProps) => t.id === result.draggableId
       )[0];
       const newDate = new Date(dragItem.start);
+      // New Date, Month and year after drop
       const newD =
         type === "week"
           ? Number(dates[dropIndex[1]].split("/")[0])
           : dropIndex[0];
+      const newM = Number(dates[dropIndex[1]].split("/")[1]);
+      const newY = Number(dates[dropIndex[1]].split("/")[2]);
+      //New Time after drop (in minutes)
       const newT =
         type === "week"
           ? newDate.getMinutes() -
             (newDate.getMinutes() > 30 ? 30 : 0) +
             dropIndex[0] * 30
-          : null;
+          : newDate.getMinutes();
+      const duration =
+        new Date(dragItem.end).getTime() - new Date(dragItem.start).getTime();
       const draggedItem = {
         ...dragItem,
-        start: updateDateTime(dragItem.start, newD, newT),
-        end: updateDateTime(dragItem.end, newD + 1, newT),
+        start: updateDateTime(0, newT, newD, newM, newY),
+        end: updateDateTime(duration, newT, newD, newM, newY),
       };
       return {
         ...state,
@@ -90,7 +97,22 @@ const tasksReducer = (state: StateProps = initialState, action: Action) => {
         ),
         modifiedTask: draggedItem,
       };
-
+    /**Change Category */
+    case Actiontype.changeCategory:
+      const changingCategoryTask = state.tasks.filter(
+        (task: ITask) => task.id === action.payload.result.draggableId
+      )[0];
+      const changedCategoryTask = {
+        ...changingCategoryTask,
+        categoryId: action.payload.result.destination.droppableId,
+      };
+      return {
+        ...state,
+        tasks: state.tasks.map((t: ITask) =>
+          t.id === changedCategoryTask.id ? changedCategoryTask : t
+        ),
+        modifiedTask: changedCategoryTask,
+      };
     /**Update Task */
     case Actiontype.updateTask:
       return {

@@ -5,6 +5,7 @@ export interface TaskProps {
   name: string;
   start: string;
   end: string;
+  categoryId: string;
 }
 export interface CalendarProps {
   type: string;
@@ -12,8 +13,14 @@ export interface CalendarProps {
   dates?: string[] | [];
   timeline: { start: number; end: number };
   body?: Array<any>;
-  by: string
+  by: string;
 }
+
+interface GetCategories {
+  type: Actiontype.getCategories;
+  payload: any;
+}
+
 interface GetTasks {
   type: Actiontype.getTasks;
   payload: TaskProps[];
@@ -43,10 +50,23 @@ interface UpdateTask {
   type: Actiontype.updateTask;
   payload: TaskProps;
 }
+
+interface CreateCategory {
+  type: Actiontype.createCategory;
+  payload: any;
+}
+
+interface ChangeCategory {
+  type: Actiontype.changeCategory;
+  payload: any;
+}
 export type Action =
   | GetTasks
   | SetCalendar
   | DropItem
   | CreateTask
   | UpdateTask
-  | DrawCalendar;
+  | DrawCalendar
+  | GetCategories
+  | CreateCategory
+  | ChangeCategory;

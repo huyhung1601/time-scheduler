@@ -5,6 +5,7 @@ export interface ITask {
     name: string 
     start: string 
     end: string 
+    categoryId: string
 }
 export interface ITaskDialogContext{
     task: ITask
@@ -19,7 +20,8 @@ const initialValue ={
     task: {
         name: "",
         start: "",
-        end: ""
+        end: "",
+        categoryId: '1',
     },
     openDialog: false
 }

@@ -1,19 +1,18 @@
-import React from "react";
 import { useSelector } from "react-redux";
 import { State } from "../../store/reducers";
-import { timeMarks } from "../../utils";
-import TaskTable from "../taskTable/TaskTable";
+import Tasktable from "../tasktable/Tasktable";
 import useStyle from "./styles";
 const TaskScheduler = () => {
   /**MUI style */
   const classes = useStyle();
   /**Redux */
-  const { calendar } = useSelector((state: State) => state);
+  const { calendar,categories,tasks } = useSelector((state: State) => state);
   const today = new Date().toLocaleDateString("en-gb");
   const todayHour = new Date().getHours()
   const timemarks = [0,6,12,18]
   return (
     <div className={classes.taskSchedulerContainer}>
+      <div className={classes.taskSchedulerTimeline}>
       {calendar.type === "week" && (
         <div className="timeline week">
           {calendar.dates.map((d: string, i: number) => {
@@ -48,7 +47,8 @@ const TaskScheduler = () => {
         </div>
          
         </div>}
-      <TaskTable />
+        </div>
+      <Tasktable tasks={tasks.tasks} categories ={categories.categories} />
     </div>
   );
 };
