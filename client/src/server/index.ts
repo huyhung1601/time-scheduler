@@ -1,7 +1,7 @@
 import { v4 } from "uuid";
 import { fakeCategories, fakeData } from "./data";
 
-export const addNewTask = async (task: any) => {
+export const serverCreateTask = async (task: any) => {
   const newTask = await { id: v4(), ...task };
   fakeData.push(newTask);
   return newTask;
@@ -47,7 +47,7 @@ export const serverUpdateTask = async (task: any) => {
 };
 
 export const serverGetCategories = async () => {
-  return fakeCategories;
+  return [...fakeCategories];
 };
 
 export const serverCreateCategory = async (category: any) => {

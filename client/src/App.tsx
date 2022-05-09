@@ -1,31 +1,31 @@
-import useStyle from './styles'
-import Controller from "./components/controller/Controller";
-import TimeScheduler from "./components/timeScheduler/TimeScheduler";
+import useStyle from "./styles";
+import Controller from "./components/calendarHeader/CalendarHeader";
+import { TimeScheduler } from "./components/time";
 import { useDispatch, useSelector } from "react-redux";
-import { State } from "./store/reducers";
-import TaskScheduler from "./components/taskScheduler/TaskScheduler";
-import TaskDialog from "./components/taskDialog/TaskDialog";
-import { useEffect } from 'react';
-import { bindActionCreators } from 'redux';
-import { actionCreators } from './store';
+import { TaskScheduler } from "./components/task";
+import { TaskFormDialog } from "./components/taskForm";
+import { useEffect } from "react";
+import { getCategories } from "./features/categories/categoriesSlice";
+import { RootState } from "./app/store";
 
 function App() {
   /**MUI style */
-  const classes = useStyle()
+  const classes = useStyle();
   /**Redux */
-  const dispatch = useDispatch()
-  const {getCategories} = bindActionCreators(actionCreators,dispatch)
-  const {calendar} = useSelector((state: State) => state)
-  useEffect(()=>{
-    getCategories()
-  },[])
+  const dispatch = useDispatch();
+  const { calendar } = useSelector((state: RootState) => state);
+
+  useEffect(() => {
+    dispatch(getCategories());
+  }, [dispatch]);
+
   return (
     <div className={classes.root}>
       <Controller />
       <div className={classes.tableContainer}>
-        {calendar.by === 'time' && <TimeScheduler/>}
-        {calendar.by === 'task' && <TaskScheduler />}
-        <TaskDialog />
+        {calendar.by === "time" && <TimeScheduler calendar={calendar} />}
+        {calendar.by === "task" && <TaskScheduler />}
+        <TaskFormDialog />
       </div>
     </div>
   );

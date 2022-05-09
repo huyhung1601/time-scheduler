@@ -12,10 +12,16 @@ export const getDate = (d: any) => {
   return new Date(d).getDate();
 };
 
-export const updateDateTime = (duration: number,newT: any, newD: any, newM:any, newY :any) => {
-  const newDate = new Date(newY,newM -1,newD).setHours(0,newT) + duration
+export const updateDateTime = (
+  duration: number,
+  newT: any,
+  newD: any,
+  newM: any,
+  newY: any
+) => {
+  const newDate = new Date(newY, newM - 1, newD).setHours(0, newT) + duration;
   const updatedDate = deductTimezoneOffset(new Date(newDate));
-  return toISOStringNoZ(updatedDate)
+  return toISOStringNoZ(updatedDate);
 };
 
 export const converToNum = (id: string) => {
@@ -30,11 +36,7 @@ export const daysPreviousMonth = (month: any, year: any) => {
   return new Date(year, month, 0).getDate();
 };
 
-export const daysCurrentMonth = (month: any, year: any) => {
-  return new Date(year, month + 1, 0).getDate();
-};
-
-export const daysCurrentMonth1 = (d: any) => {
+export const daysCurrentMonth = (d: any) => {
   const y = d.getFullYear();
   const m = d.getMonth();
   return new Date(y, m + 1, 0).getDate();
@@ -64,5 +66,5 @@ export const toISOStringNoZ = (date: Date) => {
 };
 
 export const deductTimezoneOffset = (date: Date) => {
-  return new Date(date.getTime() - date.getTimezoneOffset() * 60000)
-}
+  return new Date(date.getTime() - date.getTimezoneOffset() * 60000);
+};
