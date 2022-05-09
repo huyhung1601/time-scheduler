@@ -1,6 +1,6 @@
 import { Dispatch } from "redux";
 import {
-  addNewTask,
+  serverCreateTask,
   selectedTasks,
   serverCreateCategory,
   serverGetCategories,
@@ -9,7 +9,7 @@ import {
 import { Actiontype } from "../action-types";
 import { CalendarProps, TaskProps } from "../actions";
 
-export const setCalendar = ({
+export const drawCalendar = ({
   selectedDate,
   timeline,
   type,
@@ -17,7 +17,7 @@ export const setCalendar = ({
 }: CalendarProps) => {
   return async (dispath: Dispatch) => {
     dispath({
-      type: Actiontype.setCalendar,
+      type: Actiontype.drawCalendar,
       payload: { selectedDate, timeline, type, by },
     });
   };
@@ -33,10 +33,10 @@ export const getTasks = ({ selectedDate, type }: any) => {
   };
 };
 
-export const drawCalendar = (tasks: TaskProps[], selectedDate: Date) => {
+export const alignTasks = (tasks: TaskProps[], selectedDate: Date) => {
   return (dispatch: Dispatch) => {
     dispatch({
-      type: Actiontype.drawCalendar,
+      type: Actiontype.alignTasks,
       payload: { tasks, selectedDate },
     });
   };
@@ -62,7 +62,7 @@ export const changeCategory = (result: any) => {
 
 export const createTask = (newTask: TaskProps, calendar: any) => {
   return async (dispatch: Dispatch) => {
-    const res = await addNewTask(newTask);
+    const res = await serverCreateTask(newTask);
     dispatch({
       type: Actiontype.createTask,
       payload: { res, calendar },
@@ -96,6 +96,14 @@ export const createCategory = (category: any) => {
     dispatch({
       type: Actiontype.createCategory,
       payload: res,
+    });
+  };
+};
+
+export const clearNewCategoryTemp = () => {
+  return (dispatch: Dispatch) => {
+    dispatch({
+      type: Actiontype.clearNewCategoryTemp,
     });
   };
 };

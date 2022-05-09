@@ -26,6 +26,9 @@ export default makeStyles((theme) => ({
       marginBottom: "0px",
     },
     "& .selectListWrapper": {
+      height: "135px",
+      overflowY: "auto",
+      overflowX: "hidden",
       position: "absolute",
       borderRadius: "5px",
       border: "1px solid lightgray",
@@ -34,6 +37,17 @@ export default makeStyles((theme) => ({
       zIndex: 3,
       backgroundColor: "rgba(239,239,239,0.5)",
       backdropFilter: "blur(3px)",
+      "&::-webkit-scrollbar": {
+        width: "1px",
+      },
+      "&::-webkit-scrollbar-track": {
+        boxShadow: "inset 0 0 6px rgba(0,0,0,0.00)",
+        webkitBoxShadow: "inset 0 0 6px rgba(0,0,0,0.00)",
+      },
+      "&::-webkit-scrollbar-thumb": {
+        backgroundColor: "rgba(0,0,0,.1)",
+        outline: "1px solid slategrey",
+      },
       "& .selectList": {
         color: "black",
         width: "100%",

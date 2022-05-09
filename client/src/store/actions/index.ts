@@ -26,13 +26,13 @@ interface GetTasks {
   payload: TaskProps[];
 }
 
-interface DrawCalendar {
-  type: Actiontype.drawCalendar;
+interface alignTasks {
+  type: Actiontype.alignTasks;
   payload: { tasks: TaskProps[]; selectedDate: Date };
 }
 
-interface SetCalendar {
-  type: Actiontype.setCalendar;
+interface drawCalendar {
+  type: Actiontype.drawCalendar;
   payload: CalendarProps;
 }
 
@@ -55,6 +55,10 @@ interface CreateCategory {
   type: Actiontype.createCategory;
   payload: any;
 }
+interface ClearNewCategoryTemp {
+  type: Actiontype.clearNewCategoryTemp;
+  payload: any;
+}
 
 interface ChangeCategory {
   type: Actiontype.changeCategory;
@@ -62,11 +66,12 @@ interface ChangeCategory {
 }
 export type Action =
   | GetTasks
-  | SetCalendar
+  | drawCalendar
   | DropItem
   | CreateTask
   | UpdateTask
-  | DrawCalendar
+  | alignTasks
   | GetCategories
   | CreateCategory
+  | ClearNewCategoryTemp
   | ChangeCategory;

@@ -1,13 +1,15 @@
 import { useCallback, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { State } from "../../store/reducers";
 import useStyle from "./styles";
 import { useTaskDialogContext } from "../../context/TaskDialogContext";
-import { bindActionCreators } from "redux";
-import { actionCreators } from "../../store";
 import { DragDropContext, DropResult } from "react-beautiful-dnd";
 import CategoryCard from "../categoryCard/CategoryCard";
 import DroppableContainer from "../droppableContainer/DroppableContainer";
+import {
+  dropToChangeCategory,
+  updateTask,
+} from "../../features/tasks/tasksSlice";
+import { RootState } from "../../app/store";
 
 interface IProps {
   categories: any;
@@ -18,11 +20,8 @@ const Tasktable = ({ categories, tasks }: IProps) => {
   const classes = useStyle();
   /**Redux & context*/
   const dispatch = useDispatch();
-  const { updateTask, changeCategory } = bindActionCreators(
-    actionCreators,
-    dispatch
-  );
-  const { calendar } = useSelector((state: State) => state);
+
+  const { calendar } = useSelector((state: RootState) => state);
   const { editTask } = useTaskDialogContext();
   //Handle Drag & Drop
   const onDragEnd = (result: DropResult) => {
@@ -36,20 +35,26 @@ const Tasktable = ({ categories, tasks }: IProps) => {
     ) {
       return;
     }
-    changeCategory(result);
+    dispatch(dropToChangeCategory(result));
   };
 
   useEffect(() => {
-    updateTask && updateTask(tasks.modifdiedTask);
-  }, [tasks.modifiedTask]);
+    dispatch(updateTask?.(tasks.droppedTask));
+  }, [tasks.droppedTask, dispatch]);
 
-  const openTaskDialog = useCallback((movingTask) => {
-    editTask && editTask(movingTask);
-  }, []);
+  const openTaskDialog = useCallback(
+    (movingTask) => {
+      editTask?.(movingTask);
+    },
+    [editTask]
+  );
 
-  const handleUpdateTask = useCallback((movingTask) => {
-    updateTask && updateTask(movingTask);
-  }, []);
+  const handleUpdateTask = useCallback(
+    (movingTask) => {
+      dispatch(updateTask?.(movingTask));
+    },
+    [dispatch]
+  );
   return (
     <DragDropContext onDragEnd={onDragEnd}>
       <div className={classes.tasktable}>

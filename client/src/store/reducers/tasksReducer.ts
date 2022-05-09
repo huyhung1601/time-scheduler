@@ -6,13 +6,13 @@ import { ITask } from "../../context/TaskDialogContext";
 interface StateProps {
   loading: Boolean;
   tasks: TaskProps[];
-  modifiedTask: TaskProps;
+  droppedTask: TaskProps;
 }
 
 const initialState: StateProps = {
   loading: false,
   tasks: [] as TaskProps[],
-  modifiedTask: {} as TaskProps,
+  droppedTask: {} as TaskProps,
 };
 const tasksReducer = (state: any = initialState, action: Action) => {
   switch (action.type) {
@@ -95,13 +95,13 @@ const tasksReducer = (state: any = initialState, action: Action) => {
         tasks: state.tasks.map((t: TaskProps) =>
           t.id === draggedItem.id ? draggedItem : t
         ),
-        modifiedTask: draggedItem,
+        droppedTask: draggedItem,
       };
     /**Change Category */
     case Actiontype.changeCategory:
-      const changingCategoryTask = state.tasks.filter(
+      const changingCategoryTask = state.tasks.find(
         (task: ITask) => task.id === action.payload.result.draggableId
-      )[0];
+      );
       const changedCategoryTask = {
         ...changingCategoryTask,
         categoryId: action.payload.result.destination.droppableId,
@@ -111,7 +111,7 @@ const tasksReducer = (state: any = initialState, action: Action) => {
         tasks: state.tasks.map((t: ITask) =>
           t.id === changedCategoryTask.id ? changedCategoryTask : t
         ),
-        modifiedTask: changedCategoryTask,
+        droppedTask: changedCategoryTask,
       };
     /**Update Task */
     case Actiontype.updateTask:

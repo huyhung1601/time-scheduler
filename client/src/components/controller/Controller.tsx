@@ -15,28 +15,28 @@ import {
 } from "@material-ui/pickers";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { bindActionCreators } from "redux";
-import { actionCreators } from "../../store";
-import {  timeMarks } from "../../utils";
+import { timeMarks } from "../../utils";
 import useStyles from "./styles";
-import { State } from "../../store/reducers";
-import {  useTaskDialogContext } from "../../context/TaskDialogContext";
+import { useTaskDialogContext } from "../../context/TaskDialogContext";
+import { RootState } from "../../app/store";
+import { getTasks } from "../../features/tasks/tasksSlice";
+import {
+  drawCalendar,
+  alignTasks,
+} from "../../features/calendar/calendarSlice";
+
 const Controller = () => {
   /**MUI Theme */
   const classes = useStyles();
   /**Redux - Context*/
   const dispatch = useDispatch();
-  const { setCalendar, getTasks, drawCalendar } = bindActionCreators(
-    actionCreators,
-    dispatch
-  );
-  const { calendar, tasks } = useSelector((state: State) => state);
+  const { calendar, tasks } = useSelector((state: RootState) => state);
   const { handleOpen } = useTaskDialogContext();
   /**First value */
   const [selectedDate, setSelectedDate] = React.useState(new Date());
   const [timeline, setTimeline] = useState({ start: 6, end: 11 });
   const [type, setType] = useState("week");
-  const [by,setBy] = useState("time")
+  const [by, setBy] = useState("time");
   /**Dates pick-up */
   const handleDateChange = (date: any): void => {
     setSelectedDate(date);
@@ -50,24 +50,24 @@ const Controller = () => {
     setType(type);
   };
   /**Arranged by */
-  const arrangedBy = (e: any): void =>{
-    setBy(e.target.value)
-  }
+  const arrangedBy = (e: any): void => {
+    setBy(e.target.value);
+  };
   /**Time marks */
   const tMarks = timeMarks(24);
-  /**setCalendar */
+  /**drawCalendar */
   useEffect(() => {
-    setCalendar({ selectedDate, timeline, type,by });
-  }, [selectedDate, timeline, type,by]);
+    dispatch(drawCalendar({ selectedDate, timeline, type, by }));
+  }, [selectedDate, timeline, type, by, dispatch]);
   /**Get Tasks */
   useEffect(() => {
     const query = { type: type, selectedDate: selectedDate.toISOString() };
-    getTasks(query);
-  }, [calendar.dates]);
+    dispatch(getTasks(query));
+  }, [type, selectedDate, dispatch]);
   /**Draw Calendar */
   useEffect(() => {
-    drawCalendar(tasks.tasks, selectedDate);
-  }, [tasks.tasks]);
+    dispatch(alignTasks(tasks.tasks));
+  }, [tasks.tasks, dispatch]);
 
   return (
     <AppBar position="static" className={classes.root}>
@@ -81,19 +81,20 @@ const Controller = () => {
                 name="start"
                 value={timeline.start}
                 onChange={handleChange}
-                disabled={calendar.type == "month" || calendar.by == 'task'}
+                disabled={calendar.type === "month" || calendar.by === "task"}
               >
-                {calendar.by === 'time' && tMarks.map((x: any, index: number) => {
-                  if (x > timeline.end) {
-                    return null;
-                  } else {
-                    return (
-                      <MenuItem key={index} value={x}>
-                        {x}:00
-                      </MenuItem>
-                    );
-                  }
-                })}
+                {calendar.by === "time" &&
+                  tMarks.map((x: any, index: number) => {
+                    if (x > timeline.end) {
+                      return null;
+                    } else {
+                      return (
+                        <MenuItem key={index} value={x}>
+                          {x}:00
+                        </MenuItem>
+                      );
+                    }
+                  })}
               </Select>
             </FormControl>
             <FormControl>
@@ -102,20 +103,20 @@ const Controller = () => {
                 value={timeline.end}
                 name="end"
                 onChange={(e) => handleChange(e)}
-                disabled={calendar.type == "month" || calendar.by == 'task'}
+                disabled={calendar.type === "month" || calendar.by === "task"}
               >
-                
-                {calendar.by === 'time' && tMarks.map((x: any, index: number) => {
-                  if (x < timeline.start + 5) {
-                    return null;
-                  } else {
-                    return (
-                      <MenuItem key={index} value={x}>
-                        {x}:00
-                      </MenuItem>
-                    );
-                  }
-                })}
+                {calendar.by === "time" &&
+                  tMarks.map((x: any, index: number) => {
+                    if (x < timeline.start + 5) {
+                      return null;
+                    } else {
+                      return (
+                        <MenuItem key={index} value={x}>
+                          {x}:00
+                        </MenuItem>
+                      );
+                    }
+                  })}
               </Select>
             </FormControl>
             <MuiPickersUtilsProvider utils={DateFnsUtils}>
@@ -138,17 +139,9 @@ const Controller = () => {
           <Grid item sm />
           <Grid item>
             <FormControl>
-              <Select
-                name="by"
-                value={calendar.by}
-                onChange={arrangedBy}
-              >
-                <MenuItem value='time'>
-                  Time
-                </MenuItem>
-                <MenuItem value='task'>
-                  Task
-                </MenuItem>
+              <Select name="by" value={calendar.by} onChange={arrangedBy}>
+                <MenuItem value="time">Time</MenuItem>
+                <MenuItem value="task">Task</MenuItem>
               </Select>
             </FormControl>
             <Button onClick={() => chooseCalendar("week")}>Week</Button>

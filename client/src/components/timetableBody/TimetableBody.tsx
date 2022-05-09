@@ -1,24 +1,22 @@
 import { TableBody, TableCell, TableRow } from "@material-ui/core";
 import clsx from "clsx";
-import { State } from "../../store/reducers";
 import { useDispatch, useSelector } from "react-redux";
 import { DragDropContext, Droppable, DropResult } from "react-beautiful-dnd";
-import { bindActionCreators } from "redux";
-import { actionCreators } from "../../store";
 import Task from "../task/Task";
 import useStyles from "./styles";
 import { useTaskDialogContext } from "../../context/TaskDialogContext";
-import { converToNum, daysCurrentMonth, daysCurrentMonth1 } from "../../utils";
+import { converToNum, daysCurrentMonth } from "../../utils";
 import { TaskProps } from "../../store/actions";
 import { useCallback, useEffect } from "react";
+import { dropToChangeDate, updateTask } from "../../features/tasks/tasksSlice";
+import { RootState } from "../../app/store";
 const TimetableBody = () => {
   /**MUI styles */
   const classes = useStyles();
   const { month, week, empty } = classes;
   /**Redux */
   const dispatch = useDispatch();
-  const { dropItem, updateTask } = bindActionCreators(actionCreators, dispatch);
-  const { calendar, tasks } = useSelector((state: State) => state);
+  const { calendar, tasks } = useSelector((state: RootState) => state);
   const { type, body } = calendar;
   const { start, end } = calendar.timeline;
   //Handle Drag
@@ -34,24 +32,29 @@ const TimetableBody = () => {
       return;
     }
     //Drop Item
-    dropItem(result, calendar);
+    dispatch(dropToChangeDate({ result, calendar }));
   };
-  useEffect(()=>{
-    tasks.modifiedTask  && updateTask(tasks.modifiedTask)
-  },[tasks.modifiedTask])
+
+  useEffect(() => {
+    tasks.droppedTask && dispatch(updateTask(tasks.droppedTask));
+  }, [tasks.droppedTask, dispatch]);
+
   /**open TaskDialog */
-  const {editTask} = useTaskDialogContext()
-  const openTaskDialog = useCallback((t)=>{
-    editTask && editTask(t)
-  },[])
+  const { editTask } = useTaskDialogContext();
+  const openTaskDialog = useCallback(
+    (t) => {
+      editTask?.(t);
+    },
+    [editTask]
+  );
   return (
     <>
       <DragDropContext onDragEnd={onDragEnd}>
         <TableBody className={classes.root}>
           {body.map((row: any, index: number) => {
             if (
-              (type == "week" && index >= start * 2 && index <= end * 2 + 1) ||
-              (type == "month" && index >= start && index <=end +1)
+              (type === "week" && index >= start * 2 && index <= end * 2 + 1) ||
+              (type === "month" && index >= start && index <= end + 1)
             ) {
               return (
                 <TableRow key={index}>
@@ -59,7 +62,7 @@ const TimetableBody = () => {
                     const id = converToNum(slot.id)[0];
                     if (
                       type === "month" &&
-                      (id < 1 || id > daysCurrentMonth1(calendar.selectedDate))
+                      (id < 1 || id > daysCurrentMonth(calendar.selectedDate))
                     ) {
                       return (
                         <TableCell className={month}>
@@ -81,14 +84,23 @@ const TimetableBody = () => {
                             >
                               <div className={classes.taskContainer}>
                                 <div className="containerHeader">
-                                  {type === "month" && <small>{id}</small>}
+                                  {type === "month" && (
+                                    <small className="date">{id}</small>
+                                  )}
                                 </div>
                                 <div className="containerBody">
-                                  {slot.tasks.map((t: TaskProps, index: number) => {
-                                    return (
-                                      <Task openTaskDialog={openTaskDialog} t={t} key={index} index={index} />
-                                    );
-                                  })}
+                                  {slot.tasks.map(
+                                    (t: TaskProps, index: number) => {
+                                      return (
+                                        <Task
+                                          openTaskDialog={openTaskDialog}
+                                          t={t}
+                                          key={index}
+                                          index={index}
+                                        />
+                                      );
+                                    }
+                                  )}
                                 </div>
                               </div>
                             </TableCell>

@@ -8,9 +8,7 @@ interface IProps {
   categories: any[];
   task: any;
   onSelect: (selectedCategory: any) => void;
-  createCategory: (
-    category: any
-  ) => (dispatch: Dispatch<AnyAction>) => Promise<void>;
+  createCategory: (category: any) => void;
 }
 
 const initialValue = {
@@ -37,11 +35,10 @@ const CategoryOptions: React.FC<IProps> = ({
 }) => {
   const [addCategory, setAddCategory] = useState(initialValue);
   const [logo, setLogo] = useState(logoList[0]);
-  const [selectedCategory, setSelectedCategory] = useState(categories[0]);
   const classes = useStyles();
 
   const findCategory = (id: string) => {
-    return categories.filter((x: any) => x.id === id)[0];
+    return categories.filter((x: any) => x.id === id)[0] || categories[0];
   };
   const memorizedSelectedCategory = findCategory(task.categoryId);
 
@@ -52,32 +49,15 @@ const CategoryOptions: React.FC<IProps> = ({
       setAddCategory(initialValue);
     }
     setAddCategory((prev) => ({ ...prev, addNew: false }));
-  }, [
-    categories,
-    addCategory.newCategory,
-    createCategory,
-    onSelect,
-    setAddCategory,
-  ]);
+  }, [addCategory.newCategory, createCategory, setAddCategory]);
 
-  useEffect(() => {
-    setSelectedCategory(categories[0]);
-  }, [categories[0]]);
-
-  useEffect(() => {
-    setSelectedCategory(memorizedSelectedCategory);
-  }, []);
-
-  useEffect(() => {
-    onSelect(selectedCategory);
-  }, [selectedCategory]);
   return (
     <div className={classes.categoryOptions}>
       {!addCategory.addNew && (
         <>
           <CustomSelect
-            selected={selectedCategory}
-            setSelected={(item: any) => setSelectedCategory(item)}
+            selected={memorizedSelectedCategory}
+            setSelected={(item: any) => onSelect(item)}
             showTitle={true}
             selectList={categories}
             label="Category"

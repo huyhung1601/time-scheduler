@@ -1,14 +1,23 @@
-import { Actiontype } from "../action-types";
-import { Action } from "../actions";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import {
   getTime,
   getDay,
   getDate,
   daysCurrentMonth,
   firstDayOfMonth,
-} from "../../utils/index";
+} from "../../utils";
+import { ITask } from "../tasks/tasksSlice";
 
-const initialValue = {
+export interface ICalendar {
+  type: "week" | "month";
+  selectedDate: Date;
+  dates: string[];
+  timeline: { start: number; end: number };
+  body: any[];
+  by: string;
+}
+
+const initialState: ICalendar = {
   type: "week",
   selectedDate: new Date(),
   dates: [],
@@ -17,9 +26,11 @@ const initialValue = {
   by: "time",
 };
 
-const calendarReducer = (state: any = initialValue, action: Action) => {
-  switch (action.type) {
-    case Actiontype.drawCalendar:
+export const calendarSlice = createSlice({
+  name: "calendarSlice",
+  initialState,
+  reducers: {
+    drawCalendar: (state: ICalendar, action: PayloadAction<any>) => {
       const { selectedDate, timeline, type, by } = action.payload;
       const day = selectedDate.getDay();
       const date = selectedDate.getDate();
@@ -49,22 +60,39 @@ const calendarReducer = (state: any = initialValue, action: Action) => {
               )
             : new Date(year, month, d + 1).toLocaleDateString("en-gb");
       }
-      return {
-        ...state,
-        dates: [...arr],
-        timeline:
-          (by === "time" &&
-            (type === "week" ? timeline : { start: 0, end: weeks })) ||
-          (by === "task" &&
-            (type === "week"
-              ? { start: startOfWeek, end: endOfWeek }
-              : { start: startOfMonth, end: endOfMonth })),
-        type: type,
-        selectedDate: selectedDate,
-        by: by,
+
+      state.dates = [...arr];
+      state.timeline =
+        (by === "time" &&
+          (type === "week" ? timeline : { start: 0, end: weeks })) ||
+        (by === "task" &&
+          (type === "week"
+            ? { start: startOfWeek, end: endOfWeek }
+            : { start: startOfMonth, end: endOfMonth }));
+      state.type = type;
+      state.selectedDate = selectedDate;
+      state.by = by;
+    },
+    alignTasks: (state: ICalendar, action: PayloadAction<ITask[]>) => {
+      const tasks = action.payload;
+      const yearOfDate = (date: Date) => {
+        return new Date(date).getFullYear();
       };
-    case Actiontype.alignTasks:
-      const { tasks } = action.payload;
+      const monthOfDate = (date: Date) => {
+        return new Date(date).getMonth();
+      };
+      const yearOfSelectedDate = yearOfDate(state.selectedDate);
+      const monthOfSelectedDate = monthOfDate(state.selectedDate);
+      const filteredTask = action.payload.filter(
+        (task: ITask) =>
+          yearOfSelectedDate === yearOfDate(new Date(task.start)) &&
+          monthOfSelectedDate === monthOfDate(new Date(task.start)) &&
+          (state.type === "week"
+            ? state.dates.includes(
+                new Date(task.start).toLocaleDateString("en-gb")
+              )
+            : null)
+      );
       const firstDay = firstDayOfMonth(state.selectedDate);
 
       let table: any = [];
@@ -75,7 +103,7 @@ const calendarReducer = (state: any = initialValue, action: Action) => {
             for (let j = 0; j < 7; j++) {
               let slot = { id: `${i}:${j}`, tasks: [] };
               table[i].push(slot);
-              tasks.map((task: any) => {
+              filteredTask.forEach((task: any) => {
                 getTime(task.start) === i &&
                   getDay(task.start) === j &&
                   table[i][j].tasks.every((x: any) => x.id !== task.id) &&
@@ -98,10 +126,9 @@ const calendarReducer = (state: any = initialValue, action: Action) => {
           }
         }
       }
-      return { ...state, body: table };
-    default:
-      return { ...state };
-  }
-};
+      state.body = table;
+    },
+  },
+});
 
-export default calendarReducer;
+export const { drawCalendar, alignTasks } = calendarSlice.actions;

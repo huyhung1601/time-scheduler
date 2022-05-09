@@ -5,14 +5,18 @@ import {
   DialogContent,
   TextField,
 } from "@material-ui/core";
-import { State } from "../../store/reducers";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { bindActionCreators } from "redux";
 import { useTaskDialogContext } from "../../context/TaskDialogContext";
-import { actionCreators } from "../../store";
 import useStyles from "./styles";
 import CategoryOptions from "../categoryOptions/CategoryOptions";
+import {
+  clearNewCategoryTemp,
+  createCategory,
+} from "../../features/categories/categoriesSlice";
+import { useCallback } from "react";
+import { createTask, updateTask } from "../../features/tasks/tasksSlice";
+import { RootState } from "../../app/store";
 
 type Errs = {
   task: string;
@@ -22,17 +26,16 @@ type Errs = {
 };
 
 const TaskDialog = (props: any) => {
+  const [waitingForNewCat, setWaitingForNewCat] = useState(false);
   /**MUI styles */
   const classes = useStyles();
   /**Redux && context */
   const dispatch = useDispatch();
   const { task, openDialog, handleClose, handleTaskChange } =
     useTaskDialogContext();
-  const { updateTask, createTask, createCategory } = bindActionCreators(
-    actionCreators,
-    dispatch
-  );
-  const { calendar, categories } = useSelector((state: State) => state);
+  const { calendar, categories } = useSelector((state: RootState) => state);
+  const { newlyCreatedCategory } = categories;
+
   /**Hanle Change */
   const onChange = (e: any): string | void => {
     let name = e.target.name;
@@ -41,15 +44,25 @@ const TaskDialog = (props: any) => {
     /**validate(values) becasue compare start = end */
     validate({ ...task, [e.target.name]: e.target.value });
   };
-  const onSelect = (selectedCategory: any) => {
-    handleTaskChange && handleTaskChange("categoryId", selectedCategory.id);
+  const onSelect = useCallback(
+    (selectedCategory: any) => {
+      handleTaskChange?.("categoryId", selectedCategory.id);
+    },
+    [handleTaskChange]
+  );
+
+  const onCreateCategory = (cat: any) => {
+    setWaitingForNewCat(true);
+    dispatch(createCategory(cat));
   };
   /**Create Task */
   const handleSubmit = (): void => {
     validate();
     if (validate()) {
       const newTask = task;
-      newTask.id ? updateTask(newTask) : createTask(newTask, calendar);
+      newTask.id
+        ? dispatch(updateTask(newTask))
+        : dispatch(createTask(newTask));
       handleClose && handleClose();
       setErrs({} as Errs);
     }
@@ -83,11 +96,22 @@ const TaskDialog = (props: any) => {
     setErrs({ ...temp });
     if (fieldValues === task) return Object.values(temp).every((x) => x === "");
   };
-  /**Close Dialog */
+
   const closeDialog = () => {
     setErrs({} as Errs);
-    handleClose && handleClose();
+    handleClose?.();
   };
+
+  useEffect(() => {
+    if (waitingForNewCat && !!newlyCreatedCategory) {
+      // update local task with new cat
+      onSelect(newlyCreatedCategory);
+      // stop waiting
+      setWaitingForNewCat(false);
+      dispatch(clearNewCategoryTemp());
+    }
+  }, [waitingForNewCat, newlyCreatedCategory, onSelect, dispatch]);
+
   return (
     <Dialog className={classes.root} open={openDialog} onClose={closeDialog}>
       <DialogContent>
@@ -107,7 +131,7 @@ const TaskDialog = (props: any) => {
               task={task}
               onSelect={onSelect}
               categories={categories.categories}
-              createCategory={createCategory}
+              createCategory={onCreateCategory}
             />
           </div>
         </div>
