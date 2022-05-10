@@ -24,7 +24,7 @@ const useMeasureActingItem = ({
       (itemRef.current.style.left = itemX + "%") &&
       (itemRef.current.style.width = itemWidth + "%");
     setActingItem(task);
-  }, [task, type]);
+  }, [task, type, itemX, itemWidth, setActingItem]);
   // /**Hangle move */
   const onMove = (e: any) => {
     let prevX = e.pageX;

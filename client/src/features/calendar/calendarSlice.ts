@@ -117,7 +117,7 @@ export const calendarSlice = createSlice({
             for (let j = 0; j < 7; j++) {
               let slot = { id: `${i * 7 + j + 1 - firstDay}:${j}`, tasks: [] };
               table[i].push(slot);
-              tasks.map((task: any) => {
+              tasks.forEach((task: any) => {
                 getDate(task.start) === i * 7 + j + 1 - firstDay &&
                   table[i][j].tasks.every((x: any) => x.id !== task.id) &&
                   table[i][j].tasks.push(task);

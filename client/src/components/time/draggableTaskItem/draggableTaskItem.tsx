@@ -1,16 +1,16 @@
 import React from "react";
 import clsx from "clsx";
-import { Draggable } from "react-beautiful-dnd";
 import useStyle from "./styles";
 import { useSelector } from "react-redux";
-import MenuLogo from "../../controls/menu/menuLogo/MenuLogo";
+import { CustomLogo, DraggableContainer } from "../../controls";
 import { RootState } from "../../../app/store";
-const Task = (props: any) => {
-  const { t, index, openTaskDialog } = props;
+
+const DraggableTaskItem = (props: any) => {
+  const { task, index, openTaskDialog } = props;
   const { categories } = useSelector((state: RootState) => state);
   /**MUI style */
   const classes = useStyle();
-  const { task, prev, next } = classes;
+  const { taskItem, prev, next } = classes;
   const prevTime = (date: string) => {
     const tday = new Date().getTime();
     const time =
@@ -33,32 +33,25 @@ const Task = (props: any) => {
   };
 
   const logo = categories.categories.filter(
-    (x: any) => x.id === t.categoryId
+    (x: any) => x.id === task.categoryId
   )[0].logo;
 
   return (
-    <Draggable key={t.id} index={index} draggableId={t.id}>
-      {(provided) => {
-        return (
-          <div
-            className={clsx(
-              task,
-              { [prev]: prevTime(t.start) <= 0 },
-              { [next]: nextTime(t.start) >= 0 }
-            )}
-            ref={provided.innerRef}
-            {...provided.dragHandleProps}
-            {...provided.draggableProps}
-            onClick={() => openTaskDialog(t)}
-          >
-            <MenuLogo fontSize="small" logo={logo} />
-            <small>{t.name}</small>
-            <br />
-          </div>
-        );
-      }}
-    </Draggable>
+    <DraggableContainer index={index} draggableId={task.id}>
+      <div
+        className={clsx(
+          taskItem,
+          { [prev]: prevTime(task.start) <= 0 },
+          { [next]: nextTime(task.start) >= 0 }
+        )}
+        onClick={() => openTaskDialog(task)}
+      >
+        <CustomLogo fontSize="small" logo={logo} />
+        <small>{task.name}</small>
+        <br />
+      </div>
+    </DraggableContainer>
   );
 };
 
-export default React.memo(Task);
+export default React.memo(DraggableTaskItem);

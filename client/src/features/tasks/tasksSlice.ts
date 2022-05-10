@@ -105,9 +105,9 @@ export const tasksSlice = createSlice({
         end: updateDateTime(duration, newT, newD, newM, newY),
       };
 
-      state.tasks.forEach((t: ITask) =>
-        t.id === draggedItem.id ? draggedItem : t
-      );
+      // state.tasks = state.tasks.map((t: ITask) =>
+      //   t.id === draggedItem.id ? draggedItem : t
+      // );
       state.droppedTask = draggedItem;
     },
   },

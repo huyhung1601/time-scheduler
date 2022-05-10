@@ -1,6 +1,6 @@
 import { useState } from "react";
-import useClickOutside from "../../../../hooks/useClickOutside";
-import MenuLogo from "../menuLogo/MenuLogo";
+import useClickOutside from "../../../hooks/useClickOutside";
+import { CustomLogo } from "../index";
 import useStyles from "./styles";
 
 interface IProps {
@@ -42,7 +42,7 @@ export const CustomMenu = ({
       {selected && (
         <>
           <div className="selectedItem" onClick={() => setOpen(true)}>
-            <MenuLogo logo={selected.logo} />{" "}
+            <CustomLogo logo={selected.logo} />{" "}
             {showTitle && <p>{selected.title}</p>}{" "}
           </div>
           {open && (
@@ -55,7 +55,7 @@ export const CustomMenu = ({
                       onClick={() => handleSelect(item)}
                       className="selectItems"
                     >
-                      <MenuLogo logo={item.logo} />
+                      <CustomLogo logo={item.logo} />
                       <p>{item.title}</p>
                     </li>
                   );

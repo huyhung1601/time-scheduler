@@ -9,7 +9,7 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useTaskDialogContext } from "../../../context/TaskDialogContext";
 import useStyles from "./styles";
-import CategoryOptions from "../categoryOptions/CategoryOptions";
+import CategoryMenu from "../categoryMenu/CategoryMenu";
 import {
   clearNewCategoryTemp,
   createCategory,
@@ -127,7 +127,7 @@ export const TaskFormDialog = (props: any) => {
             />
           </div>
           <div className="taskContainerRight">
-            <CategoryOptions
+            <CategoryMenu
               task={task}
               onSelect={onSelect}
               categories={categories.categories}

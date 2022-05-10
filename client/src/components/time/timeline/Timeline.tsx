@@ -31,7 +31,7 @@ const Timeline = () => {
             if (x >= start && x <= (calendar.type === "week" ? end : end - 1)) {
               return (
                 <TableRow className={classes.tableRow} key={i}>
-                  {calendar.type == "month" ? `W${x}` : `${x}:00`}
+                  {calendar.type === "month" ? `W${x}` : `${x}:00`}
                 </TableRow>
               );
             } else {

@@ -1,5 +1,5 @@
 import useStyles from "./styles";
-import MenuLogo from "../../controls/menu/menuLogo/MenuLogo";
+import { CustomLogo } from "../../controls";
 import ResizableItem from "../../task/resizableItem/ResizableItem";
 import { ITask } from "../../../features/tasks/tasksSlice";
 interface IProps {
@@ -20,7 +20,7 @@ const CategoryCard = ({
   return (
     <div className={classes.cardContainer}>
       <div className="cardHeader">
-        <MenuLogo logo={category.logo} />
+        <CustomLogo logo={category.logo} />
         <div className="title">{category.title}</div>
       </div>
       <div className="cardBody">

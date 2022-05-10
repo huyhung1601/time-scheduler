@@ -26,7 +26,7 @@ const logoList = [
   { title: "family", logo: "family" },
 ];
 
-const CategoryOptions: React.FC<IProps> = ({
+const CategoryMenu: React.FC<IProps> = ({
   categories,
   task,
   onSelect,
@@ -99,4 +99,4 @@ const CategoryOptions: React.FC<IProps> = ({
   );
 };
 
-export default CategoryOptions;
+export default CategoryMenu;
