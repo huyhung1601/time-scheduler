@@ -1,5 +1,5 @@
 import useStyle from "./styles";
-import Controller from "./components/calendarHeader/CalendarHeader";
+import CalendarHeader from "./components/calendarHeader/CalendarHeader";
 import { TimeScheduler } from "./components/time";
 import { useDispatch, useSelector } from "react-redux";
 import { TaskScheduler } from "./components/task";
@@ -21,7 +21,7 @@ function App() {
 
   return (
     <div className={classes.root}>
-      <Controller />
+      <CalendarHeader />
       <div className={classes.tableContainer}>
         {calendar.by === "time" && <TimeScheduler calendar={calendar} />}
         {calendar.by === "task" && <TaskScheduler />}

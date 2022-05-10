@@ -1,8 +1,7 @@
 import { TableBody, TableCell, TableRow } from "@material-ui/core";
 import clsx from "clsx";
 import { useDispatch, useSelector } from "react-redux";
-import { DragDropContext, Droppable, DropResult } from "react-beautiful-dnd";
-import Task from "../draggableTaskItem/draggableTaskItem";
+import { DragDropContext, DropResult } from "react-beautiful-dnd";
 import useStyles from "./styles";
 import { useTaskDialogContext } from "../../../context/TaskDialogContext";
 import { converToNum, daysCurrentMonth } from "../../../utils";
@@ -13,6 +12,9 @@ import {
   updateTask,
 } from "../../../features/tasks/tasksSlice";
 import { RootState } from "../../../app/store";
+import { DroppableContainer } from "../../controls";
+import DraggableTaskItem from "../draggableTaskItem/DraggableTaskItem";
+
 const TimetableBody = () => {
   /**MUI styles */
   const classes = useStyles();
@@ -74,40 +76,35 @@ const TimetableBody = () => {
                       );
                     }
                     return (
-                      <Droppable droppableId={slot.id} key={index}>
-                        {(provided) => {
-                          return (
-                            <TableCell
-                              className={clsx(
-                                { [month]: type === "month" },
-                                { [week]: type === "week" }
+                      <TableCell
+                        key={index}
+                        className={clsx(
+                          { [month]: type === "month" },
+                          { [week]: type === "week" }
+                        )}
+                      >
+                        <DroppableContainer droppableId={slot.id}>
+                          <div className={classes.taskContainer}>
+                            <div className="containerHeader">
+                              {type === "month" && (
+                                <small className="date">{id}</small>
                               )}
-                              ref={provided.innerRef}
-                              {...provided.droppableProps}
-                            >
-                              <div className={classes.taskContainer}>
-                                <div className="containerHeader">
-                                  {type === "month" && (
-                                    <small className="date">{id}</small>
-                                  )}
-                                </div>
-                                <div className="containerBody">
-                                  {slot.tasks.map((t: ITask, index: number) => {
-                                    return (
-                                      <Task
-                                        openTaskDialog={openTaskDialog}
-                                        t={t}
-                                        key={index}
-                                        index={index}
-                                      />
-                                    );
-                                  })}
-                                </div>
-                              </div>
-                            </TableCell>
-                          );
-                        }}
-                      </Droppable>
+                            </div>
+                            <div className="containerBody">
+                              {slot.tasks.map((t: ITask, index: number) => {
+                                return (
+                                  <DraggableTaskItem
+                                    openTaskDialog={openTaskDialog}
+                                    task={t}
+                                    key={index}
+                                    index={index}
+                                  />
+                                );
+                              })}
+                            </div>
+                          </div>
+                        </DroppableContainer>
+                      </TableCell>
                     );
                   })}
                 </TableRow>

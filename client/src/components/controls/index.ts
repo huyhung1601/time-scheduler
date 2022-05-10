@@ -1,2 +1,4 @@
 export { DroppableContainer } from "./droppableContainer/DroppableContainer";
-export { CustomMenu } from "./menu/customMenu/CustomMenu";
+export { DraggableContainer } from "./draggableContainer/DraggableContainer";
+export { CustomMenu } from "./customMenu/CustomMenu";
+export { CustomLogo } from "./customLogo/CustomLogo";

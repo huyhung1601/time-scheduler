@@ -11,7 +11,7 @@ interface IProps {
   logo: string;
   fontSize?: "small" | "inherit" | "default" | "large" | "medium" | undefined;
 }
-const MenuLogo = (props: IProps) => {
+export const CustomLogo = (props: IProps) => {
   const classes = useStyles();
   const { logo, fontSize } = props;
   return (
@@ -32,5 +32,3 @@ const MenuLogo = (props: IProps) => {
     </div>
   );
 };
-
-export default MenuLogo;

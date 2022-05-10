@@ -42,7 +42,7 @@ const Controller = () => {
     setSelectedDate(date);
   };
   /**Handle Change */
-  const handleChange = (e: any): void => {
+  const handleTimeLineChange = (e: any): void => {
     setTimeline({ ...timeline, [e.target.name]: e.target.value });
   };
   /**Choose calendar */
@@ -80,7 +80,7 @@ const Controller = () => {
               <Select
                 name="start"
                 value={timeline.start}
-                onChange={handleChange}
+                onChange={handleTimeLineChange}
                 disabled={calendar.type === "month" || calendar.by === "task"}
               >
                 {calendar.by === "time" &&
@@ -102,7 +102,7 @@ const Controller = () => {
               <Select
                 value={timeline.end}
                 name="end"
-                onChange={(e) => handleChange(e)}
+                onChange={handleTimeLineChange}
                 disabled={calendar.type === "month" || calendar.by === "task"}
               >
                 {calendar.by === "time" &&
