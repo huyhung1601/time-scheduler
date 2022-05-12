@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from "react";
 import { TextField, IconButton } from "@material-ui/core";
 import useStyles from "./styles";
-import { CustomMenu } from "../../controls";
+import { CustomMenu } from "../../customElements";
 import { Add, Clear } from "@material-ui/icons";
 interface IProps {
   categories: any[];

@@ -1,9 +1,15 @@
 import { useSelector } from "react-redux";
 import { RootState } from "../../../app/store";
+import { ITask } from "../../../features/tasks/tasksSlice";
 import Tasktable from "../tasktable/Tasktable";
 import useStyle from "./styles";
 
-export const TaskScheduler = () => {
+interface IProps {
+  editTask: (task: ITask) => void;
+}
+
+export const TaskScheduler = (props: IProps) => {
+  const { editTask } = props;
   /**MUI style */
   const classes = useStyle();
   /**Redux */
@@ -62,7 +68,11 @@ export const TaskScheduler = () => {
           </div>
         )}
       </div>
-      <Tasktable tasks={tasks.tasks} categories={categories.categories} />
+      <Tasktable
+        editTask={editTask}
+        tasks={tasks.tasks}
+        categories={categories.categories}
+      />
     </div>
   );
 };

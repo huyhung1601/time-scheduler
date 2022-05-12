@@ -2,11 +2,10 @@ import React, { useState } from "react";
 import useDebounce from "../../../hooks/useDebounce";
 import useStyle from "./styles";
 import useMeasureActingItem from "../../../hooks/useMeasureActingItem";
-import { DraggableContainer } from "../../controls";
+import { DraggableContainer } from "../../customElements";
 
 const ResizableItem: React.FC<any> = (props) => {
-  const { task, openTaskDialog, handleUpdateTask, type, timeline, index } =
-    props;
+  const { task, editTask, handleUpdateTask, type, timeline, index } = props;
   const [isDragging, setIsDragging] = useState(false);
   /**MUI style */
   const classes = useStyle();
@@ -39,10 +38,7 @@ const ResizableItem: React.FC<any> = (props) => {
         isDragging={() => setIsDragging(true)}
         isDragged={() => setIsDragging(false)}
       >
-        <div
-          className={classes.itemInfos}
-          onClick={() => openTaskDialog(actingItem)}
-        >
+        <div className={classes.itemInfos} onClick={() => editTask(actingItem)}>
           <small className="itemInfo">{task.name}</small>
           <small className="itemInfo">
             Start:
