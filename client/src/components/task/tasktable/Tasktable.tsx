@@ -1,12 +1,12 @@
 import { useCallback, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import useStyle from "./styles";
-import { useTaskDialogContext } from "../../../context/TaskDialogContext";
 import { DragDropContext, DropResult } from "react-beautiful-dnd";
-import CategoryCard from "../../taskForm/categoryCard/CategoryCard";
-import { DroppableContainer } from "../../controls";
+import CategoryCard from "../categoryCard/CategoryCard";
+import { DroppableContainer } from "../../customElements";
 import {
   dropToChangeCategory,
+  ITask,
   updateTask,
 } from "../../../features/tasks/tasksSlice";
 import { RootState } from "../../../app/store";
@@ -14,15 +14,15 @@ import { RootState } from "../../../app/store";
 interface IProps {
   categories: any;
   tasks: any;
+  editTask: (task: ITask) => void;
 }
-const Tasktable = ({ categories, tasks }: IProps) => {
+const Tasktable = ({ categories, tasks, editTask }: IProps) => {
   /**MUI style */
   const classes = useStyle();
   /**Redux & context*/
   const dispatch = useDispatch();
 
   const { calendar } = useSelector((state: RootState) => state);
-  const { editTask } = useTaskDialogContext();
   //Handle Drag & Drop
   const onDragEnd = (result: DropResult) => {
     const { destination, source } = result;
@@ -42,13 +42,6 @@ const Tasktable = ({ categories, tasks }: IProps) => {
     dispatch(updateTask?.(tasks.droppedTask));
   }, [tasks.droppedTask, dispatch]);
 
-  const openTaskDialog = useCallback(
-    (movingTask) => {
-      editTask?.(movingTask);
-    },
-    [editTask]
-  );
-
   const handleUpdateTask = useCallback(
     (movingTask) => {
       dispatch(updateTask?.(movingTask));
@@ -63,7 +56,7 @@ const Tasktable = ({ categories, tasks }: IProps) => {
             return (
               <DroppableContainer droppableId={c.id}>
                 <CategoryCard
-                  openTaskDialog={openTaskDialog}
+                  editTask={editTask}
                   handleUpdateTask={handleUpdateTask}
                   calendar={calendar}
                   tasks={tasks}

@@ -3,19 +3,19 @@ import clsx from "clsx";
 import { useDispatch, useSelector } from "react-redux";
 import { DragDropContext, DropResult } from "react-beautiful-dnd";
 import useStyles from "./styles";
-import { useTaskDialogContext } from "../../../context/TaskDialogContext";
 import { converToNum, daysCurrentMonth } from "../../../utils";
-import { useCallback, useEffect } from "react";
+import { useEffect } from "react";
 import {
   dropToChangeDate,
   ITask,
   updateTask,
 } from "../../../features/tasks/tasksSlice";
 import { RootState } from "../../../app/store";
-import { DroppableContainer } from "../../controls";
+import { DroppableContainer } from "../../customElements";
 import DraggableTaskItem from "../draggableTaskItem/DraggableTaskItem";
 
-const TimetableBody = () => {
+const TimetableBody = (props: any) => {
+  const { editTask } = props;
   /**MUI styles */
   const classes = useStyles();
   const { month, week, empty } = classes;
@@ -44,14 +44,6 @@ const TimetableBody = () => {
     tasks.droppedTask && dispatch(updateTask(tasks.droppedTask));
   }, [tasks.droppedTask, dispatch]);
 
-  /**open TaskDialog */
-  const { editTask } = useTaskDialogContext();
-  const openTaskDialog = useCallback(
-    (t) => {
-      editTask?.(t);
-    },
-    [editTask]
-  );
   return (
     <>
       <DragDropContext onDragEnd={onDragEnd}>
@@ -94,7 +86,7 @@ const TimetableBody = () => {
                               {slot.tasks.map((t: ITask, index: number) => {
                                 return (
                                   <DraggableTaskItem
-                                    openTaskDialog={openTaskDialog}
+                                    editTask={editTask}
                                     task={t}
                                     key={index}
                                     index={index}

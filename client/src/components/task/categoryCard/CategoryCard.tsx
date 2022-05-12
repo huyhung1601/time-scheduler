@@ -1,19 +1,19 @@
 import useStyles from "./styles";
-import { CustomLogo } from "../../controls";
-import ResizableItem from "../../task/resizableItem/ResizableItem";
+import { CustomLogo } from "../../customElements";
+import ResizableItem from "../resizableItem/ResizableItem";
 import { ITask } from "../../../features/tasks/tasksSlice";
 interface IProps {
   category: any;
   tasks: ITask[];
   calendar: any;
-  openTaskDialog: (movingTask: any) => void;
-  handleUpdateTask: (movingTask: any) => void;
+  editTask: (task: any) => void;
+  handleUpdateTask: (task: any) => void;
 }
 const CategoryCard = ({
   category,
   tasks,
   calendar,
-  openTaskDialog,
+  editTask,
   handleUpdateTask,
 }: IProps) => {
   const classes = useStyles();
@@ -33,7 +33,7 @@ const CategoryCard = ({
                 handleUpdateTask={(movingTask: any) =>
                   handleUpdateTask(movingTask)
                 }
-                openTaskDialog={(movingTask: any) => openTaskDialog(movingTask)}
+                editTask={editTask}
                 key={task.id}
                 task={task}
                 index={index}

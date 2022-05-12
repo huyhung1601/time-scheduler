@@ -17,7 +17,6 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { timeMarks } from "../../utils";
 import useStyles from "./styles";
-import { useTaskDialogContext } from "../../context/TaskDialogContext";
 import { RootState } from "../../app/store";
 import { getTasks } from "../../features/tasks/tasksSlice";
 import {
@@ -25,13 +24,17 @@ import {
   alignTasks,
 } from "../../features/calendar/calendarSlice";
 
-const Controller = () => {
+interface IProps {
+  handleOpenDialog: () => void;
+}
+
+const Controller = (props: IProps) => {
+  const { handleOpenDialog } = props;
   /**MUI Theme */
   const classes = useStyles();
   /**Redux - Context*/
   const dispatch = useDispatch();
   const { calendar, tasks } = useSelector((state: RootState) => state);
-  const { handleOpen } = useTaskDialogContext();
   /**First value */
   const [selectedDate, setSelectedDate] = React.useState(new Date());
   const [timeline, setTimeline] = useState({ start: 6, end: 11 });
@@ -132,7 +135,11 @@ const Controller = () => {
                 }}
               />
             </MuiPickersUtilsProvider>
-            <Button variant="outlined" color="primary" onClick={handleOpen}>
+            <Button
+              variant="outlined"
+              color="primary"
+              onClick={handleOpenDialog}
+            >
               New Task
             </Button>
           </Grid>

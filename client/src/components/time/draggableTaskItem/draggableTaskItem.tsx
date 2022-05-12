@@ -2,11 +2,11 @@ import React from "react";
 import clsx from "clsx";
 import useStyle from "./styles";
 import { useSelector } from "react-redux";
-import { CustomLogo, DraggableContainer } from "../../controls";
+import { CustomLogo, DraggableContainer } from "../../customElements";
 import { RootState } from "../../../app/store";
 
 const DraggableTaskItem = (props: any) => {
-  const { task, index, openTaskDialog } = props;
+  const { task, index, editTask } = props;
   const { categories } = useSelector((state: RootState) => state);
   /**MUI style */
   const classes = useStyle();
@@ -44,7 +44,7 @@ const DraggableTaskItem = (props: any) => {
           { [prev]: prevTime(task.start) <= 0 },
           { [next]: nextTime(task.start) >= 0 }
         )}
-        onClick={() => openTaskDialog(task)}
+        onClick={() => editTask(task)}
       >
         <CustomLogo fontSize="small" logo={logo} />
         <small>{task.name}</small>
